@@ -1,0 +1,105 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<div nz-row nzJustify="space-between" nzAlign="middle" class="mb-15">
+  <div nz-col>Document Details</div>
+  <div nz-col>
+    <a
+      nz-button
+      nzType="link"
+      class="p-0"
+      (click)="openDocumentModal()"
+      (keydown.enter)="openDocumentModal()"
+      tabindex="0"
+      >Add New Document</a
+    >
+  </div>
+</div>
+
+<div nz-row [nzGutter]="[16, 16]">
+  <div nz-col class="gutter-row" [nzSpan]="24">
+    <nz-table
+      #basicTable
+      nzSize="small"
+      nzOuterBordered
+      nzShowPagination="false"
+      [nzScroll]="{ y: '70vh' }"
+      [nzData]="listOfCurrentPageData"
+    >
+      <thead>
+        <tr>
+          <th nzAlign="center" nzWidth="40px">#</th>
+          <th nzWidth="150px">Document Type</th>
+          <th nzWidth="130px">Document</th>
+          <th nzAlign="center" nzWidth="80px">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of listOfCurrentPageData">
+          <td nzAlign="center">{{ data.id + 1 }}</td>
+          <td>Specs Documents</td>
+          <td>
+            <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
+            MouldTest.PDF
+          </td>
+          <td nzAlign="center">
+            <span nz-icon nzType="delete" nzTheme="outline"></span>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>
+
+<nz-modal
+  [(nzVisible)]="document"
+  nzTitle="Add New Document"
+  (nzOnCancel)="closeDocumentModal()"
+  (nzOnOk)="closeDocumentModal()"
+  [nzFooter]="modalFooter"
+  nzCentered
+  nzWidth="375px"
+  [nzBodyStyle]="{ padding: '20px' }"
+>
+  <ng-container *nzModalContent>
+    <div nz-row [nzGutter]="[16, 16]" class="custom-card border-none">
+      <div nz-col class="gutter-row" [nzSpan]="24">
+        <label>Document Type<sup>*</sup></label>
+        <nz-select
+          ngModel=""
+          nzPlaceHolder="Select Type"
+          class="w-100"
+          nzSize="large"
+        >
+          <nz-option nzValue="1" nzLabel="Specs Documents"></nz-option>
+          <nz-option nzValue="2" nzLabel="Design Documnets"></nz-option>
+          <nz-option nzValue="3" nzLabel="Mould Manual Documnets"></nz-option>
+          <nz-option nzValue="4" nzLabel="Maintainence Documnets"></nz-option>
+          <nz-option nzValue="5" nzLabel="Any other"></nz-option>
+        </nz-select>
+      </div>
+      <div nz-col class="gutter-row" [nzSpan]="24">
+        <label>Upload Document</label>
+        <nz-upload
+          nzType="drag"
+          [nzMultiple]="true"
+          nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+          (nzChange)="handleChange($event)"
+        >
+          <img
+            src="../../../../../../../assets/images/plus.svg"
+            alt=""
+            class="mb-1"
+          />
+          <p class="ant-upload-text text-14">Upload</p>
+        </nz-upload>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="closeDocumentModal()">
+      Cancel
+    </button>
+    <button nz-button nzType="primary" (click)="closeDocumentModal()">
+      Add Document
+    </button>
+  </ng-template>
+</nz-modal>

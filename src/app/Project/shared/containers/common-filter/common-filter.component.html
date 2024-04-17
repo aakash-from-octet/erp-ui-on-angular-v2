@@ -1,0 +1,64 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<a
+  nz-dropdown
+  [nzVisible]="isDropDownOpen"
+  (nzVisibleChange)="isDropDownOpen = $event"
+  [nzDropdownMenu]="menu"
+  nzTrigger="click"
+>
+  <span nz-icon nzType="filter" nzTheme="fill" class="filter-icon"></span>
+</a>
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <div class="custom-search">
+    <nz-input-group [nzPrefix]="prefixTemplateUser" class="mb-18"
+      ><input
+        nz-input
+        placeholder="Search by Keyword"
+        type="text"
+        [(ngModel)]="searchTerm"
+        (keyup)="search()"
+    /></nz-input-group>
+    <ng-template #prefixTemplateUser
+      ><span nz-icon nzType="search"></span
+    ></ng-template>
+    <p (click)="sort('asc')" (keydown.enter)="sort('asc')" tabindex="0">
+      Sort A to Z
+    </p>
+    <p (click)="sort('desc')" (keydown.enter)="sort('desc')" tabindex="0">
+      Sort Z to A
+    </p>
+    <nz-collapse *ngIf="filterEnabled" nzGhost nzExpandIconPosition="right">
+      <nz-collapse-panel [nzHeader]="'Filter By ' + filterByString">
+        <div *ngFor="let value of valueArray">
+          <label
+            nz-checkbox
+            (nzCheckedChange)="filter(value)"
+            (keydown.enter)="filter(value)"
+            tabindex="0"
+          >
+            <span *ngIf="getType(value) === 'string'">{{ value }}</span>
+            <span *ngIf="getType(value) === 'boolean'">
+              <span *ngIf="value">Active</span>
+              <span *ngIf="!value">Inactive</span>
+            </span>
+          </label>
+        </div>
+      </nz-collapse-panel>
+    </nz-collapse>
+    <hr />
+    <div class="text-right">
+      <button (click)="reset()" nz-button nzType="default" nzSize="small">
+        Reset
+      </button>
+      <button
+        (click)="close()"
+        nz-button
+        nzType="primary"
+        nzSize="small"
+        class="ml-12"
+      >
+        Apply
+      </button>
+    </div>
+  </div>
+</nz-dropdown-menu>

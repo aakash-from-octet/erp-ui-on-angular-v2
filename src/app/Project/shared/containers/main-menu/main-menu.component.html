@@ -1,0 +1,59 @@
+<section class="sidebar-action" [class.close]="isClose">
+  <div class="sidebar-wrap-inner" [class.close]="isClose">
+    <nz-collapse
+      nzGhost
+      [nzExpandIconPosition]="'right'"
+      class="custom-collapse"
+    >
+      <nz-collapse-panel
+        *ngFor="let panel of panels"
+        [nzHeader]="panel?.menuName"
+        [nzActive]="panel?.active"
+      >
+        <div>
+          <div>
+            <ul>
+              <li
+                routerLinkActive="active"
+                *ngFor="let subMenu of panel?.subMenus"
+              >
+                <a [routerLink]="subMenu?.routingUrl">{{
+                  subMenu?.menuName
+                }}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nz-collapse-panel>
+    </nz-collapse>
+  </div>
+  <img
+    src="../../../assets/images/sidebar-close.svg"
+    alt=""
+    class="sidebar-close"
+    (click)="sidebarClose()"
+    (keydown.enter)="sidebarClose()"
+    tabindex="0"
+    *ngIf="!isClose"
+  />
+  <img
+    src="../../../assets/images/sidebar-open.svg"
+    alt=""
+    class="sidebar-open"
+    (click)="sidebarOpen()"
+    (keydown.enter)="sidebarOpen()"
+    tabindex="0"
+    *ngIf="isClose"
+  />
+</section>
+
+<!-- <div>
+    <ul class="list-group" *ngFor="let arr of navarr[this.arrid].applicationMenus">
+      <li class="list-group-item">{{arr.menuName}}</li>
+      <ul class="list-group" *ngFor="let ss of arr.dropDownValue">
+        <li class="list-group-item">
+          <a href="#">{{ss.dropDownMenu}}</a>
+        </li>
+      </ul>
+  </ul>
+  </div> -->

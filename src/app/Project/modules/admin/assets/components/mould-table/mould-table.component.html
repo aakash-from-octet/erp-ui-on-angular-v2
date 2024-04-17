@@ -1,0 +1,171 @@
+<nz-table
+  #rowSelectionTable
+  nzSize="small"
+  nzOuterBordered
+  nzShowPagination="false"
+  [nzData]="listOfCurrentPageData"
+  [nzScroll]="{ x: '2800px', y: 'calc(100vh - 220px)' }"
+  [nzNoResult]="noDataTemplate"
+>
+  <thead>
+    <tr>
+      <th
+        [nzChecked]="checked"
+        [nzIndeterminate]="indeterminate"
+        (nzCheckedChange)="onAllChecked($event)"
+        nzLeft
+        nzWidth="50px"
+      ></th>
+      <th nzLeft nzWidth="150px">Mould Name <app-filters></app-filters></th>
+      <th nzWidth="130px">Mould Code <app-filters></app-filters></th>
+      <th nzWidth="150px">Component ID <app-filters></app-filters></th>
+      <th nzWidth="150px">Asset Finance ID</th>
+      <th nzWidth="200px">Mould Process</th>
+      <th nzWidth="150px">Mould Type</th>
+      <th nzWidth="150px">Depreciation Code</th>
+      <th nzWidth="150px">Mould Owner</th>
+      <th nzWidth="150px">Mould Maker</th>
+      <th nzWidth="150px">Cavity Count</th>
+      <th nzWidth="150px">Lead Mould</th>
+      <th nzWidth="150px">Location ID</th>
+      <th nzWidth="150px">Mould Maker ID</th>
+      <th nzWidth="150px">Project Name</th>
+      <th nzWidth="150px">Cavity Numbering</th>
+      <th nzWidth="150px">Expected CT</th>
+      <th nzWidth="150px">Expected Shot Count</th>
+      <th nzWidth="150px">Warranted Life</th>
+      <th nzWidth="150px">Revised Life</th>
+      <th nzWidth="150px">Revised Shot Count</th>
+      <th nzWidth="150px">Refurbished</th>
+      <th nzWidth="200px">Last Refurbished Date</th>
+      <th nzWidth="150px">Created On</th>
+      <th nzWidth="150px">Status</th>
+      <th nzRight nzAlign="center" nzWidth="100px">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of listOfCurrentPageData">
+      <td
+        nzLeft
+        [nzChecked]="setOfCheckedId.has(data.id)"
+        (nzCheckedChange)="onItemChecked(data.id, $event)"
+      ></td>
+      <td nzLeft>
+        <span class="first-letter">{{ data.mouldname.charAt(0) }}</span
+        >{{ data.mouldname }}
+      </td>
+      <td>PR:0001</td>
+      <td>PR:0001</td>
+      <td>A171</td>
+      <td>Injection Blow Moulding</td>
+      <td>Proto</td>
+      <td>D-1232</td>
+      <td>John</td>
+      <td>John</td>
+      <td>5</td>
+      <td>Yes</td>
+      <td>L-78965</td>
+      <td>M-7854</td>
+      <td>Lorem</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>5</td>
+      <td>3</td>
+      <td>2</td>
+      <td>Yes</td>
+      <td>11 Jan, 2024</td>
+      <td>11 Jan, 2024</td>
+      <td><span class="status green">Active</span></td>
+      <td nzRight nzAlign="center">
+        <nz-space>
+          <button *nzSpaceItem nz-button nzType="text" (click)="openView()">
+            <span nz-icon nzType="eye" nzTheme="outline"></span>
+          </button>
+          <div class="action-divider" *nzSpaceItem></div>
+          <button
+            *nzSpaceItem
+            nz-button
+            nzType="text"
+            nz-dropdown
+            [nzDropdownMenu]="menu"
+          >
+            <span nz-icon nzType="more" nzTheme="outline"></span>
+          </button>
+
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+              <li nz-menu-item>Edit</li>
+              <li nz-menu-item>Mark as in-active</li>
+              <li nz-menu-item>Add Component</li>
+            </ul>
+          </nz-dropdown-menu>
+        </nz-space>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<section class="footer-pagination">
+  <nz-pagination
+    [(nzPageIndex)]="currentPageIndex"
+    [(nzPageSize)]="pageSize"
+    [nzTotal]="totalItems"
+    (nzPageIndexChange)="loadTableData($event, pageSize)"
+    [nzSize]="'small'"
+    nzShowSizeChanger="true"
+    (nzPageSizeChange)="pageSizeChange($event)"
+  ></nz-pagination>
+</section>
+
+<ng-template #noDataTemplate>
+  <div class="no-data">
+    <img src="../../../assets/images/no-data.svg" alt="" />
+  </div>
+</ng-template>
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  nzTitle="Grid Customization"
+  [nzCloseIcon]="modalClose"
+  [nzFooter]="null"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  nzCentered
+  nzWidth="670px"
+  ><ng-template #modalClose> Close </ng-template
+  ><ng-container *nzModalContent>
+    <nz-table
+      #rowSelectionTable
+      nzSize="small"
+      nzOuterBordered
+      nzBordered=""
+      nzShowPagination="false"
+      [nzData]="listOfCurrentPageData"
+      [nzScroll]="{ x: '700px', y: '70vh' }"
+      [nzNoResult]="noDataTemplate"
+    >
+      <thead>
+        <tr>
+          <th nzAlign="center" nzLeft nzWidth="40px">#</th>
+          <th nzWidth="150px">Component Name <app-filters></app-filters></th>
+          <th nzWidth="130px">Component Id <app-filters></app-filters></th>
+          <th nzWidth="130px">Component Code <app-filters></app-filters></th>
+          <th nzAlign="center" nzRight nzWidth="60px">Qty</th>
+          <th nzAlign="center" nzRight nzWidth="80px">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of listOfCurrentPageData">
+          <td nzLeft>{{ data.id + 1 }}</td>
+          <td>ASL:12332</td>
+          <td>PR:0001</td>
+          <td>ASL:12332</td>
+          <td nzAlign="center" nzRight>04</td>
+          <td nzAlign="center" nzRight>
+            <span nz-icon nzType="delete" nzTheme="outline"></span>
+          </td>
+        </tr>
+      </tbody> </nz-table
+  ></ng-container>
+</nz-modal>

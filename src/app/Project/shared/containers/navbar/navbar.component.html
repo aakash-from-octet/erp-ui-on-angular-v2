@@ -1,0 +1,335 @@
+<header class="d-none d-lg-block">
+  <div nz-row nzJustify="space-between">
+    <div nz-col>
+      <nz-input-group
+        [nzSuffix]="suffixTemplateInfo"
+        [nzPrefix]="prefixTemplateUser"
+        class="search"
+      >
+        <input
+          type="text"
+          nz-input
+          placeholder="Search for projects, moulds, components..."
+        />
+      </nz-input-group>
+      <ng-template #prefixTemplateUser
+        ><span nz-icon nzType="search" nzTheme="outline"></span
+      ></ng-template>
+      <ng-template #suffixTemplateInfo>
+        <!-- <img src="../../../assets/images/keyboard.svg" alt="" /> -->
+      </ng-template>
+    </div>
+    <div nz-col>
+      <nz-space [nzSize]="8">
+        <button
+          nz-button
+          nzType="default"
+          *nzSpaceItem
+          nzTooltipTitle="Notifications"
+          nzTooltipPlacement="bottom"
+          nz-tooltip
+        >
+          <span nz-icon nzType="bell" nzTheme="outline"></span>
+        </button>
+        <button
+          nz-button
+          nzType="default"
+          *nzSpaceItem
+          nzTooltipTitle="Resources"
+          nzTooltipPlacement="bottom"
+          nz-tooltip
+        >
+          <span nz-icon nzType="file-text" nzTheme="outline"></span>
+        </button>
+
+        <a nz-dropdown [nzDropdownMenu]="menu" *nzSpaceItem>
+          <button nz-button class="btn-lightblue" nzType="default">
+            Quick Actions
+          </button>
+        </a>
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <ul nz-menu nzSelectable class="quick-actions">
+            <li nz-menu-item *ngFor="let action of actions">
+              <nz-space [nzSize]="10">
+                <div *nzSpaceItem class="hover-icon">
+                  <span nz-icon nzType="file-text" nzTheme="fill"></span>
+                </div>
+                <div *nzSpaceItem>
+                  <h3>{{ action.title }}</h3>
+                  <p>{{ action.description }}</p>
+                </div>
+              </nz-space>
+            </li>
+          </ul>
+        </nz-dropdown-menu>
+
+        <div *nzSpaceItem>
+          <button
+            nz-button
+            nz-dropdown
+            [nzDropdownMenu]="menu4"
+            [nzPlacement]="'bottomRight'"
+            class="profile-menu"
+          >
+            <nz-space [nzSize]="8" nzAlign="center">
+              <img
+                src="../../../assets/images/profile.svg"
+                alt=""
+                *nzSpaceItem />
+              <span *nzSpaceItem> {{ userName }} </span
+              ><span nz-icon nzType="down" *nzSpaceItem></span
+            ></nz-space>
+          </button>
+          <nz-dropdown-menu #menu4="nzDropdownMenu">
+            <ul nz-menu>
+              <li
+                nz-menu-item
+                (click)="logout()"
+                (keydown.enter)="logout()"
+                tabindex="0"
+              >
+                Logout
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+      </nz-space>
+    </div>
+  </div>
+</header>
+<header class="d-lg-none header-mobile">
+  <div nz-row nzJustify="space-between">
+    <div nz-col>
+      <img src="../../../../../assets/images/logo.svg" alt="" />
+    </div>
+    <div nz-col>
+      <nz-space [nzSize]="12">
+        <div
+          *nzSpaceItem
+          nzTooltipTitle="Notifications"
+          nzTooltipPlacement="bottom"
+          nz-tooltip
+        >
+          <span nz-icon nzType="bell" nzTheme="outline"></span>
+        </div>
+        <div
+          *nzSpaceItem
+          nzTooltipTitle="Resources"
+          nzTooltipPlacement="bottom"
+          nz-tooltip
+        >
+          <span nz-icon nzType="file-text" nzTheme="outline"></span>
+        </div>
+
+        <div
+          nz-dropdown
+          [nzDropdownMenu]="menu"
+          *nzSpaceItem
+          class="relative"
+          nzTrigger="click"
+        >
+          <span nz-icon nzType="thunderbolt" nzTheme="outline"></span>
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu nzSelectable class="quick-actions">
+              <li nz-menu-item *ngFor="let action of actions">
+                <nz-space [nzSize]="10">
+                  <div *nzSpaceItem class="hover-icon">
+                    <span nz-icon nzType="file-text" nzTheme="fill"></span>
+                  </div>
+                  <div *nzSpaceItem>
+                    <h3>{{ action.title }}</h3>
+                    <p>{{ action.description }}</p>
+                  </div>
+                </nz-space>
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+
+        <div *nzSpaceItem>
+          <button
+            nz-button
+            nz-dropdown
+            [nzDropdownMenu]="menu4"
+            [nzPlacement]="'bottomRight'"
+            class="profile-menu d-lg-none"
+          >
+            <nz-space [nzSize]="8">
+              <img src="../../../assets/images/profile2.svg" alt="" />
+            </nz-space>
+          </button>
+          <nz-dropdown-menu #menu4="nzDropdownMenu">
+            <ul nz-menu>
+              <li
+                nz-menu-item
+                (click)="logout()"
+                (keydown.enter)="logout()"
+                tabindex="0"
+              >
+                Logout
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+      </nz-space>
+    </div>
+  </div>
+  <div nz-row nzJustify="space-between" class="mt-2">
+    <div
+      nz-col
+      (click)="openMobileMainMenu()"
+      (keydown.enter)="openMobileMainMenu()"
+      tabindex="0"
+      class="cp"
+    >
+      <span nz-icon nzType="menu" nzTheme="outline"></span>
+    </div>
+    <div nz-col nzSpan="20">
+      <nz-input-group
+        [nzSuffix]="suffixTemplateInfo"
+        [nzPrefix]="prefixTemplateUser"
+        class="search"
+      >
+        <input
+          type="text"
+          nz-input
+          placeholder="Search for projects, moulds, components..."
+        />
+      </nz-input-group>
+      <ng-template #prefixTemplateUser
+        ><span nz-icon nzType="search" nzTheme="outline"></span
+      ></ng-template>
+      <ng-template #suffixTemplateInfo>
+        <!-- <img src="../../../assets/images/keyboard.svg" alt="" /> -->
+      </ng-template>
+    </div>
+  </div>
+</header>
+
+<!-- first screen -->
+
+<section class="main-menu-list-wrap" [ngClass]="{ 'main-open': var_mainMenu }">
+  <div class="menu-header">
+    <div class="d-flex align-items-center">
+      <span
+        nz-icon
+        nzType="close"
+        nzTheme="outline"
+        (click)="closeMainMenu()"
+        (keydown.enter)="closeMainMenu()"
+        tabindex="0"
+        class="cp menu-action-icon"
+        *ngIf="currentSubMenuTitle === null"
+      ></span>
+      <span
+        nz-icon
+        nzType="left"
+        nzTheme="outline"
+        *ngIf="currentSubMenuTitle !== null"
+        (click)="toggleSubMenu(currentSubMenuTitle)"
+        (keydown.enter)="toggleSubMenu(currentSubMenuTitle)"
+        tabindex="0"
+        class="cp menu-action-icon"
+      ></span>
+      <h4 class="ms-2" *ngIf="currentSubMenuTitle === null; else showSubMenu">
+        Menu
+      </h4>
+      <ng-template #showSubMenu
+        ><h4 class="ms-2">{{ currentSubMenuTitle }}</h4></ng-template
+      >
+    </div>
+
+    <h6>V 0.1.1</h6>
+  </div>
+  <div class="menu-body">
+    <!-- First level template -->
+    <ng-template #firstLevelTemplate>
+      <ul class="mobile-menu-list">
+        <ng-container *ngFor="let item of menuItems">
+          <li>
+            <span *ngIf="item.title" class="title">{{ item.title }}</span>
+            <a *ngIf="item.routerLink" [routerLink]="item.routerLink">
+              <img
+                [src]="
+                  '../../../../../assets/images/navigation/mobile/' +
+                  item?.text +
+                  '.svg'
+                "
+                alt=""
+              /><span *ngIf="!item.title">{{ item.text }}</span>
+            </a>
+            <ul *ngIf="item.children && item.children.length > 0">
+              <li
+                *ngFor="let child of item.children"
+                [ngClass]="{ hassubmenu1: child.hasSubmenu }"
+                (click)="child.hasSubmenu ? toggleSubMenu(child.text) : null"
+                (keydown.enter)="
+                  child.hasSubmenu ? toggleSubMenu(child.text) : null
+                "
+                tabindex="0"
+              >
+                <a [routerLink]="child.routerLink"
+                  ><img
+                    [src]="
+                      '../../../../../assets/images/navigation/mobile/' +
+                      child?.text +
+                      '.svg'
+                    "
+                    alt=""
+                  />{{ child.text }}</a
+                >
+              </li>
+            </ul>
+          </li>
+        </ng-container>
+      </ul>
+    </ng-template>
+
+    <!-- Submenu template  -->
+    <ng-template #SubMenuTemplate>
+      <ul class="mobile-menu-list">
+        <ng-container *ngFor="let item of menuItems">
+          <ng-container *ngIf="item.children">
+            <ng-container *ngFor="let child of item.children">
+              <ng-container *ngIf="child.menus">
+                <ng-container *ngFor="let submenu of child.menus">
+                  <li
+                    *ngIf="currentSubMenuTitle === child.text"
+                    class="submenu-li"
+                  >
+                    <span
+                      class="title hassubmenu2"
+                      (click)="toggleSubMenu2(submenu.title)"
+                      (keydown.enter)="toggleSubMenu2(submenu.title)"
+                      tabindex="0"
+                      [class.active]="subMenuOpen[submenu.title]"
+                    >
+                      {{ submenu.title }}
+                    </span>
+                    <ul *ngIf="subMenuOpen[submenu.title]">
+                      <li *ngFor="let subitem of submenu.submenus">
+                        <a
+                          [routerLink]="subitem.link"
+                          (click)="refreshMenu()"
+                          routerLinkActive="active"
+                          >{{ subitem.label }}</a
+                        >
+                      </li>
+                    </ul>
+                  </li></ng-container
+                >
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ul>
+    </ng-template>
+
+    <!-- Use ngTemplateOutlet to render appropriate template -->
+    <ng-container
+      *ngTemplateOutlet="
+        subMenuOpen[currentSubMenuTitle] ? SubMenuTemplate : firstLevelTemplate
+      "
+    ></ng-container>
+  </div>
+</section>

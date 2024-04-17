@@ -1,0 +1,917 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<div class="w-100">
+  <div class="title-bar">
+    <div nz-row nzJustify="space-between" nzAlign="middle">
+      <div nz-col>
+        <h3>Location</h3>
+      </div>
+      <div nz-col>
+        <nz-space [nzSize]="8">
+          <div class="send-request" *nzSpaceItem>
+            <a nz-dropdown [nzDropdownMenu]="menu" nzType="link">
+              Bulk Action
+            </a>
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu nzSelectable>
+                <li
+                  nz-menu-item
+                  (click)="bulkActive()"
+                  (keydown.enter)="bulkActive()"
+                  tabindex="0"
+                >
+                  Mark as Active
+                </li>
+                <li
+                  nz-menu-item
+                  (click)="bulkInactive()"
+                  (keydown.enter)="bulkInactive()"
+                  tabindex="0"
+                >
+                  Mark as Inactive
+                </li>
+              </ul>
+            </nz-dropdown-menu>
+          </div>
+
+          <nz-input-group
+            *nzSpaceItem
+            [nzPrefix]="prefixTemplateUser"
+            class="search"
+          >
+            <input
+              type="text"
+              nz-input
+              placeholder="Search"
+              [(ngModel)]="searchText"
+              (ngModelChange)="filterData()"
+            />
+            <ng-template #prefixTemplateUser
+              ><span nz-icon nzType="search" nzTheme="outline"></span
+            ></ng-template>
+          </nz-input-group>
+
+          <button
+            nz-button
+            nzType="default"
+            *nzSpaceItem
+            nzTooltipTitle="Export"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="convertToJSON()"
+          >
+            <span nz-icon nzType="download" nzTheme="outline"></span></button
+          ><button
+            nz-button
+            nzType="default"
+            (click)="resetFilter()"
+            *nzSpaceItem
+            nzTooltipTitle="Reset Filters"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+          >
+            <span nz-icon nzType="reload" nzTheme="outline"></span>
+          </button>
+          <button
+            nz-button
+            nzType="default"
+            *nzSpaceItem
+            (click)="openGridModal()"
+            nzTooltipTitle="Grid Customization"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+          >
+            <span nz-icon nzType="control" nzTheme="outline"></span></button
+          ><button
+            nz-button
+            nzType="primary"
+            *nzSpaceItem
+            (click)="showModal(1)"
+            class="d-none d-lg-block"
+          >
+            Add Location
+          </button>
+        </nz-space>
+        <div class="d-lg-none xs-footer">
+          <button nz-button nzType="primary" (click)="showModal(1)">
+            Add Location
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nz-table
+  #rowSelectionTable
+  nzSize="small"
+  nzOuterBordered
+  nzShowPagination="false"
+  [nzData]="listOfCurrentPageData"
+  [nzScroll]="{ y: 'calc(100vh - 250px)' }"
+  [nzNoResult]="filteredData !== [] ? null : noDataTemplate"
+>
+  <thead>
+    <tr>
+      <th
+        [nzChecked]="checked"
+        [nzIndeterminate]="indeterminate"
+        (nzCheckedChange)="onAllChecked($event)"
+        nzLeft
+        nzWidth="50px"
+      ></th>
+      <th nzLeft nzWidth="190px" *ngIf="States['Location Name'] === true">
+        Location Name
+        <app-common-filter
+          [filterByString]="'Location Name'"
+          [valueArray]="getValueArray('locationName')"
+          [filterEnabled]="false"
+          (searchEvent)="search($event, 'locationName')"
+          (sortEvent)="sort($event, 'locationName')"
+          (filterEvent)="filter($event, 'locationName')"
+        ></app-common-filter>
+      </th>
+      <th nzWidth="130px" *ngIf="States['Location Code'] === true">
+        Location Code
+        <app-common-filter
+          [filterByString]="'Location Code'"
+          [valueArray]="getValueArray('locationCode')"
+          [filterEnabled]="false"
+          (searchEvent)="search($event, 'locationCode')"
+          (sortEvent)="sort($event, 'locationCode')"
+          (filterEvent)="filter($event, 'locationCode')"
+        ></app-common-filter>
+      </th>
+      <th nzWidth="130px" *ngIf="States['Location Type'] === true">
+        Location Type
+        <app-common-filter
+          [filterByString]="'Location Type'"
+          [valueArray]="getValueArray('locationType.name')"
+          [filterEnabled]="true"
+          (searchEvent)="search($event, 'locationType.name')"
+          (sortEvent)="sort($event, 'locationType.name')"
+          (filterEvent)="filter($event, 'locationType.name')"
+        ></app-common-filter>
+      </th>
+      <th nzWidth="140px" *ngIf="States['Parent Location'] === true">
+        Parent Location
+        <app-common-filter
+          [filterByString]="'Parent Location'"
+          [valueArray]="getValueArray('parentLocation.locationName')"
+          [filterEnabled]="true"
+          (searchEvent)="search($event, 'parentLocation.locationName')"
+          (sortEvent)="sort($event, 'parentLocation.locationName')"
+          (filterEvent)="filter($event, 'parentLocation.locationName')"
+        ></app-common-filter>
+      </th>
+      <th nzWidth="130px" *ngIf="States['Local Currency'] === true">
+        Local Currency
+        <app-common-filter
+          [filterByString]="'Local Currency'"
+          [valueArray]="getValueArray('localCurrency.currencyCode')"
+          [filterEnabled]="true"
+          (searchEvent)="search($event, 'localCurrency.currencyCode')"
+          (sortEvent)="sort($event, 'localCurrency.currencyCode')"
+          (filterEvent)="filter($event, 'localCurrency.currencyCode')"
+        ></app-common-filter>
+      </th>
+      <th nzWidth="120px" *ngIf="States['Status'] === true">
+        Status
+        <app-common-filter
+          [filterByString]="'Status'"
+          [valueArray]="getValueArray('isActive')"
+          [filterEnabled]="true"
+          (searchEvent)="search($event, 'isActive')"
+          (sortEvent)="sort($event, 'isActive')"
+          (filterEvent)="filter($event, 'isActive')"
+        ></app-common-filter>
+      </th>
+      <th nzRight nzAlign="center" nzWidth="100px">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of listOfCurrentPageData">
+      <td
+        nzLeft
+        [nzChecked]="setOfCheckedId.has(data.id)"
+        (nzCheckedChange)="onItemChecked(data.id, $event)"
+      ></td>
+      <td nzLeft *ngIf="States['Location Name'] === true">
+        <span class="first-letter">{{ data?.locationName?.charAt(0) }}</span
+        >{{ data?.locationName }}
+      </td>
+      <td *ngIf="States['Location Code'] === true">
+        {{ data?.locationCode }}
+      </td>
+      <td *ngIf="States['Location Type'] === true">
+        {{ data?.locationType?.name }}
+      </td>
+      <td *ngIf="States['Parent Location'] === true">
+        {{ data?.parentLocation?.locationName }}
+      </td>
+      <td *ngIf="States['Local Currency'] === true">
+        {{ data?.localCurrency?.currencyCode }}
+      </td>
+
+      <td *ngIf="data?.isActive === false && States['Status'] === true">
+        <span class="status red">In-Active</span>
+      </td>
+      <td *ngIf="data?.isActive === true && States['Status'] === true">
+        <span class="status green">Active</span>
+      </td>
+      <td nzRight nzAlign="center">
+        <nz-space>
+          <button
+            *nzSpaceItem
+            nz-button
+            nzType="text"
+            (click)="viewLocation(data)"
+          >
+            <span nz-icon nzType="eye" nzTheme="outline"></span>
+          </button>
+          <div class="action-divider" *nzSpaceItem></div>
+          <button
+            *nzSpaceItem
+            nz-button
+            nzType="text"
+            nz-dropdown
+            [nzDropdownMenu]="menu"
+          >
+            <span nz-icon nzType="more" nzTheme="outline"></span>
+          </button>
+
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+              <li
+                nz-menu-item
+                (click)="editLocation(data)"
+                (keydown.enter)="editLocation(data)"
+                tabindex="0"
+              >
+                Edit
+              </li>
+              <li
+                nz-menu-item
+                *ngIf="data?.isActive === true"
+                (click)="onStatusChange(data)"
+                (keydown.enter)="onStatusChange(data)"
+                tabindex="0"
+              >
+                Mark as Inactive
+              </li>
+              <li
+                nz-menu-item
+                *ngIf="data?.isActive === false"
+                (click)="onStatusChange(data)"
+                (keydown.enter)="onStatusChange(data)"
+                tabindex="0"
+              >
+                Mark as active
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </nz-space>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<ng-template #noDataTemplate>
+  <div class="no-data">
+    <img src="../../../assets/images/no-data.svg" alt="" />
+  </div>
+</ng-template>
+<section class="footer-pagination">
+  <nz-pagination
+    [(nzPageIndex)]="currentPageIndex"
+    [(nzPageSize)]="pageSize"
+    [nzTotal]="totalItems"
+    (nzPageIndexChange)="loadTableData($event, pageSize)"
+    [nzSize]="'small'"
+    nzShowSizeChanger="true"
+    (nzPageSizeChange)="pageSizeChange($event)"
+  ></nz-pagination>
+</section>
+
+<!--location Create Modal start-->
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="modalTitle"
+  [nzCloseIcon]="modalClose"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzFooter]="modalFooter"
+  nzCentered
+  nzWidth="100%"
+  nzWrapClassName="modal-full"
+>
+  <ng-template #modalTitle> Add Location </ng-template>
+  <ng-template #modalClose> Close </ng-template>
+  <ng-container *nzModalContent>
+    <!-- add location start -->
+    <nz-card
+      *ngIf="tabSelected === 1"
+      style="width: 880px"
+      [nzBordered]="false"
+      [nzBodyStyle]="{ padding: '0px' }"
+      nzTitle="Location Details"
+      class="custom-card"
+    >
+      <form [formGroup]="locationForm">
+        <section class="p-20">
+          <div nz-row [nzGutter]="[16, 16]">
+            <div nz-col class="gutter-row" [nzSpan]="24"></div>
+            <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+              <label>Location Name<sup>*</sup></label
+              ><input
+                nz-input
+                placeholder="Enter Location Name"
+                type="text"
+                nzSize="large"
+                formControlName="locationName"
+              />
+              <div
+                *ngIf="
+                  f['locationName'].errors &&
+                  (f['locationName'].dirty || f['locationName'].touched)
+                "
+              >
+                <div *ngIf="f['locationName'].errors['required']" class="error">
+                  Location name is required.
+                </div>
+              </div>
+            </div>
+            <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+              <label>Location Code<sup>*</sup></label
+              ><input
+                nz-input
+                placeholder="Enter Location Code"
+                type="text"
+                nzSize="large"
+                formControlName="locationCode"
+                (focusout)="onFocusOutEvent($event)"
+                (input)="onInput($event)"
+              />
+              <div
+                *ngIf="
+                  f['locationCode'].errors &&
+                  (f['locationCode'].dirty || f['locationCode'].touched)
+                "
+              >
+                <div *ngIf="f['locationCode'].errors['required']" class="error">
+                  Location Code is required.
+                </div>
+              </div>
+              <div *ngIf="errorMessage" class="error">
+                Location code is already exist
+              </div>
+            </div>
+            <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+              <label>Location Type<sup>*</sup></label>
+              <nz-select
+                formControlName="locationtype"
+                [nzPlaceHolder]="'Select an option'"
+                nzShowSearch
+                [nzAllowClear]="true"
+                style="width: 100%"
+                nzSize="large"
+              >
+                <nz-option
+                  *ngFor="let option of locationTypeDropDown"
+                  [nzLabel]="option.name"
+                  [nzValue]="option.id"
+                ></nz-option>
+              </nz-select>
+              <div
+                *ngIf="
+                  f['locationtype'].errors &&
+                  (f['locationtype'].dirty || f['locationtype'].touched)
+                "
+              >
+                <div *ngIf="f['locationtype'].errors['required']" class="error">
+                  Location type is required.
+                </div>
+              </div>
+            </div>
+
+            <div
+              nz-col
+              class="gutter-row"
+              nzXs="24"
+              nzSm="12"
+              *ngIf="listOfData?.length > 0"
+            >
+              <label>Parent Location</label>
+              <nz-select
+                formControlName="parentLocation"
+                [nzPlaceHolder]="'Select an option'"
+                nzShowSearch
+                [nzAllowClear]="true"
+                style="width: 100%"
+                nzSize="large"
+              >
+                <ng-container *ngFor="let option of listOfData">
+                  <nz-option
+                    *ngIf="option?.id !== null"
+                    [nzLabel]="option?.locationName"
+                    [nzValue]="option?.id"
+                  >
+                  </nz-option>
+                </ng-container>
+              </nz-select>
+            </div>
+
+            <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+              <label>Local Currency</label
+              ><nz-select
+                formControlName="localCurrency"
+                [nzPlaceHolder]="'Select an option'"
+                [nzAllowClear]="true"
+                style="width: 100%"
+                nzShowSearch
+                nzSize="large"
+              >
+                <nz-option
+                  *ngFor="let option of localCurrencyDropDown"
+                  [nzLabel]="option.description"
+                  [nzValue]="option.id"
+                ></nz-option>
+              </nz-select>
+              <div
+                *ngIf="
+                  f['localCurrency'].errors &&
+                  (f['localCurrency'].dirty || f['localCurrency'].touched)
+                "
+              >
+                <div
+                  *ngIf="f['localCurrency'].errors['required']"
+                  class="error"
+                >
+                  Local currency is required.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </form>
+    </nz-card>
+    <!-- add location end -->
+
+    <!--create preview component start -->
+    <nz-card
+      *ngIf="tabSelected === 2"
+      style="width: 900px"
+      [nzBordered]="false"
+      [nzTitle]="previewtitle"
+      nzDescription="See a quick summary of Location"
+      class="custom-card"
+    >
+      <ng-template #previewtitle>
+        <h3>Preview</h3>
+        <p>See a quick summary of Location</p>
+      </ng-template>
+
+      <section class="preview-card">
+        <div class="header">
+          <h4>Location Details</h4>
+          <button
+            nz-button
+            nzTooltipTitle="Edit"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="updateTabSelected(1)"
+          >
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 24]">
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Location Name</h5>
+              <p>{{ previewValue?.locationName }}</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Location Code</h5>
+              <p>{{ previewValue?.locationCode }}</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Location Type</h5>
+              <p>
+                {{
+                  getLabel(
+                    previewValue?.locationtype,
+                    locationTypeDropDown,
+                    "id",
+                    "name"
+                  )
+                }}
+              </p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Parent Location</h5>
+              <p>
+                {{
+                  getLabel(
+                    previewValue?.parentLocation,
+                    listOfData,
+                    "id",
+                    "locationName"
+                  )
+                }}
+              </p>
+            </div>
+            <div nz-col nzSpan="8">
+              <h5>Local Currency</h5>
+              <p>
+                {{
+                  getLabel(
+                    previewValue?.localCurrency,
+                    localCurrencyDropDown,
+                    "id",
+                    "description"
+                  )
+                }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </nz-card>
+    <!--create preview component end -->
+  </ng-container>
+
+  <ng-template #modalFooter>
+    <div>
+      <button nz-button (click)="back()" *ngIf="tabSelected > 1">Back</button>
+    </div>
+
+    <button
+      nz-button
+      nzType="primary"
+      (click)="saveContinue()"
+      *ngIf="tabSelected < 2 && !isEdit"
+    >
+      Save & Continue
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="onCreateLocation()"
+      *ngIf="tabSelected === 2 && !isEditEnable"
+    >
+      Create Location
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="onUpdateLocationApi()"
+      *ngIf="tabSelected === 2 && isEditEnable"
+    >
+      Update
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="update()"
+      *ngIf="tabSelected === 3 && isEdit"
+    >
+      Update
+    </button>
+  </ng-template>
+</nz-modal>
+<!-- location Create Model end -->
+
+<!-- new edit nz model start -->
+<nz-modal
+  [(nzVisible)]="isEditVisible"
+  [nzTitle]="modalTitle1"
+  [nzCloseIcon]="modalClose1"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzFooter]="modalFooter"
+  nzCentered
+  nzWidth="100%"
+  nzWrapClassName="modal-full"
+>
+  <ng-template #modalTitle1> Edit Location </ng-template>
+  <ng-template #modalClose1>close</ng-template>
+  <ng-container *nzModalContent>
+    <nz-card
+      *ngIf="tabSelected === 1"
+      style="width: 880px"
+      [nzBordered]="false"
+      [nzBodyStyle]="{ padding: '0px' }"
+      nzTitle="Location Details"
+      class="custom-card"
+    >
+      <form [formGroup]="locationEditForm">
+        <section class="p-20">
+          <div nz-row [nzGutter]="[16, 16]">
+            <div nz-col class="gutter-row" [nzSpan]="24"></div>
+            <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+              <label>Location Name<sup>*</sup></label
+              ><input
+                nz-input
+                placeholder="Enter Location Name"
+                type="text"
+                nzSize="large"
+                formControlName="locationName"
+              />
+              <div
+                *ngIf="
+                  g['locationName'].errors &&
+                  (g['locationName'].dirty || g['locationName'].touched)
+                "
+              >
+                <div *ngIf="g['locationName'].errors['required']" class="error">
+                  location name is required.
+                </div>
+              </div>
+            </div>
+            <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+              <label>Location Code<sup>*</sup></label
+              ><input
+                nz-input
+                placeholder="Enter Location Code"
+                type="text"
+                nzSize="large"
+                formControlName="locationCode"
+              />
+              <div
+                *ngIf="
+                  g['locationCode'].errors &&
+                  (g['locationCode'].dirty || g['locationCode'].touched)
+                "
+              >
+                <div *ngIf="g['locationCode'].errors['required']" class="error">
+                  location code is required.
+                </div>
+              </div>
+            </div>
+            <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+              <label>Location Type<sup>*</sup></label>
+              <nz-select
+                formControlName="locationtype"
+                [nzPlaceHolder]="'Select an option'"
+                [nzAllowClear]="true"
+                style="width: 100%"
+                nzSize="large"
+              >
+                <nz-option
+                  *ngFor="let option of locationTypeDropDown"
+                  [nzLabel]="option.name"
+                  [nzValue]="option.id"
+                ></nz-option>
+              </nz-select>
+              <div
+                *ngIf="
+                  g['locationtype'].errors &&
+                  (g['locationtype'].dirty || g['locationtype'].touched)
+                "
+              >
+                <div *ngIf="g['locationtype'].errors['required']" class="error">
+                  location type is required.
+                </div>
+              </div>
+            </div>
+            <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+              <label>Parent Location</label>
+              <nz-select
+                formControlName="parentLocation"
+                [nzPlaceHolder]="'Select an option'"
+                [nzAllowClear]="true"
+                style="width: 100%"
+                nzSize="large"
+              >
+                <ng-container *ngFor="let option of listOfData">
+                  <nz-option
+                    *ngIf="
+                      option?.id !== null &&
+                      option?.locationName !==
+                        this.editLocationPatch?.locationName
+                    "
+                    [nzLabel]="option?.locationName"
+                    [nzValue]="option?.id"
+                  >
+                  </nz-option>
+                </ng-container>
+              </nz-select>
+            </div>
+            <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+              <label>Local Currency<sup>*</sup></label
+              ><nz-select
+                formControlName="localCurrency"
+                [nzPlaceHolder]="'Select an option'"
+                [nzAllowClear]="true"
+                style="width: 100%"
+                nzSize="large"
+              >
+                <nz-option
+                  *ngFor="let option of localCurrencyDropDown"
+                  [nzLabel]="option.description"
+                  [nzValue]="option.id"
+                ></nz-option>
+              </nz-select>
+            </div>
+          </div>
+        </section>
+      </form>
+    </nz-card>
+
+    <!-- edit preview start -->
+    <nz-card
+      *ngIf="tabSelected === 2"
+      style="width: 900px"
+      [nzBordered]="false"
+      [nzTitle]="previewtitle"
+      nzDescription="See a quick summary of Location"
+      class="custom-card"
+    >
+      <ng-template #previewtitle>
+        <h3>Preview</h3>
+        <p>See a quick summary of Location</p>
+      </ng-template>
+
+      <section class="preview-card">
+        <div class="header">
+          <h4>Location Details</h4>
+          <button
+            nz-button
+            nzTooltipTitle="Edit"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="updateTabSelected(1)"
+          >
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 24]">
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Location Name</h5>
+              <p>{{ previewEditValue?.locationName }}</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Location Code</h5>
+              <p>{{ previewEditValue?.locationCode }}</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Location Type</h5>
+              <p>
+                {{
+                  getLabel(
+                    previewEditValue?.locationtype,
+                    locationTypeDropDown,
+                    "id",
+                    "name"
+                  )
+                }}
+              </p>
+              <!-- <p ngIf="data?.id === previewValue?.locationtype"> {{previewEditValue?.locationtype}} </p> -->
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Parent Location</h5>
+              <div *ngFor="let data of listOfData">
+                <p ngIf="data.id === previewEditValue?.parentLocation"></p>
+              </div>
+              <p>
+                {{
+                  getLabel(
+                    previewEditValue?.parentLocation,
+                    listOfData,
+                    "id",
+                    "locationName"
+                  )
+                }}
+              </p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Local Currency</h5>
+              <p>
+                {{
+                  getLabel(
+                    previewEditValue?.localCurrency,
+                    localCurrencyDropDown,
+                    "id",
+                    "description"
+                  )
+                }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </nz-card>
+    <!-- edit preview end -->
+  </ng-container>
+</nz-modal>
+<!-- new edit nz model end -->
+
+<!-- location view Model start  -->
+<nz-modal
+  [(nzVisible)]="viewLocationModel"
+  [nzTitle]="modalTitle1"
+  [nzCloseIcon]="modalClose1"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzFooter]="null"
+  nzCentered
+  nzWidth="100%"
+  nzWrapClassName="modal-full no-footer"
+>
+  <ng-container *nzModalContent>
+    <div *ngFor="let data of viewList">
+      <nz-card
+        style="width: 670px"
+        [nzBordered]="false"
+        [nzTitle]="previewtitle"
+        nzDescription="See a quick summary of organisation"
+        class="custom-card"
+      >
+        <ng-template #previewtitle>
+          <div
+            nz-row
+            nzJustify="space-between"
+            nzAlign="middle"
+            class="view-title"
+          >
+            <div nz-col>
+              <nz-space>
+                <span class="first-letter">{{
+                  data?.locationName?.charAt(0)
+                }}</span>
+                <div>
+                  <h3>
+                    {{ data?.locationName }}
+                    <span class="dot"></span>
+                    <span class="status green" *ngIf="data?.isActive === true"
+                      >Active</span
+                    >
+                    <span class="status red" *ngIf="data?.isActive === false"
+                      >In-Active</span
+                    >
+                  </h3>
+                  <p>Location Code:{{ data?.locationCode }}</p>
+                </div>
+              </nz-space>
+            </div>
+            <div nz-col>
+              <button
+                nz-button
+                nzTooltipTitle="Edit"
+                nzTooltipPlacement="bottom"
+                nz-tooltip
+                (click)="editLocation(data)"
+              >
+                <span nz-icon nzType="edit" nzTheme="outline"></span>
+              </button>
+            </div>
+          </div>
+        </ng-template>
+        <section class="view-card">
+          <div class="body">
+            <div nz-row [nzGutter]="[15, 15]">
+              <div nz-col nzSpan="24">
+                <h5>Location Type</h5>
+                <p href="#" target="_blank">{{ data?.locationType?.name }}</p>
+                <hr />
+              </div>
+              <div nz-col nzSpan="24">
+                <h5>Parent Location</h5>
+
+                <p>{{ data?.parentLocation?.locationName }}</p>
+                <hr />
+              </div>
+              <div nz-col nzSpan="24">
+                <h5>Local Currency</h5>
+                <p>{{ data?.localCurrency?.currencyCode }}</p>
+                <hr />
+              </div>
+            </div>
+          </div>
+        </section>
+      </nz-card>
+    </div>
+  </ng-container>
+  <ng-template #modalTitle1> Location Information </ng-template>
+  <ng-template #modalClose1> Close </ng-template>
+</nz-modal>
+<!-- location view Model ends -->
+
+<!-- Grid Customization starts -->
+<nz-modal
+  [(nzVisible)]="isModalVisible"
+  (nzOnCancel)="Cancel()"
+  (nzOnOk)="handleOk()"
+  nzTitle="Location"
+  nzCentered
+  [nzCloseIcon]="modalClose2"
+  nzWidth="450px"
+  ><ng-template #modalClose2> Close </ng-template>
+  <ng-container *nzModalContent>
+    <app-grid-customization
+      [checkboxStates]="States"
+      [columns]="columns"
+    ></app-grid-customization>
+  </ng-container>
+</nz-modal>
+<!-- Grid Customization End -->

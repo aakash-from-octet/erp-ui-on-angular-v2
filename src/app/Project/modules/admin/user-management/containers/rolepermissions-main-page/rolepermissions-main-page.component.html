@@ -1,0 +1,73 @@
+<div class="w-100">
+  <div class="title-bar">
+    <div nz-row nzJustify="space-between" nzAlign="middle">
+      <div nz-col>
+        <h3>Role Permissions</h3>
+      </div>
+    </div>
+  </div>
+</div>
+<section class="role-grid">
+  <div class="left-bar">
+    <div class="search-wrap">
+      <nz-input-group [nzPrefix]="PrefixIconSearch">
+        <input type="text" nz-input placeholder="Search roles" />
+      </nz-input-group>
+      <ng-template #PrefixIconSearch>
+        <span nz-icon nzType="search"></span>
+      </ng-template>
+    </div>
+
+    <div class="left-header">Roles</div>
+    <ul class="roles-menu">
+      <li
+        *ngFor="let role of roleList"
+        [class.active]="role?.idRoles === activeRole[0]"
+        (click)="setActiveRole(role)"
+        (keydown.enter)="setActiveRole(role)"
+        tabindex="0"
+      >
+        <a>
+          <div class="truck-wrap">
+            <img src="../../../../../../../assets/images/truck.svg" alt="" />
+          </div>
+          {{ role.name }}
+          <span nz-icon nzType="info-circle" nzTheme="outline"></span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div>
+    <nz-tabset
+      *ngIf="activeRole === filteredList"
+      [nzTabBarExtraContent]="extraTemplate"
+    >
+      <nz-tab nzTitle="Menu Level Items">
+        <app-rolepermission-table
+          [listOfMapData]="listOfMapData"
+          [mapOfExpandedData]="mapOfExpandedData"
+          (outputListOfData)="receiveDataFromChild($event)"
+        ></app-rolepermission-table>
+      </nz-tab>
+      <nz-tab nzTitle="Report Access">
+        <!-- <app-rolepermission-table
+          [listOfMapData]="listOfMapData"
+          [mapOfExpandedData]="mapOfExpandedData"
+          (outputListOfData)="receiveDataFromChild($event)"
+        ></app-rolepermission-table
+      > -->
+      </nz-tab>
+    </nz-tabset>
+    <ng-template #extraTemplate>
+      <button
+        nz-button
+        nzSize="small"
+        nzType="primary"
+        class="outline-primary mr-15"
+        (click)="onSave()"
+      >
+        {{ saveButtonText }}
+      </button>
+    </ng-template>
+  </div>
+</section>

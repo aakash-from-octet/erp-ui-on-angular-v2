@@ -1,0 +1,32 @@
+<nav>
+  <div>
+    <div class="logo">
+      <img src="../../../assets/images/logo.svg" alt="logo" />
+    </div>
+    <ul *ngFor="let data of menuarray">
+      <ng-container *ngIf="data?.idModule !== 9">
+        <li class="category">{{ data.label }}</li>
+        <li>
+          <a (click)="handleButtonClick(data)" (keydown.enter)="handleButtonClick(data)" tabindex="0">
+            <img src="{{ data.icon }}" alt="menu icons" />
+            <span>{{ data?.moduleName }}</span></a
+          >
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+  <div *ngFor="let data of menuarray">
+    <a
+      *ngIf="data?.idModule === 9"
+      (click)="handleButtonClick(data)"
+      (keydown.enter)="handleButtonClick(data)"
+      tabindex="0"
+    >
+      <div class="user">
+        <img src="{{ data.icon }}" alt="menu icons" />
+        <span>{{ data?.moduleName }}</span>
+      </div>
+      <p class="version">V 0.1.1</p>
+    </a>
+  </div>
+</nav>

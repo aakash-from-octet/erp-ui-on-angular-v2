@@ -1,0 +1,72 @@
+<ng-container>
+  <div>
+    <div nz-row [nzGutter]="12">
+      <div nz-col class="gutter-row" [nzSpan]="8">
+        <nz-tree-select
+          [(ngModel)]="value"
+          [nzNodes]="nodes"
+          nzShowSearch
+          nzCheckable
+          [nzShowExpand]="false"
+          [nzMaxTagCount]="1"
+          [nzShowIcon]="true"
+          nzPlaceHolder="Filter By Product"
+          nzSize="large"
+          class="w-100"
+          nzDropdownClassName="multiselect"
+          (ngModelChange)="updateFilterList()"
+        ></nz-tree-select>
+      </div>
+      <div nz-col class="gutter-row" [nzSpan]="8">
+        <nz-tree-select
+          [(ngModel)]="value1"
+          [nzNodes]="nodes1"
+          nzShowSearch
+          nzCheckable
+          [nzShowExpand]="false"
+          [nzMaxTagCount]="1"
+          [nzShowIcon]="true"
+          nzPlaceHolder="Filter By Facility"
+          nzSize="large"
+          class="w-100"
+          nzDropdownClassName="multiselect"
+          (ngModelChange)="updateFilterList()"
+        ></nz-tree-select>
+      </div>
+      <div nz-col class="gutter-row" [nzSpan]="8">
+        <nz-tree-select
+          [(ngModel)]="value2"
+          [nzNodes]="nodes2"
+          nzShowSearch
+          nzCheckable
+          [nzShowExpand]="false"
+          [nzMaxTagCount]="1"
+          [nzShowIcon]="true"
+          nzPlaceHolder="Filter By Mould"
+          nzSize="large"
+          class="w-100"
+          nzDropdownClassName="multiselect"
+          (ngModelChange)="updateFilterList()"
+        ></nz-tree-select>
+      </div>
+    </div>
+  </div>
+  <p class="filter-title">All Components</p>
+  <ul class="filter-list">
+    <ng-container *ngIf="filteredItems.length; else staticFilterList">
+      <li *ngFor="let item of filteredItems">{{ item }}</li>
+    </ng-container>
+    <ng-template #staticFilterList>
+      <li>Fliptop Bottle - <span>#456213</span></li>
+      <li>Fliptop Bottle - <span>#456213</span></li>
+      <li>Fliptop Bottle - <span>#456213</span></li>
+      <li>Fliptop Bottle - <span>#456213</span></li>
+      <li>Fliptop Bottle - <span>#456213</span></li>
+      <li>Fliptop Bottle - <span>#456213</span></li>
+      <li>Fliptop Bottle - <span>#456213</span></li>
+      <li>Fliptop Bottle - <span>#456213</span></li>
+      <li>Fliptop Bottle - <span>#456213</span></li>
+      <li>Fliptop Bottle - <span>#456213</span></li>
+    </ng-template>
+  </ul>
+</ng-container>

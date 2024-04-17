@@ -1,0 +1,29 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<a nz-dropdown [nzDropdownMenu]="menu" nzTrigger="click">
+  <span nz-icon nzType="filter" nzTheme="fill" class="filter-icon"></span>
+</a>
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <div class="custom-search">
+    <nz-input-group [nzPrefix]="prefixTemplateUser" class="mb-18"
+      ><input nz-input placeholder="Search by Keyword" type="text"
+    /></nz-input-group>
+    <ng-template #prefixTemplateUser
+      ><span nz-icon nzType="search"></span
+    ></ng-template>
+    <p @click="">Sort A to Z</p>
+    <p @click="">Sort Z to A</p>
+    <nz-collapse nzGhost nzExpandIconPosition="right">
+      <nz-collapse-panel nzHeader="Filter by Name">
+        <label nz-checkbox>Org Name 1</label>
+        <label nz-checkbox>Org Name 2</label>
+      </nz-collapse-panel>
+    </nz-collapse>
+    <hr />
+    <div class="text-right">
+      <button nz-button nzType="default" nzSize="small">Reset</button>
+      <button nz-button nzType="primary" nzSize="small" class="ml-12">
+        Apply
+      </button>
+    </div>
+  </div>
+</nz-dropdown-menu>

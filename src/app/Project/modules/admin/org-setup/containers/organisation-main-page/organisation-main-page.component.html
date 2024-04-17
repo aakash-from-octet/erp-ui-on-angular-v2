@@ -1,0 +1,719 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<!-- header in this search bar and table component inside -->
+<div class="w-100">
+  <div class="title-bar">
+    <div nz-row nzJustify="space-between" nzAlign="middle">
+      <div nz-col>
+        <h3>Organisation</h3>
+      </div>
+      <div nz-col>
+        <nz-space [nzSize]="8">
+          <!-- <nz-input-group
+            *nzSpaceItem
+            [nzPrefix]="prefixTemplateUser"
+            class="search"
+          >
+            <input
+              type="text"
+              nz-input
+              placeholder="Search"
+              [(ngModel)]="searchText"
+              (ngModelChange)="searchEntries()"
+            />
+            <ng-template #prefixTemplateUser
+              ><span nz-icon nzType="search" nzTheme="outline"></span
+            ></ng-template>
+          </nz-input-group> -->
+
+          <button
+            nz-button
+            nzType="default"
+            *nzSpaceItem
+            nzTooltipTitle="Export"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="convertToJSON()"
+          >
+            <span nz-icon nzType="download" nzTheme="outline"></span></button
+          >
+          <!-- <button
+            nz-button
+            nzType="default"
+            *nzSpaceItem
+            nzTooltipTitle="Reset Filters"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="restFilter()"
+          >
+            <span nz-icon nzType="reload" nzTheme="outline"></span>
+          </button> -->
+          <button
+            nz-button
+            nzType="default"
+            *nzSpaceItem
+            (click)="openGridModal()"
+            nzTooltipTitle="Grid Customization"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+          >
+            <span nz-icon nzType="control" nzTheme="outline"></span>
+          </button>
+        </nz-space>
+      </div>
+    </div>
+  </div>
+  <app-organisation-table
+    (openViewEvent)="openViewModal($event)"
+    (openEditEvent)="openEditModal(1, $event)"
+  ></app-organisation-table>
+</div>
+<!-- header tab ends -->
+
+<!-- In Organisation only edit  Modal  starts inside this preview card is there-->
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="modalTitle"
+  [nzCloseIcon]="modalClose"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzFooter]="modalFooter"
+  nzCentered
+  nzWidth="100%"
+  nzWrapClassName="modal-full"
+>
+  <ng-template #modalTitle> Update Organisation </ng-template>
+  <ng-template #modalClose> Close </ng-template>
+  <ng-container *nzModalContent>
+    <nz-card
+      *ngIf="tabSelected < 3"
+      style="width: 880px"
+      [nzBordered]="false"
+      [nzBodyStyle]="{ padding: '0px' }"
+      nzTitle="Organisation Details"
+      class="custom-card"
+    >
+      <!-- tab component start -->
+      <form [formGroup]="orgForm">
+        <nz-tabset
+          [nzTabPosition]="isSmallScreen ? 'top' : 'left'"
+          [(nzSelectedIndex)]="tabSelected"
+          class="step-form"
+        >
+          <nz-tab nzTitle="Steps:" nzDisabled="true"></nz-tab>
+          <nz-tab nzTitle="Org Details">
+            <section class="p-20">
+              <div nz-row [nzGutter]="[16, 16]">
+                <div nz-col class="gutter-row" [nzSpan]="24">
+                  <label>Add Logo</label>
+                  <nz-upload
+                    class="avatar-uploader"
+                    nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                    nzName="avatar"
+                    nzListType="picture-card"
+                    [nzShowUploadList]="false"
+                    (nzChange)="handleChange($event)"
+                  >
+                    <ng-container *ngIf="!getLogo">
+                      <span
+                        class="upload-icon"
+                        nz-icon
+                        [nzType]="loading ? 'loading' : 'plus'"
+                      ></span>
+                      <div class="ant-upload-text">Upload</div>
+                    </ng-container>
+                    <img
+                      *ngIf="getLogo"
+                      [src]="getLogo"
+                      alt=""
+                      style="width: 100%"
+                    />
+                  </nz-upload>
+                </div>
+                <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                  <label>Organisation Name<sup>*</sup></label
+                  ><input
+                    nz-input
+                    placeholder="Enter Category Name"
+                    type="text"
+                    nzSize="large"
+                    formControlName="orgName"
+                    [class.ant-input-status-error]="
+                      f['orgName'].errors &&
+                      (f['orgName'].dirty || f['orgName'].touched)
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      f['orgName'].errors &&
+                      (f['orgName'].dirty || f['orgName'].touched)
+                    "
+                  >
+                    <div *ngIf="f['orgName'].errors['required']" class="error">
+                      Organisation Name is required.
+                    </div>
+                  </div>
+                </div>
+                <div nz-col class="gutter-row" [nzSpan]="12">
+                  <label>Organisation Code<sup>*</sup></label
+                  ><input
+                    nz-input
+                    placeholder="Enter Category Code"
+                    type="text"
+                    nzSize="large"
+                    [readonly]="isReadOnly"
+                    formControlName="orgCode"
+                  />
+                </div>
+                <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                  <label>Domain Name<sup>*</sup></label
+                  ><input
+                    nz-input
+                    placeholder="Enter Domain Name"
+                    type="text"
+                    nzSize="large"
+                    formControlName="domainName"
+                    [class.ant-input-status-error]="
+                      f['domainName'].errors &&
+                      (f['domainName'].dirty || f['domainName'].touched)
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      f['domainName'].errors &&
+                      (f['domainName'].dirty || f['domainName'].touched)
+                    "
+                  >
+                    <div
+                      *ngIf="f['domainName'].errors['required']"
+                      class="error"
+                    >
+                      Domain Name is required.
+                    </div>
+                  </div>
+                </div>
+                <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                  <label>Global Currency<sup>*</sup></label>
+                  <nz-select
+                    formControlName="globalCurrency"
+                    [nzAllowClear]="true"
+                    style="width: 100%"
+                    nzSize="large"
+                  >
+                    <nz-option
+                      *ngFor="let option of getGlobalCurrencyData"
+                      [nzLabel]="option.currencyCode"
+                      [nzValue]="option.id"
+                    ></nz-option>
+                  </nz-select>
+                </div>
+                <div nz-col class="gutter-row" [nzSpan]="24">
+                  <label>Domain URL</label
+                  ><input
+                    nz-input
+                    placeholder="Enter Packfora URL"
+                    type="text"
+                    nzSize="large"
+                    [readonly]="isReadOnly"
+                    formControlName="domainUrl"
+                  />
+                </div>
+              </div>
+            </section>
+          </nz-tab>
+          <nz-tab nzTitle="Contact Details">
+            <section class="p-20">
+              <div nz-row [nzGutter]="[16, 16]">
+                <div nz-col class="gutter-row" nzXs="24" nzSm="8">
+                  <label>Contact Name<sup>*</sup></label>
+                  <input
+                    nz-input
+                    placeholder="Enter  Conatct Name"
+                    type="text"
+                    nzSize="large"
+                    formControlName="ContactName"
+                    [class.ant-input-status-error]="
+                      f['ContactName'].errors &&
+                      (f['ContactName'].dirty || f['ContactName'].touched)
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      f['ContactName'].errors &&
+                      (f['ContactName'].dirty || f['ContactName'].touched)
+                    "
+                  >
+                    <div
+                      *ngIf="f['ContactName'].errors['required']"
+                      class="error"
+                    >
+                      Contact Name is required.
+                    </div>
+                  </div>
+                </div>
+                <div nz-col class="gutter-row" nzXs="24" nzSm="8">
+                  <label>Contact Number<sup>*</sup></label
+                  ><input
+                    nz-input
+                    placeholder="Enter Contact Number"
+                    type="text"
+                    nzSize="large"
+                    formControlName="ContactNumber"
+                    [class.ant-input-status-error]="
+                      f['ContactNumber'].errors &&
+                      (f['ContactNumber'].dirty || f['ContactNumber'].touched)
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      f['ContactNumber'].errors &&
+                      (f['ContactNumber'].dirty || f['ContactNumber'].touched)
+                    "
+                  >
+                    <div
+                      *ngIf="f['ContactNumber'].errors['required']"
+                      class="error"
+                    >
+                      Contact Number is required.
+                    </div>
+                  </div>
+                </div>
+                <div nz-col class="gutter-row" nzXs="24" nzSm="8">
+                  <label>Email id<sup>*</sup></label
+                  ><input
+                    nz-input
+                    placeholder="Enter Email id"
+                    type="email"
+                    name="email"
+                    nzSize="large"
+                    formControlName="PrimaryEmail"
+                    [class.ant-input-status-error]="
+                      f['PrimaryEmail'].errors &&
+                      (f['PrimaryEmail'].dirty ||
+                        f['PrimaryEmail'].touched ||
+                        f['PrimaryEmail'].invalid)
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      f['PrimaryEmail'].errors &&
+                      (f['PrimaryEmail'].dirty || f['PrimaryEmail'].touched)
+                    "
+                  >
+                    <div
+                      *ngIf="f['PrimaryEmail'].errors['required']"
+                      class="error"
+                    >
+                      Primary Email is required.
+                    </div>
+                    <div
+                      *ngIf="f['PrimaryEmail'].errors['pattern']"
+                      class="error"
+                    >
+                      Invalid email format.
+                    </div>
+                  </div>
+                </div>
+                <div nz-col class="gutter-row" nzXs="24" nzSm="24">
+                  <label>Address</label
+                  ><input
+                    nz-input
+                    placeholder="Address Line 1"
+                    type="text"
+                    nzSize="large"
+                    formControlName="addressOne"
+                    class="mb-10"
+                    [class.ant-input-status-error]="
+                      f['addressOne'].errors &&
+                      (f['addressOne'].dirty || f['addressOne'].touched)
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      f['addressOne'].errors &&
+                      (f['addressOne'].dirty || f['addressOne'].touched)
+                    "
+                  >
+                    <div
+                      *ngIf="f['addressOne'].errors['required']"
+                      class="error"
+                    >
+                      Address is required.
+                    </div>
+                  </div>
+                  <input
+                    nz-input
+                    placeholder="Address Line 2"
+                    type="text"
+                    nzSize="large"
+                    formControlName="addressTwo"
+                  />
+                </div>
+                <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="6">
+                  <label>Country<sup>*</sup></label
+                  ><input
+                    nz-input
+                    placeholder="Enter Country "
+                    type="text"
+                    nzSize="large"
+                    formControlName="country"
+                    [class.ant-input-status-error]="
+                      f['country'].errors &&
+                      (f['country'].dirty || f['country'].touched)
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      f['country'].errors &&
+                      (f['country'].dirty || f['country'].touched)
+                    "
+                  >
+                    <div *ngIf="f['country'].errors['required']" class="error">
+                      Country is required.
+                    </div>
+                  </div>
+                </div>
+                <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="6">
+                  <label>State<sup>*</sup></label
+                  ><input
+                    nz-input
+                    placeholder="Enter State "
+                    type="text"
+                    nzSize="large"
+                    formControlName="state"
+                    [class.ant-input-status-error]="
+                      f['state'].errors &&
+                      (f['state'].dirty || f['state'].touched)
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      f['state'].errors &&
+                      (f['state'].dirty || f['state'].touched)
+                    "
+                  >
+                    <div *ngIf="f['state'].errors['required']" class="error">
+                      State is required.
+                    </div>
+                  </div>
+                </div>
+
+                <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="6">
+                  <label>City<sup>*</sup></label
+                  ><input
+                    nz-input
+                    placeholder="Enter City "
+                    type="text"
+                    nzSize="large"
+                    formControlName="city"
+                    [class.ant-input-status-error]="
+                      f['city'].errors && (f['city'].dirty || f['city'].touched)
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      f['city'].errors && (f['city'].dirty || f['city'].touched)
+                    "
+                  >
+                    <div *ngIf="f['city'].errors['required']" class="error">
+                      City is required.
+                    </div>
+                  </div>
+                </div>
+                <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="6">
+                  <label>ZipCode<sup>*</sup></label
+                  ><input
+                    nz-input
+                    placeholder="Enter ZipCode "
+                    type="text"
+                    nzSize="large"
+                    formControlName="pinCode"
+                    [class.ant-input-status-error]="
+                      f['pinCode'].errors &&
+                      (f['pinCode'].dirty || f['pinCode'].touched)
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      f['pinCode'].errors &&
+                      (f['pinCode'].dirty || f['pinCode'].touched)
+                    "
+                  >
+                    <div *ngIf="f['pinCode'].errors['required']" class="error">
+                      Zipcode is required.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </nz-tab>
+        </nz-tabset>
+        <!-- tab component start -->
+      </form>
+    </nz-card>
+
+    <!-- preview component start -->
+    <nz-card
+      *ngIf="tabSelected === 3"
+      style="width: 900px"
+      [nzBordered]="false"
+      [nzTitle]="previewtitle"
+      nzDescription="See a quick summary of organisation"
+      class="custom-card"
+    >
+      <ng-template #previewtitle>
+        <h3>Preview</h3>
+        <p>See a quick summary of organisation</p>
+      </ng-template>
+      <section class="preview-card">
+        <div class="header">
+          <h4>Organisation Details</h4>
+          <button
+            nz-button
+            nzTooltipTitle="Edit"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="updateTabSelected(1)"
+          >
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 24]">
+            <div nz-col nzSpan="24">
+              <h5>Logo</h5>
+              <div class="preview-logo">
+                <!-- <img src="../../../../../../../assets/images/org-logo.png" alt="" /> -->
+                <img *ngIf="getLogo" [src]="getLogo" alt="logo" />
+              </div>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Organisation Name</h5>
+              <p>{{ previewValue?.orgName }}</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Organisation Code</h5>
+              <p>{{ previeworgcode }}</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Domain Name</h5>
+              <p>{{ previewDomainName }}</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Domain Url</h5>
+              <p>{{ previewDomainUrl }}</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Global Currency</h5>
+              <p>{{ previewValueForGlobalCurrency }}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="preview-card">
+        <div class="header">
+          <h4>Contact Details</h4>
+          <button
+            nz-button
+            nzTooltipTitle="Edit"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="updateTabSelected(2)"
+          >
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 24]">
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Contact Name</h5>
+              <p>{{ previewValue?.ContactName }}</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Contact Number</h5>
+              <p>{{ previewValue?.ContactNumber }}</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Primary Email</h5>
+              <p>{{ previewValue?.PrimaryEmail }}</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Address</h5>
+              <p>{{ previewValue?.addressOne }}</p>
+              <p>{{ previewValue?.addressTwo }}</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>PinCode</h5>
+              <p>{{ previewValue?.pinCode }}</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>State</h5>
+              <p>{{ previewValue?.state }}</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Country</h5>
+              <p>{{ previewValue?.country }}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </nz-card>
+    <!-- preview component end -->
+  </ng-container>
+  <ng-template #modalFooter>
+    <div>
+      <button nz-button (click)="back()" *ngIf="tabSelected > 1">Back</button>
+    </div>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="updateOrg()"
+      *ngIf="tabSelected === 3"
+    >
+      Update
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="update()"
+      *ngIf="tabSelected < 3 && isEdit"
+    >
+      Save & Continue
+    </button>
+  </ng-template>
+</nz-modal>
+<!-- end edit module -->
+
+<!-- View Modal -->
+<nz-modal
+  [(nzVisible)]="viewOrganisation"
+  [nzTitle]="modalTitle1"
+  [nzCloseIcon]="modalClose1"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzFooter]="null"
+  nzCentered
+  nzWidth="100%"
+  nzWrapClassName="modal-full no-footer"
+>
+  <ng-container *nzModalContent>
+    <nz-card
+      style="width: 670px"
+      [nzBordered]="false"
+      [nzTitle]="previewtitle"
+      nzDescription="See a quick summary of organisation"
+      class="custom-card"
+    >
+      <ng-template #previewtitle>
+        <div
+          nz-row
+          nzJustify="space-between"
+          nzAlign="middle"
+          class="view-title"
+        >
+          <div nz-col>
+            <nz-space>
+              <span class="first-letter">{{
+                tableDataValue.name.charAt(0)
+              }}</span>
+              <div>
+                <h3>
+                  {{ tableDataValue?.name }} <span class="dot"></span>
+                  <span
+                    *ngIf="tableDataValue?.status === true"
+                    class="status green"
+                    >Active</span
+                  >
+                  <span
+                    *ngIf="tableDataValue?.status === false"
+                    class="status red"
+                    >Inactive</span
+                  >
+                </h3>
+                <p>
+                  Organisation Code:
+                  {{ tableDataValue.orgCode }}
+                </p>
+              </div>
+            </nz-space>
+          </div>
+          <div nz-col>
+            <button
+              nz-button
+              nzTooltipTitle="Edit"
+              nzTooltipPlacement="bottom"
+              nz-tooltip
+              (click)="openEditModal(1, this.tableDataValue)"
+            >
+              <span nz-icon nzType="edit" nzTheme="outline"></span>
+            </button>
+          </div>
+        </div>
+      </ng-template>
+      <section class="view-card">
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 15]">
+            <img *ngIf="getLogo" [src]="getLogo" alt="image" />
+            <div nz-col nzSpan="24">
+              <h5>Domain Name</h5>
+              <p>{{ tableDataValue?.domainName }}</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Domain URL</h5>
+              {{ tableDataValue.domainUrl }}
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Primary Email</h5>
+              <p>{{ tableDataValue?.contactInfo?.email }}</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Contact Name</h5>
+              <p>{{ tableDataValue?.contactInfo?.name }}</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Contact</h5>
+              <p>{{ tableDataValue?.contactInfo?.mobile }}</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Address</h5>
+              <p>{{ tableDataValue?.contactAddressInfo?.addressLine1 }}</p>
+              <p>{{ tableDataValue?.contactAddressInfo?.addressLine2 }}</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>City</h5>
+              <p>{{ tableDataValue?.contactAddressInfo?.city }}</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Zip code</h5>
+              <p>{{ tableDataValue?.contactAddressInfo?.zipCode }}</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>State</h5>
+              <p>{{ tableDataValue?.contactAddressInfo?.state }}</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Country</h5>
+              <p>{{ tableDataValue?.contactAddressInfo?.country }}</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Global Currency</h5>
+              <p>{{ tableDataValue?.globalCurrencyId?.currencyCode }}</p>
+              <hr />
+            </div>
+          </div>
+        </div>
+      </section>
+    </nz-card>
+  </ng-container>
+  <ng-template #modalTitle1> Organisation Information </ng-template>
+  <ng-template #modalClose1> Close </ng-template></nz-modal
+>

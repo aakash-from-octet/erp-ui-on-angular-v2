@@ -1,0 +1,39 @@
+.sidebar-wrap-inner {
+    background: #fff;
+    padding: 16px 0 16px 16px;
+    height: calc(100vh - 53px);
+    overflow: auto;
+    width: 200px;
+    border-right: 1px solid var(--Gray-1, #e7e9eb);
+  
+    &.close {
+      width: 0px;
+      padding: 0;
+    }
+  }
+  .sidebar-action {
+    width: 228px;
+    position: relative;
+    &.close {
+      width: 0px;
+    }
+    .sidebar-close {
+      display: none;
+    }
+    &:hover {
+      .sidebar-close {
+        display: block;
+        position: absolute;
+        right: 0;
+        top: 46%;
+        cursor: pointer;
+      }
+    }
+    .sidebar-open {
+      position: absolute;
+      right: -29px;
+      top: 46%;
+      cursor: pointer;
+    }
+  }
+  

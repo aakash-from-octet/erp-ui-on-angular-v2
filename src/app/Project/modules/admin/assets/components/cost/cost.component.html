@@ -1,0 +1,114 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<nz-collapse nzExpandIconPosition="right" class="form-accordion">
+  <nz-collapse-panel nzHeader="Capitalisation" [nzActive]="true">
+    <div nz-row [nzGutter]="[16, 16]">
+      <div nz-col class="gutter-row d-flex" [nzSpan]="24">
+        <nz-switch nzSize="small"></nz-switch
+        ><label class="ml-12">Is The Mould Capitalised<sup>*</sup></label>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Total Capitalised Cost<sup>*</sup></label>
+        <nz-input-group [nzAddOnAfter]="addOnAfterTemplate" nzSize="large">
+          <input type="text" nz-input placeholder="Enter Amount" />
+        </nz-input-group>
+        <ng-template #addOnAfterTemplate>
+          <nz-select [ngModel]="'USD'" nzSize="large">
+            <nz-option nzLabel="USD" nzValue="USD"></nz-option>
+            <nz-option nzLabel="Rupee" nzValue="Rupee"></nz-option>
+          </nz-select>
+        </ng-template>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Cost Center<sup>*</sup></label
+        ><input
+          nz-input
+          placeholder="Enter Cost Center"
+          type="text"
+          nzSize="large"
+        />
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+        <label>Finance Asset ID<sup>*</sup></label
+        ><input nz-input placeholder="Enter Id" type="text" nzSize="large" />
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+        <label>Depreciation Rule<sup>*</sup></label>
+        <nz-tree-select
+          [(ngModel)]="value"
+          [nzNodes]="nodes"
+          nzShowSearch
+          nzCheckable
+          [nzShowExpand]="false"
+          [nzMaxTagCount]="1"
+          [nzShowIcon]="true"
+          nzPlaceHolder="Please select"
+          nzSize="large"
+          class="w-100"
+          nzDropdownClassName="multiselect"
+        ></nz-tree-select>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+        <label>Depreciation Life<sup>*</sup></label
+        ><input nz-input placeholder="Enter Years" type="text" nzSize="large" />
+      </div>
+    </div>
+  </nz-collapse-panel>
+  <nz-collapse-panel nzHeader="Refurbishment">
+    <div nz-row [nzGutter]="[16, 16]">
+      <div nz-col class="gutter-row d-flex" [nzSpan]="24">
+        <nz-switch nzSize="small"></nz-switch
+        ><label class="ml-12">Is The Mould Refurbished<sup>*</sup></label>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+        <label>Total Capitalised Cost<sup>*</sup></label>
+        <nz-input-group [nzAddOnAfter]="addOnAfterTemplate" nzSize="large">
+          <input type="text" nz-input placeholder="Enter Amount" />
+        </nz-input-group>
+        <ng-template #addOnAfterTemplate>
+          <nz-select [ngModel]="'USD'" nzSize="large">
+            <nz-option nzLabel="USD" nzValue="USD"></nz-option>
+            <nz-option nzLabel="Rupee" nzValue="Rupee"></nz-option>
+          </nz-select>
+        </ng-template>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+        <label>New Enhanced Life<sup>*</sup></label
+        ><input
+          nz-input
+          placeholder="Enter in Years"
+          type="text"
+          nzSize="large"
+        />
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+        <label>Refurbishment Count<sup>*</sup></label
+        ><input
+          nz-input
+          placeholder="Enter Number"
+          type="text"
+          nzSize="large"
+        />
+      </div>
+    </div>
+  </nz-collapse-panel>
+  <nz-collapse-panel nzHeader="Retiral">
+    <div nz-row [nzGutter]="[16, 16]">
+      <div nz-col class="gutter-row d-flex" [nzSpan]="24">
+        <nz-switch nzSize="small"></nz-switch
+        ><label class="ml-12">Is The Mould Retired<sup>*</sup></label>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+        <label>Retrial Value<sup>*</sup></label>
+        <nz-input-group [nzAddOnAfter]="addOnAfterTemplate" nzSize="large">
+          <input type="text" nz-input placeholder="Enter Amount" />
+        </nz-input-group>
+        <ng-template #addOnAfterTemplate>
+          <nz-select [ngModel]="'USD'" nzSize="large">
+            <nz-option nzLabel="USD" nzValue="USD"></nz-option>
+            <nz-option nzLabel="Rupee" nzValue="Rupee"></nz-option>
+          </nz-select>
+        </ng-template>
+      </div>
+    </div>
+  </nz-collapse-panel>
+</nz-collapse>

@@ -1,0 +1,1107 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<div class="w-100">
+  <div class="title-bar">
+    <div nz-row nzJustify="space-between" nzAlign="middle">
+      <div nz-col>
+        <h3>
+          Product <span>({{ listOfCurrentPageData.length }} Products)</span>
+        </h3>
+      </div>
+      <div nz-col>
+        <nz-space [nzSize]="8">
+          <div class="send-request" *nzSpaceItem>
+            <a nz-dropdown [nzDropdownMenu]="menu" nzType="link">
+              Bulk Action
+              <span nz-icon nzType="down"></span>
+            </a>
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu nzSelectable>
+                <li
+                  nz-menu-item
+                  (click)="bulkActive()"
+                  (keydown.enter)="bulkActive()"
+                  tabindex="0"
+                >
+                  Mark as Active
+                </li>
+                <li
+                  nz-menu-item
+                  (click)="bulkInactive()"
+                  (keydown.enter)="bulkInactive()"
+                  tabindex="0"
+                >
+                  Mark as Inactive
+                </li>
+              </ul>
+            </nz-dropdown-menu>
+          </div>
+          <nz-input-group
+            *nzSpaceItem
+            [nzPrefix]="prefixTemplateUser"
+            class="search"
+          >
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="searchText"
+              (ngModelChange)="filterData()"
+              placeholder="Search"
+            />
+            <ng-template #prefixTemplateUser
+              ><span nz-icon nzType="search" nzTheme="outline"></span
+            ></ng-template>
+          </nz-input-group>
+
+          <button
+            nz-button
+            nzType="default"
+            *nzSpaceItem
+            nzTooltipTitle="Export"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+          >
+            <span nz-icon nzType="download" nzTheme="outline"></span></button
+          ><button
+            nz-button
+            nzType="default"
+            *nzSpaceItem
+            (click)="resetFilter()"
+            nzTooltipTitle="Reset Filters"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+          >
+            <span nz-icon nzType="reload" nzTheme="outline"></span>
+          </button>
+          <button
+            nz-button
+            nzType="default"
+            *nzSpaceItem
+            (click)="openGridModal()"
+            nzTooltipTitle="Grid Customization"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+          >
+            <span nz-icon nzType="control" nzTheme="outline"></span></button
+          ><button
+            nz-button
+            nzType="primary"
+            *nzSpaceItem
+            (click)="showModal(1)"
+            class="d-none d-lg-block"
+          >
+            Create Product
+          </button>
+        </nz-space>
+        <div class="d-lg-none xs-footer">
+          <button nz-button nzType="primary" (click)="showModal(1)">
+            Create Product
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Table component starts -->
+<nz-table
+  #rowSelectionTable
+  nzSize="small"
+  nzOuterBordered
+  nzShowPagination="false"
+  [nzData]="listOfCurrentPageData"
+  [nzScroll]="{ x: '1300px', y: 'calc(100vh - 220px)' }"
+  [nzNoResult]="filteredData !== [] ? null : noDataTemplate"
+>
+  <thead>
+    <tr>
+      <th
+        [nzChecked]="checked"
+        [nzIndeterminate]="indeterminate"
+        (nzCheckedChange)="onAllChecked($event)"
+        [nzSelections]=""
+        nzLeft
+        nzWidth="50px"
+      ></th>
+      <th nzLeft nzWidth="200px" *ngIf="States['Product Name'] === true">
+        Product Name
+        <app-common-filter
+          [filterByString]="'Product Name'"
+          [valueArray]="getValueArray('productName')"
+          [filterEnabled]="false"
+          (searchEvent)="search($event, 'productName')"
+          (sortEvent)="sort($event, 'productName')"
+          (filterEvent)="filter($event, 'productName')"
+        ></app-common-filter>
+      </th>
+
+      <th *ngIf="States['Product Code'] === true">
+        Product Code
+        <app-common-filter
+          [filterByString]="'Product Code'"
+          [valueArray]="getValueArray('productCode')"
+          [filterEnabled]="false"
+          (searchEvent)="search($event, 'productCode')"
+          (sortEvent)="sort($event, 'productCode')"
+          (filterEvent)="filter($event, 'productCode')"
+        ></app-common-filter>
+      </th>
+
+      <th *ngIf="States['Brand'] === true">
+        Brand
+        <app-common-filter
+          [filterByString]="'Brand'"
+          [valueArray]="getValueArray('brand.name')"
+          [filterEnabled]="true"
+          (searchEvent)="search($event, 'brand.name')"
+          (sortEvent)="sort($event, 'brand.name')"
+          (filterEvent)="filter($event, 'brand.name')"
+        ></app-common-filter>
+      </th>
+
+      <th *ngIf="States['Brand Code'] === true">
+        Brand Code
+        <app-common-filter
+          [filterByString]="'Brand Code'"
+          [valueArray]="getValueArray('brand.code')"
+          [filterEnabled]="true"
+          (searchEvent)="search($event, 'brand.code')"
+          (sortEvent)="sort($event, 'brand.code')"
+          (filterEvent)="filter($event, 'brand.code')"
+        ></app-common-filter>
+      </th>
+
+      <th *ngIf="States['Category'] === true">
+        Category
+        <app-common-filter
+          [filterByString]="'Category'"
+          [valueArray]="getValueArray('category.name')"
+          [filterEnabled]="true"
+          (searchEvent)="search($event, 'category.name')"
+          (sortEvent)="sort($event, 'category.name')"
+          (filterEvent)="filter($event, 'category.name')"
+        ></app-common-filter>
+      </th>
+
+      <th *ngIf="States['Category Code'] === true">
+        Category Code
+        <app-common-filter
+          [filterByString]="'Category Code'"
+          [valueArray]="getValueArray('category.code')"
+          [filterEnabled]="true"
+          (searchEvent)="search($event, 'category.code')"
+          (sortEvent)="sort($event, 'category.code')"
+          (filterEvent)="filter($event, 'category.code')"
+        ></app-common-filter>
+      </th>
+
+      <th *ngIf="States['Created On'] === true">
+        Created On
+        <app-common-filter
+          [filterByString]="'Created On'"
+          [valueArray]="getValueArray('createdAt')"
+          [filterEnabled]="false"
+          (searchEvent)="search($event, 'createdAt')"
+          (sortEvent)="sort($event, 'createdAt')"
+          (filterEvent)="filter($event, 'createdAt')"
+        ></app-common-filter>
+      </th>
+      <th *ngIf="States['Status'] === true">
+        Status
+        <app-common-filter
+          [filterByString]="'Status'"
+          [valueArray]="getValueArray('isActive')"
+          [filterEnabled]="true"
+          (searchEvent)="search($event, 'isActive')"
+          (sortEvent)="sort($event, 'isActive')"
+          (filterEvent)="filter($event, 'isActive')"
+        ></app-common-filter>
+      </th>
+      <th nzRight nzAlign="center" nzWidth="100px">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of listOfCurrentPageData">
+      <td
+        nzLeft
+        [nzChecked]="setOfCheckedId.has(data.id)"
+        (nzCheckedChange)="onItemChecked(data.id, $event)"
+      ></td>
+      <td nzLeft *ngIf="States['Product Name'] === true">
+        <span class="first-letter">{{ data?.productName.charAt(0) }}</span
+        >{{ data?.productName }}
+      </td>
+      <td *ngIf="States['Product Code'] === true">{{ data?.productCode }}</td>
+      <td *ngIf="States['Brand'] === true">{{ data?.brand?.name }}</td>
+      <td *ngIf="States['Brand Code'] === true">{{ data?.brand?.code }}</td>
+      <td *ngIf="States['Category'] === true">{{ data?.category?.name }}</td>
+      <td *ngIf="States['Category Code'] === true">
+        {{ data?.category?.code }}
+      </td>
+      <td *ngIf="States['Created On'] === true">{{ data?.createdAt }}</td>
+      <td *ngIf="data?.isActive === true && States['Status'] === true">
+        <span class="status green">Active</span>
+      </td>
+      <td *ngIf="data?.isActive === false && States['Status'] === true">
+        <span class="status red">Inactive</span>
+      </td>
+      <td nzRight nzAlign="center">
+        <nz-space>
+          <button
+            *nzSpaceItem
+            nz-button
+            nzType="text"
+            (click)="openViewModal(data)"
+          >
+            <span nz-icon nzType="eye" nzTheme="outline"></span>
+          </button>
+          <div class="action-divider" *nzSpaceItem></div>
+          <button
+            *nzSpaceItem
+            nz-button
+            nzType="text"
+            nz-dropdown
+            [nzDropdownMenu]="menu"
+          >
+            <span nz-icon nzType="more" nzTheme="outline"></span>
+          </button>
+
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+              <li nz-menu-item>Edit</li>
+              <li nz-menu-item>Mark as in-active</li>
+              <li nz-menu-item>Add Component</li>
+            </ul>
+          </nz-dropdown-menu>
+        </nz-space>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<section class="footer-pagination">
+  <nz-pagination
+    [(nzPageIndex)]="currentPageIndex"
+    [(nzPageSize)]="pageSize"
+    [nzTotal]="totalItems"
+    (nzPageIndexChange)="loadTableData($event, pageSize)"
+    [nzSize]="'small'"
+    nzShowSizeChanger="true"
+    (nzPageSizeChange)="pageSizeChange($event)"
+  ></nz-pagination>
+</section>
+
+<ng-template #noDataTemplate>
+  <div class="no-data">
+    <img src="../../../assets/images/no-data.svg" alt="" />
+  </div>
+</ng-template>
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  nzTitle="Grid Customization"
+  [nzCloseIcon]="modalClose"
+  [nzFooter]="null"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  nzCentered
+  nzWidth="670px"
+  ><ng-template #modalClose> Close </ng-template
+  ><ng-container *nzModalContent>
+    <nz-table
+      #rowSelectionTable
+      nzSize="small"
+      nzOuterBordered
+      nzBordered=""
+      nzShowPagination="false"
+      [nzData]="listOfCurrentPageData"
+      [nzScroll]="{ x: '700px', y: '70vh' }"
+      [nzNoResult]="noDataTemplate"
+    >
+      <thead>
+        <tr>
+          <th nzAlign="center" nzLeft nzWidth="40px">#</th>
+          <th nzWidth="150px">
+            Component Name <app-shared-filters></app-shared-filters>
+          </th>
+          <th nzWidth="130px">
+            Component Id <app-shared-filters></app-shared-filters>
+          </th>
+          <th nzWidth="130px">
+            Component Code <app-shared-filters></app-shared-filters>
+          </th>
+          <th nzAlign="center" nzRight nzWidth="60px">Qty</th>
+          <th nzAlign="center" nzRight nzWidth="80px">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of listOfCurrentPageData">
+          <td nzLeft>{{ data.id + 1 }}</td>
+          <td>ASL:12332</td>
+          <td>PR:0001</td>
+          <td>ASL:12332</td>
+          <td nzAlign="center" nzRight>04</td>
+          <td nzAlign="center" nzRight>
+            <span nz-icon nzType="delete" nzTheme="outline"></span>
+          </td>
+        </tr>
+      </tbody> </nz-table
+  ></ng-container>
+</nz-modal>
+
+<!-- Table component ends -->
+
+<!-- Create Modal -->
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="modalTitle"
+  [nzCloseIcon]="modalClose"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzFooter]="modalFooter"
+  nzCentered
+  nzWidth="100%"
+  nzWrapClassName="modal-full"
+>
+  <ng-template #modalTitle> Create Product </ng-template>
+  <ng-template #modalClose> Close </ng-template>
+  <ng-container *nzModalContent>
+    <nz-card
+      *ngIf="tabSelected < 4"
+      style="width: 880px"
+      [nzBordered]="false"
+      [nzBodyStyle]="{ padding: '0px' }"
+      nzTitle="Product Details"
+      class="custom-card"
+    >
+      <!-- tab component start -->
+      <nz-tabset
+        [nzTabPosition]="isSmallScreen ? 'top' : 'left'"
+        [(nzSelectedIndex)]="tabSelected"
+        class="step-form"
+      >
+        <nz-tab nzTitle="Steps:" nzDisabled="true"></nz-tab>
+        <nz-tab nzTitle="Basic Details">
+          <section class="p-20">
+            <div nz-row [nzGutter]="[16, 16]">
+              <div nz-col class="gutter-row" [nzSpan]="24">
+                <label>Product Image</label>
+                <nz-upload
+                  class="avatar-uploader"
+                  nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                  nzName="avatar"
+                  nzListType="picture-card"
+                  [nzShowUploadList]="false"
+                  (nzChange)="handleChange($event)"
+                >
+                  <ng-container *ngIf="!avatarUrl">
+                    <span
+                      class="upload-icon"
+                      nz-icon
+                      [nzType]="loading ? 'loading' : 'plus'"
+                    ></span>
+                    <div class="ant-upload-text">Upload</div>
+                  </ng-container>
+                  <img
+                    *ngIf="avatarUrl"
+                    [src]="avatarUrl"
+                    alt=""
+                    style="width: 100%"
+                  />
+                </nz-upload>
+              </div>
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                <label>Product Name<sup>*</sup></label
+                ><input
+                  nz-input
+                  placeholder="Enter Product Name"
+                  type="text"
+                  nzSize="large"
+                />
+              </div>
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                <label>Product Code<sup>*</sup></label
+                ><input
+                  nz-input
+                  placeholder="Enter Product Code"
+                  type="text"
+                  nzSize="large"
+                />
+              </div>
+
+              <div nz-col class="gutter-row" [nzSpan]="24">
+                <label>Product Description<sup>*</sup></label
+                ><textarea
+                  nz-input
+                  placeholder="Enter Product Description"
+                  [nzAutosize]="{ minRows: 3 }"
+                ></textarea>
+              </div>
+            </div></section
+        ></nz-tab>
+        <!-- ////*****reference****////file upload start  -->
+        <!-- <nz-tab nzTitle="Product Designs"
+          ><section class="p-20">
+            <div nz-row [nzGutter]="[16, 16]">
+              <div nz-col class="gutter-row" [nzSpan]="12">
+                <label>Product Design Id<sup>*</sup></label
+                ><input
+                  nz-input
+                  placeholder="Enter Product Design Id"
+                  type="text"
+                  nzSize="large"
+                />
+              </div>
+              <div nz-col class="gutter-row" [nzSpan]="12">
+                <label>Design Type<sup>*</sup></label
+                ><nz-select
+                  ngModel=""
+                  nzPlaceHolder="Select Design Type"
+                  class="w-100"
+                  nzSize="large"
+                >
+                  <nz-option nzValue="1" nzLabel="1"></nz-option>
+                  <nz-option nzValue="2" nzLabel="2"></nz-option>
+                </nz-select>
+              </div>
+              <div nz-col class="gutter-row" [nzSpan]="24">
+                <label>Design Files<sup>*</sup></label>
+
+                <nz-upload
+                  nzType="drag"
+                  [nzMultiple]="true"
+                  nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                  (nzChange)="handleChange($event)"
+                  [nzFileListRender]="customFilelist"
+                >
+                  <p class="ant-upload-drag-icon mb-0">
+                    <span nz-icon nzType="file-add" nzTheme="twotone"></span>
+                  </p>
+                  <h3 class="ant-upload-text">
+                    <u>Click</u> or drag file to this area to upload
+                  </h3>
+                  <p class="ant-upload-hint">
+                    Support for a single or bulk upload.
+                  </p>
+                  <ng-template #customFilelist>
+                    <div
+                      nz-row
+                      nzJustify="space-between"
+                      nzAlign="middle"
+                      class="filelist-title"
+                    >
+                      <h3>Upload Progress</h3>
+                      <p>1 out of 3 files uploaded</p>
+                    </div>
+                    <div *ngFor="let file of fileList">
+                      <div
+                        nz-row
+                        nzJustify="space-between"
+                        nzAlign="middle"
+                        class="filelist-item"
+                        [style.--file-width]="file['uploading']"
+                      >
+                        <div nz-col>
+                          <nz-space nzAlign="center">
+                            <span
+                              nz-icon
+                              nzType="file-ppt"
+                              nzTheme="fill"
+                              class="list-icon"
+                              *nzSpaceItem
+                            ></span>
+                            <p class="file-name" *nzSpaceItem>
+                              {{ file.name }}
+                            </p></nz-space
+                          >
+                        </div>
+                        <div nz-col>
+                          <nz-space
+                            nzAlign="center"
+                            [nzSize]="12"
+                            *ngIf="file['uploading'] === '100%'"
+                          >
+                            <p class="file-size" *nzSpaceItem>
+                              {{ file.size }} MB
+                            </p>
+                            <span
+                              nz-icon
+                              nzType="check-circle"
+                              nzTheme="outline"
+                              *nzSpaceItem
+                              class="file-uploaded"
+                            ></span>
+                            <button nz-button nzType="default" *nzSpaceItem>
+                              <span nz-icon nzType="delete"></span></button
+                          ></nz-space>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-template>
+                </nz-upload>
+              </div>
+            </div></section
+        ></nz-tab> -->
+        <!-- ////*****reference****////file upload end  -->
+        <nz-tab nzTitle="Product Associations"
+          ><section class="p-20">
+            <nz-collapse nzExpandIconPosition="right" class="form-accordion">
+              <nz-collapse-panel nzHeader="Key Asscoiations" [nzActive]="true">
+                <div nz-row [nzGutter]="[16, 16]">
+                  <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                    <label>Brand Name<sup>*</sup></label
+                    ><nz-tree-select
+                      [(ngModel)]="value"
+                      [nzNodes]="nodes"
+                      nzShowSearch
+                      nzCheckable
+                      [nzShowExpand]="false"
+                      [nzMaxTagCount]="1"
+                      [nzShowIcon]="true"
+                      nzPlaceHolder="Select Brand Name"
+                      nzSize="large"
+                      class="w-100"
+                      nzDropdownClassName="multiselect"
+                      nzHideUnMatched="true"
+                    ></nz-tree-select>
+                  </div>
+                  <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                    <label>Brand Code<sup>*</sup></label
+                    ><nz-tree-select
+                      [(ngModel)]="value"
+                      [nzNodes]="nodes"
+                      nzShowSearch
+                      nzCheckable
+                      [nzShowExpand]="false"
+                      [nzMaxTagCount]="1"
+                      [nzShowIcon]="true"
+                      nzPlaceHolder="Select Brand Code"
+                      nzSize="large"
+                      class="w-100"
+                      nzDropdownClassName="multiselect"
+                      nzHideUnMatched="true"
+                    ></nz-tree-select>
+                  </div>
+                  <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                    <label>Category Name<sup>*</sup></label
+                    ><nz-tree-select
+                      [(ngModel)]="value"
+                      [nzNodes]="nodes"
+                      nzShowSearch
+                      nzCheckable
+                      [nzShowExpand]="false"
+                      [nzMaxTagCount]="1"
+                      [nzShowIcon]="true"
+                      nzPlaceHolder="Select Category Name"
+                      nzSize="large"
+                      class="w-100"
+                      nzDropdownClassName="multiselect"
+                      nzHideUnMatched="true"
+                    ></nz-tree-select>
+                  </div>
+                  <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                    <label>Category Code<sup>*</sup></label
+                    ><nz-tree-select
+                      [(ngModel)]="value"
+                      [nzNodes]="nodes"
+                      nzShowSearch
+                      nzCheckable
+                      [nzShowExpand]="false"
+                      [nzMaxTagCount]="1"
+                      [nzShowIcon]="true"
+                      nzPlaceHolder="Select Category Code"
+                      nzSize="large"
+                      class="w-100"
+                      nzDropdownClassName="multiselect"
+                      nzHideUnMatched="true"
+                    ></nz-tree-select>
+                  </div>
+                  <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                    <label>Component Name<sup>*</sup></label
+                    ><nz-tree-select
+                      [(ngModel)]="value"
+                      [nzNodes]="nodes"
+                      nzShowSearch
+                      nzCheckable
+                      [nzShowExpand]="false"
+                      [nzMaxTagCount]="1"
+                      [nzShowIcon]="true"
+                      nzPlaceHolder="Select Component Name"
+                      nzSize="large"
+                      class="w-100"
+                      nzDropdownClassName="multiselect"
+                      nzHideUnMatched="true"
+                    ></nz-tree-select>
+                  </div>
+                  <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                    <label>Component Code<sup>*</sup></label
+                    ><nz-tree-select
+                      [(ngModel)]="value"
+                      [nzNodes]="nodes"
+                      nzShowSearch
+                      nzCheckable
+                      [nzShowExpand]="false"
+                      [nzMaxTagCount]="1"
+                      [nzShowIcon]="true"
+                      nzPlaceHolder="Select Component Code"
+                      nzSize="large"
+                      class="w-100"
+                      nzDropdownClassName="multiselect"
+                      nzHideUnMatched="true"
+                    ></nz-tree-select>
+                  </div>
+                </div>
+              </nz-collapse-panel>
+              <nz-collapse-panel nzHeader="Product Assembly">
+                <div
+                  nz-row
+                  nzJustify="space-between"
+                  nzAlign="middle"
+                  class="mb-15"
+                >
+                  <div nz-col>Components</div>
+                  <div nz-col>
+                    <a
+                      nz-button
+                      nzType="link"
+                      class="p-0"
+                      (click)="openSelectComponent()"
+                      (keydown.enter)="openSelectComponent()"
+                      tabindex="0"
+                      >Select Components</a
+                    ><span class="seperator-vertical"></span>
+                    <a
+                      nz-button
+                      nzType="link"
+                      class="p-0"
+                      (click)="openAddNewComponent()"
+                      (keydown.enter)="openAddNewComponent()"
+                      tabindex="0"
+                      >Add New Components</a
+                    >
+                    <app-select-component
+                      [isVisible]="openSelComponent"
+                      (cancelClicked)="closeSelectModal()"
+                    ></app-select-component>
+                    <app-add-component
+                      [isVisible]="openComponent"
+                      (cancelClicked)="closeAddNewModal()"
+                    ></app-add-component>
+                  </div>
+                </div>
+                <div nz-row [nzGutter]="[16, 16]">
+                  <div nz-col class="gutter-row" [nzSpan]="24">
+                    <nz-table
+                      #basicTable
+                      nzSize="small"
+                      nzOuterBordered
+                      nzShowPagination="false"
+                      [nzScroll]="{ y: '70vh' }"
+                      [nzData]="listOfCurrentPageData"
+                    >
+                      <thead>
+                        <tr>
+                          <th nzAlign="center" nzWidth="40px">#</th>
+                          <th nzWidth="150px">
+                            Component Name
+                            <app-shared-filters></app-shared-filters>
+                          </th>
+                          <th nzWidth="130px">
+                            Component Id
+                            <app-shared-filters></app-shared-filters>
+                          </th>
+                          <th nzWidth="min-content">
+                            Component Code
+                            <app-shared-filters></app-shared-filters>
+                          </th>
+                          <th nzAlign="center" nzWidth="60px">Qty</th>
+                          <th nzAlign="center" nzWidth="80px">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let data of listOfCurrentPageData">
+                          <td nzAlign="center">{{ data.id + 1 }}</td>
+                          <td>ASL:12332</td>
+                          <td>PR:0001</td>
+                          <td>ASL:12332</td>
+                          <td nzAlign="center">04</td>
+                          <td nzAlign="center">
+                            <span
+                              nz-icon
+                              nzType="delete"
+                              nzTheme="outline"
+                            ></span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </nz-table>
+                  </div>
+                </div>
+              </nz-collapse-panel>
+            </nz-collapse></section
+        ></nz-tab>
+        <nz-tab nzTitle="Other Details"
+          ><section class="p-20">
+            <div nz-row [nzGutter]="[16, 16]">
+              <div nz-col class="gutter-row" [nzSpan]="12">
+                <label>Global Currency<sup>*</sup></label
+                ><input
+                  nz-input
+                  placeholder="Enter Currency"
+                  type="text"
+                  nzSize="large"
+                />
+              </div>
+            </div></section
+        ></nz-tab>
+      </nz-tabset>
+      <!-- tab component start -->
+    </nz-card>
+    <!-- preview component start -->
+    <nz-card
+      *ngIf="tabSelected === 4"
+      style="width: 900px"
+      [nzBordered]="false"
+      [nzTitle]="previewtitle"
+      class="custom-card"
+    >
+      <ng-template #previewtitle>
+        <h3>Preview</h3>
+        <p>See a quick summary of product</p>
+      </ng-template>
+      <section class="preview-card">
+        <div class="header">
+          <h4>Product Details</h4>
+          <button
+            nz-button
+            nzTooltipTitle="Edit"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="updateTabSelected(1)"
+          >
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 24]">
+            <div nz-col nzSpan="24">
+              <h5>Product Image</h5>
+              <div class="preview-logo">
+                <img
+                  src="../../../../../../../assets/images/org-logo.png"
+                  alt=""
+                />
+              </div>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Product Name</h5>
+              <p>Product Name</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Product Code</h5>
+              <p>3488990</p>
+            </div>
+
+            <div nz-col nzSpan="24">
+              <h5>Description</h5>
+              <p>Lorem ipsum is a dummy text.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="preview-card">
+        <div class="header">
+          <h4>Product Associations</h4>
+          <button
+            nz-button
+            nzTooltipTitle="Edit"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="updateTabSelected(2)"
+          >
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 24]">
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Brand Name</h5>
+              <p>Name</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Brand Code</h5>
+              <p>1234</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Category Name</h5>
+              <p>Lorem ipsum</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Category Code</h5>
+              <p>Lorem ipsum</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Component Name</h5>
+              <p>Lorem ipsum</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Component Code</h5>
+              <p>12356</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="preview-card">
+        <div class="header">
+          <h4>Other Details</h4>
+          <button
+            nz-button
+            nzTooltipTitle="Edit"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="updateTabSelected(3)"
+          >
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 24]">
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Global Currency</h5>
+              <p>Lorem ipsum</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </nz-card>
+    <!-- preview component end -->
+  </ng-container>
+  <ng-template #modalFooter>
+    <div>
+      <button nz-button (click)="back()" *ngIf="tabSelected > 1">Back</button>
+    </div>
+
+    <button
+      nz-button
+      nzType="primary"
+      (click)="saveContinue()"
+      *ngIf="tabSelected < 4 && !isEdit"
+    >
+      Save & Continue
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="createNotification('success')"
+      *ngIf="tabSelected === 4"
+    >
+      Create Product
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="update()"
+      *ngIf="tabSelected < 4 && isEdit"
+    >
+      Update
+    </button>
+  </ng-template>
+</nz-modal>
+
+<!-- View Modal -->
+<nz-modal
+  [(nzVisible)]="viewProduct"
+  [nzTitle]="modalTitle1"
+  [nzCloseIcon]="modalClose1"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzFooter]="null"
+  nzCentered
+  nzWidth="100%"
+  nzWrapClassName="modal-full no-footer"
+  ><ng-container *nzModalContent>
+    <nz-card
+      style="width: calc(100vw - 340px); max-width: 1020px"
+      [nzBordered]="false"
+      [nzTitle]=""
+      nzDescription="See a quick summary of product"
+      class="custom-card"
+      [nzBodyStyle]="{ padding: 0 }"
+    >
+      <div class="product-preview-grid">
+        <div>
+          <section class="view-card">
+            <div
+              nz-row
+              nzJustify="space-between"
+              nzAlign="middle"
+              class="view-title bg-lightblue px-24 py-15"
+            >
+              <div nz-col>
+                <nz-space>
+                  <span class="first-letter">D</span>
+                  <div>
+                    <h3>Dispenser</h3>
+                    <p>
+                      <span class="status blue mr-10">Mould Maker</span>
+                      <span class="status green">Active</span>
+                    </p>
+                  </div>
+                </nz-space>
+              </div>
+              <div nz-col>
+                <button
+                  nz-button
+                  nzTooltipTitle="Edit"
+                  nzTooltipPlacement="bottom"
+                  nz-tooltip
+                  (click)="editModal(1)"
+                >
+                  <span nz-icon nzType="edit" nzTheme="outline"></span>
+                </button>
+              </div>
+            </div>
+            <div class="body">
+              <div class="px-24 py-15">
+                <div nz-row [nzGutter]="[15, 15]">
+                  <div nz-col nzSpan="12">
+                    <h5>Product Id</h5>
+                    <p>1124</p>
+                  </div>
+                  <div nz-col nzSpan="12">
+                    <h5>Product code</h5>
+                    <p>A1124</p>
+                  </div>
+                </div>
+              </div>
+
+              <div nz-col nzSpan="24"><hr /></div>
+              <div class="px-24 py-15">
+                <div nz-row [nzGutter]="[15, 15]">
+                  <div nz-col nzSpan="24">
+                    <h5>Product Variants</h5>
+                    <p>500ml, 750 ml, 1000ml</p>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="12">
+                    <h5>Brand Name</h5>
+                    <p>Unilever</p>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="12">
+                    <h5>Brand Code</h5>
+                    <p>ASL:1234</p>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="12">
+                    <h5>Category Name</h5>
+                    <p>Renee</p>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="12">
+                    <h5>Category Code</h5>
+                    <p>#1234</p>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="12">
+                    <h5>Category Type</h5>
+                    <p>Skincare</p>
+                  </div>
+                </div>
+              </div>
+              <div nz-col nzSpan="24"><hr /></div>
+
+              <div class="px-24 py-15">
+                <div nz-row [nzGutter]="[15, 15]">
+                  <div nz-col nzXs="24" nzSm="12">
+                    <h5>Description</h5>
+                    <p>lorem ipsum is a dummy text</p>
+                  </div>
+                </div>
+              </div>
+
+              <div nz-col nzSpan="24"><hr class="m-0" /></div>
+              <div class="px-24 py-15">
+                <div nz-row [nzGutter]="[15, 15]">
+                  <div nz-col nzXs="24" nzSm="12">
+                    <h5>Created By</h5>
+                    <p>John Doe</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div class="preview-2-right">
+          <div nz-row nzJustify="space-between" nzAlign="middle" class="mb-10">
+            <div nz-col>
+              <h3 class="text-14 fw-600">Product Assembly</h3>
+            </div>
+            <div nz-col>
+              <a nz-button nzType="link" class="p-0">Add New Component</a>
+            </div>
+          </div>
+
+          <nz-table
+            #rowSelectionTable
+            nzSize="small"
+            nzOuterBordered
+            nzBordered="false"
+            nzShowPagination="false"
+            [nzData]="listOfCurrentPageData"
+            [nzScroll]="{ x: '900px', y: '70vh' }"
+          >
+            <thead>
+              <tr>
+                <th nzAlign="center" nzLeft nzWidth="40px">#</th>
+                <th nzWidth="150px">
+                  Component Name <app-shared-filters></app-shared-filters>
+                </th>
+                <th nzWidth="130px">
+                  Component Id <app-shared-filters></app-shared-filters>
+                </th>
+                <th nzWidth="min-content">
+                  Component Code <app-shared-filters></app-shared-filters>
+                </th>
+                <th nzWidth="min-content">
+                  Component Description
+                  <app-shared-filters></app-shared-filters>
+                </th>
+                <th nzAlign="center" nzRight nzWidth="60px">Qty</th>
+                <th nzAlign="center" nzRight nzWidth="80px">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of listOfCurrentPageData">
+                <td nzLeft>{{ data.id + 1 }}</td>
+                <td>ASL:12332</td>
+                <td>PR:0001</td>
+                <td>ASL:12332</td>
+                <td>ASL:12332</td>
+                <td nzAlign="center" nzRight>04</td>
+                <td nzAlign="center" nzRight>
+                  <span nz-icon nzType="delete" nzTheme="outline"></span>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
+      </div> </nz-card
+  ></ng-container>
+  <ng-template #modalTitle1> Organisation Information </ng-template>
+  <ng-template #modalClose1> Close </ng-template></nz-modal
+>
+
+<!-- Grid Customization Modal starts  -->
+<nz-modal
+  [(nzVisible)]="isModalVisible"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  nzTitle="Grid Customization"
+  nzCentered
+  [nzCloseIcon]="modalClose2"
+  nzWidth="450px"
+  ><ng-template #modalClose2> Close </ng-template>
+  <ng-container *nzModalContent>
+    <app-grid-customization
+      [checkboxStates]="States"
+      [columns]="newColumns"
+    ></app-grid-customization>
+  </ng-container>
+</nz-modal>
+<!-- Grid Customization ends -->

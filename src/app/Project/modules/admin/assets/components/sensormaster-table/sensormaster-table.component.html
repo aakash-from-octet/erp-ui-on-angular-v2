@@ -1,0 +1,129 @@
+<nz-table
+  #rowSelectionTable
+  nzSize="small"
+  nzOuterBordered
+  nzShowPagination="false"
+  [nzData]="listOfCurrentPageData"
+  [nzScroll]="{ x: '1800px', y: 'calc(100vh - 280px)' }"
+  [nzNoResult]="noDataTemplate"
+>
+  <thead>
+    <tr>
+      <th nzLeft nzWidth="80px">Sensor Code <app-filters></app-filters></th>
+      <th nzWidth="80px">Sensor Name <app-filters></app-filters></th>
+      <th nzWidth="150px">Description <app-filters></app-filters></th>
+      <th nzWidth="80px">Sensor Serial No.</th>
+      <th nzWidth="50px">Model No.</th>
+      <th nzWidth="90px">Warranty Life</th>
+      <th nzWidth="90px">Manufacture</th>
+      <th nzWidth="80px">Battery Life</th>
+      <th nzWidth="150px">Additional Comments</th>
+      <th nzWidth="80px">QR Code</th>
+      <th nzRight nzAlign="center" nzWidth="60px">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of listOfCurrentPageData">
+      <td nzLeft>#784</td>
+      <td>Spare 123</td>
+      <td>Lorem ipsum is a dummy text</td>
+      <td>Yes</td>
+      <td>mm</td>
+      <td>India</td>
+      <td>India</td>
+      <td>500</td>
+      <td>Lorem ipsum is a dummy text</td>
+      <td><span nz-icon nzType="qrcode" nzTheme="outline"></span></td>
+
+      <td nzRight nzAlign="center">
+        <nz-space>
+          <button *nzSpaceItem nz-button nzType="text" (click)="openView()">
+            <span nz-icon nzType="eye" nzTheme="outline"></span>
+          </button>
+          <div class="action-divider" *nzSpaceItem></div>
+          <button
+            *nzSpaceItem
+            nz-button
+            nzType="text"
+            nz-dropdown
+            [nzDropdownMenu]="menu"
+          >
+            <span nz-icon nzType="more" nzTheme="outline"></span>
+          </button>
+
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+              <li nz-menu-item>Edit</li>
+              <li nz-menu-item>Mark as in-active</li>
+              <li nz-menu-item>Add Component</li>
+            </ul>
+          </nz-dropdown-menu>
+        </nz-space>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<section class="footer-pagination">
+  <nz-pagination
+    [(nzPageIndex)]="currentPageIndex"
+    [(nzPageSize)]="pageSize"
+    [nzTotal]="totalItems"
+    (nzPageIndexChange)="loadTableData($event, pageSize)"
+    [nzSize]="'small'"
+    nzShowSizeChanger="true"
+    (nzPageSizeChange)="pageSizeChange($event)"
+  ></nz-pagination>
+</section>
+
+<ng-template #noDataTemplate>
+  <div class="no-data">
+    <img src="../../../assets/images/no-data.svg" alt="" />
+  </div>
+</ng-template>
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  nzTitle="Grid Customization"
+  [nzCloseIcon]="modalClose"
+  [nzFooter]="null"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  nzCentered
+  nzWidth="670px"
+  ><ng-template #modalClose> Close </ng-template
+  ><ng-container *nzModalContent>
+    <nz-table
+      #rowSelectionTable
+      nzSize="small"
+      nzOuterBordered
+      nzBordered=""
+      nzShowPagination="false"
+      [nzData]="listOfCurrentPageData"
+      [nzScroll]="{ x: '700px', y: '70vh' }"
+      [nzNoResult]="noDataTemplate"
+    >
+      <thead>
+        <tr>
+          <th nzAlign="center" nzLeft nzWidth="40px">#</th>
+          <th nzWidth="150px">Component Name <app-filters></app-filters></th>
+          <th nzWidth="130px">Component Id <app-filters></app-filters></th>
+          <th nzWidth="130px">Component Code <app-filters></app-filters></th>
+          <th nzAlign="center" nzRight nzWidth="60px">Qty</th>
+          <th nzAlign="center" nzRight nzWidth="80px">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of listOfCurrentPageData">
+          <td nzLeft>{{ data.id + 1 }}</td>
+          <td>ASL:12332</td>
+          <td>PR:0001</td>
+          <td>ASL:12332</td>
+          <td nzAlign="center" nzRight>04</td>
+          <td nzAlign="center" nzRight>
+            <span nz-icon nzType="delete" nzTheme="outline"></span>
+          </td>
+        </tr>
+      </tbody> </nz-table
+  ></ng-container>
+</nz-modal>

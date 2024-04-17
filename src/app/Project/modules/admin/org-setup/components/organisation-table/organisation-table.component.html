@@ -1,0 +1,137 @@
+<nz-table
+  #rowSelectionTable
+  nzSize="small"
+  nzOuterBordered
+  nzShowPagination="false"
+  [nzData]="filteredData"
+  [nzScroll]="{ y: 'calc(100vh - 250px)' }"
+  [nzNoResult]="noDataTemplate"
+>
+  <thead>
+    <tr>
+      <th
+        [nzChecked]="checked"
+        [nzIndeterminate]="indeterminate"
+        (nzCheckedChange)="onAllChecked($event)"
+        nzLeft
+        nzWidth="50px"
+      ></th>
+      <th nzLeft nzWidth="180px" *ngIf="States['Organisation Name'] === true">
+        Org Name
+      </th>
+      <th nzWidth="100px" *ngIf="States['Organisation Code'] === true">
+        Org Code
+      </th>
+      <th nzWidth="200px" *ngIf="States['Domain Name'] === true">
+        Domain Name
+      </th>
+      <th nzWidth="140px" *ngIf="States['Gloabal Currency'] === true">
+        Global Currency
+      </th>
+
+      <th nzWidth="200px" *ngIf="States['Email'] === true">Email</th>
+      <th nzWidth="100px" nzEllipsis *ngIf="States['Conatct Number'] === true">
+        Contact Number
+      </th>
+      <th nzWidth="100px" *ngIf="States['Status'] === true">Status</th>
+      <th nzWidth="100px" nzRight nzAlign="center">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of filteredData">
+      <td
+        nzLeft
+        [nzChecked]="setOfCheckedId.has(data.id)"
+        (nzCheckedChange)="onItemChecked(data.id, $event)"
+      ></td>
+      <td nzLeft *ngIf="States['Organisation Name'] === true">
+        <span class="first-letter">{{ data.name.charAt(0) }}</span
+        >{{ data.name }}
+      </td>
+      <td *ngIf="States['Organisation Code'] === true">{{ data.orgCode }}</td>
+      <td *ngIf="States['Domain Name'] === true">
+        {{ data?.domainName }}
+      </td>
+      <td *ngIf="States['Gloabal Currency'] === true">
+        {{ data["globalCurrencyId"]?.currencyCode }}
+      </td>
+      <td *ngIf="States['Email'] === true">{{ data?.contactInfo?.email }}</td>
+      <td nzEllipsis *ngIf="States['Conatct Number'] === true">
+        {{ data?.contactInfo.mobile }}
+      </td>
+      <td *ngIf="data?.status === true && States['Status'] === true">
+        <span class="status green">Active</span>
+      </td>
+      <td *ngIf="data?.status === false && States['Status'] === true">
+        <span class="status red">In-Active</span>
+      </td>
+      <td nzRight>
+        <nz-space>
+          <button *nzSpaceItem nz-button nzType="text" (click)="openView(data)">
+            <span nz-icon nzType="eye" nzTheme="outline"></span>
+          </button>
+          <div class="action-divider" *nzSpaceItem></div>
+          <button
+            *nzSpaceItem
+            nz-button
+            nzType="text"
+            nz-dropdown
+            [nzDropdownMenu]="menu"
+          >
+            <span nz-icon nzType="more" nzTheme="outline"></span>
+          </button>
+
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+              <li
+                nz-menu-item
+                (click)="openEdit(data)"
+                (keydown.enter)="openEdit(data)"
+                tabindex="0"
+              >
+                Edit
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </nz-space>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<section class="footer-pagination">
+  <nz-pagination
+    [(nzPageIndex)]="currentPageIndex"
+    [(nzPageSize)]="pageSize"
+    [nzTotal]="totalItems"
+    (nzPageIndexChange)="loadTableData($event, pageSize)"
+    [nzSize]="'small'"
+    nzShowSizeChanger="true"
+    (nzPageSizeChange)="pageSizeChange($event)"
+  ></nz-pagination>
+</section>
+
+<ng-template #noDataTemplate>
+  <div class="no-data">
+    <img src="../../../assets/images/no-data.svg" alt="" />
+  </div>
+</ng-template>
+
+<!-- Grid Customization starts -->
+<nz-modal
+  [(nzVisible)]="isModalVisible"
+  (nzOnCancel)="Cancel()"
+  (nzOnOk)="handleOk()"
+  nzTitle="Organisation"
+  nzCentered
+  [nzCloseIcon]="modalClose2"
+  nzWidth="450px"
+  ><ng-template #modalClose2> Close </ng-template>
+  <ng-container *nzModalContent>
+    <app-grid-customization
+      [checkboxStates]="States"
+      [columns]="columns"
+    ></app-grid-customization>
+  </ng-container>
+</nz-modal>
+<!-- Grid Customization End -->

@@ -1,0 +1,65 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<nz-modal
+  [(nzVisible)]="isVisible"
+  nzTitle="Add Task"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzFooter]="modalFooter"
+  nzCentered
+  nzWidth="590px"
+  [nzBodyStyle]="{ padding: '0px' }"
+>
+  <ng-container *nzModalContent>
+    <div class="custom-card border-none">
+      <!-- tab component start -->
+      <section class="p-20">
+        <div nz-row [nzGutter]="[16, 16]">
+          <div nz-col class="gutter-row" [nzSpan]="12">
+            <label>Task Code <sup>*</sup></label
+            ><input
+              nz-input
+              placeholder="Enter Task Code"
+              type="text"
+              nzSize="large"
+            />
+          </div>
+          <div nz-col class="gutter-row" [nzSpan]="12">
+            <label>Task Name <sup>*</sup></label
+            ><input
+              nz-input
+              placeholder="Enter Task Name"
+              type="text"
+              nzSize="large"
+            />
+          </div>
+          <div nz-col class="gutter-row" [nzSpan]="24">
+            <label>Task Description <sup>*</sup></label>
+            <textarea
+              nz-input
+              placeholder="Enter Description"
+              [nzAutosize]="{ minRows: 3, maxRows: 5 }"
+            ></textarea>
+          </div>
+          <div nz-col class="gutter-row" [nzSpan]="12">
+            <label>Task Duration <sup>*</sup></label
+            ><nz-input-group [nzAddOnAfter]="addOnAfterTemplate" nzSize="large">
+              <input type="text" nz-input placeholder="Enter Value" />
+            </nz-input-group>
+            <ng-template #addOnAfterTemplate>
+              <nz-select [ngModel]="'Years'" nzSize="large">
+                <nz-option nzLabel="Years" nzValue="Years"></nz-option>
+                <nz-option nzLabel="Month" nzValue="Month"></nz-option>
+              </nz-select>
+            </ng-template>
+          </div>
+        </div>
+      </section>
+      <!-- tab component start -->
+    </div>
+  </ng-container>
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="cancel()">Cancel</button>
+
+    <button nz-button nzType="primary" (click)="cancel()">Add Task</button>
+  </ng-template>
+</nz-modal>

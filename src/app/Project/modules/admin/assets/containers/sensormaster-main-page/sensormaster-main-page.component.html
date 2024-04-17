@@ -1,0 +1,490 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<div class="w-100">
+  <div class="title-bar">
+    <div nz-row nzJustify="space-between" nzAlign="middle">
+      <div nz-col>
+        <h3>Sensor Master <span>(0 Sensor Masters)</span></h3>
+      </div>
+      <div nz-col>
+        <nz-space [nzSize]="8">
+          <button
+            nz-button
+            nzType="primary"
+            *nzSpaceItem
+            (click)="showModal(1)"
+            class="d-none d-lg-block"
+          >
+            Add Sensor
+          </button>
+        </nz-space>
+        <div class="d-lg-none xs-footer">
+          <button nz-button nzType="primary" (click)="showModal(1)">
+            Add Sensor
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nz-tabset [nzTabBarExtraContent]="extraTemplate">
+    <nz-tab nzTitle="Active"
+      ><app-sensormaster-table
+        (openViewEvent)="openViewModal()"
+      ></app-sensormaster-table
+    ></nz-tab>
+    <nz-tab nzTitle="Inactive"
+      ><app-sensormaster-table
+        (openViewEvent)="openViewModal()"
+      ></app-sensormaster-table
+    ></nz-tab>
+  </nz-tabset>
+  <ng-template #extraTemplate>
+    <nz-space [nzSize]="8">
+      <nz-input-group
+        *nzSpaceItem
+        [nzPrefix]="prefixTemplateUser"
+        class="search"
+      >
+        <input type="text" nz-input placeholder="Search by Sensor code" />
+        <ng-template #prefixTemplateUser
+          ><span nz-icon nzType="search" nzTheme="outline"></span
+        ></ng-template>
+      </nz-input-group>
+
+      <button
+        nz-button
+        nzType="default"
+        *nzSpaceItem
+        nzTooltipTitle="Export"
+        nzTooltipPlacement="bottom"
+        nz-tooltip
+      >
+        <span nz-icon nzType="download" nzTheme="outline"></span></button
+      ><button
+        nz-button
+        nzType="default"
+        *nzSpaceItem
+        nzTooltipTitle="Reset Filters"
+        nzTooltipPlacement="bottom"
+        nz-tooltip
+      >
+        <span nz-icon nzType="reload" nzTheme="outline"></span>
+      </button>
+      <button
+        nz-button
+        nzType="default"
+        *nzSpaceItem
+        (click)="openGridModal()"
+        nzTooltipTitle="Grid Customization"
+        nzTooltipPlacement="bottom"
+        nz-tooltip
+      >
+        <span nz-icon nzType="control" nzTheme="outline"></span>
+      </button>
+    </nz-space>
+  </ng-template>
+</div>
+
+<!-- Create Modal -->
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="modalTitle"
+  [nzCloseIcon]="modalClose"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzFooter]="modalFooter"
+  nzCentered
+  nzWidth="100%"
+  nzWrapClassName="modal-full"
+>
+  <ng-template #modalTitle> Add Sensor </ng-template>
+  <ng-template #modalClose> Close </ng-template>
+  <ng-container *nzModalContent>
+    <nz-card
+      *ngIf="tabSelected < 2"
+      style="width: 650px"
+      [nzBordered]="false"
+      [nzBodyStyle]="{ padding: '0px' }"
+      nzTitle="Sensor Details"
+      class="custom-card"
+    >
+      <!-- tab component start -->
+      <section class="p-20">
+        <div nz-row [nzGutter]="[16, 16]">
+          <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+            <label>Sensor Code<sup>*</sup></label
+            ><input
+              nz-input
+              placeholder="Enter Sensor Code"
+              type="text"
+              nzSize="large"
+            />
+          </div>
+          <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+            <label>Sensor Name<sup>*</sup></label
+            ><input
+              nz-input
+              placeholder="Enter Sensor Name"
+              type="text"
+              nzSize="large"
+            />
+          </div>
+
+          <div nz-col class="gutter-row" [nzSpan]="24">
+            <label>Description<sup>*</sup></label
+            ><textarea
+              nz-input
+              placeholder="Enter Description"
+              [nzAutosize]="{ minRows: 3 }"
+            ></textarea>
+          </div>
+          <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+            <label>Sensor Serial No.<sup>*</sup></label
+            ><input
+              nz-input
+              placeholder="Enter Number"
+              type="text"
+              nzSize="large"
+            />
+          </div>
+          <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+            <label>Model No.<sup>*</sup></label
+            ><input
+              nz-input
+              placeholder="Enter Number"
+              type="text"
+              nzSize="large"
+            />
+          </div>
+          <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+            <label>Warranty Life<sup>*</sup></label>
+            <nz-input-group [nzAddOnAfter]="addOnAfterTemplate" nzSize="large">
+              <input type="text" nz-input placeholder="Enter Value" />
+            </nz-input-group>
+            <ng-template #addOnAfterTemplate>
+              <nz-select [ngModel]="'Years'" nzSize="large">
+                <nz-option nzLabel="Years" nzValue="Years"></nz-option>
+                <nz-option nzLabel="Month" nzValue="Month"></nz-option>
+              </nz-select>
+            </ng-template>
+          </div>
+          <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+            <label>Manufacture<sup>*</sup></label
+            ><input nz-input placeholder="Enter" type="text" nzSize="large" />
+          </div>
+          <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+            <label>Battery Life<sup>*</sup></label>
+            <nz-input-group [nzAddOnAfter]="addOnAfterTemplate1" nzSize="large">
+              <input type="text" nz-input placeholder="Enter Value" />
+            </nz-input-group>
+            <ng-template #addOnAfterTemplate1>
+              <nz-select [ngModel]="'Years'" nzSize="large">
+                <nz-option nzLabel="Years" nzValue="Years"></nz-option>
+                <nz-option nzLabel="Month" nzValue="Month"></nz-option>
+              </nz-select>
+            </ng-template>
+          </div>
+          <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+            <label>Associate Mould<sup>*</sup></label
+            ><nz-select
+              nzShowSearch
+              nzAllowClear
+              [nzSuffixIcon]="suffixIconSearch"
+              nzPlaceHolder="Search by mould id, code, name.."
+              [(ngModel)]="selectedValue"
+              class="w-100 icon-prefix"
+              nzSize="large"
+            >
+              <nz-option nzLabel="Mould 1" nzValue="Mould1"></nz-option>
+              <nz-option nzLabel="Mould 2" nzValue="Mould2"></nz-option>
+              <nz-option nzLabel="Mould 3" nzValue="Mould3"></nz-option>
+            </nz-select>
+            <ng-template #suffixIconSearch>
+              <span nz-icon nzType="search"></span>
+            </ng-template>
+          </div>
+          <div nz-col class="gutter-row" [nzSpan]="24">
+            <label>Additional Comments<sup>*</sup></label
+            ><textarea
+              nz-input
+              placeholder="Enter Description"
+              [nzAutosize]="{ minRows: 3 }"
+            ></textarea>
+          </div>
+          <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+            <label>QR Code</label>
+            <nz-upload
+              nzType="drag"
+              [nzMultiple]="true"
+              nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+              (nzChange)="handleChange($event)"
+            >
+              <img
+                src="../../../../../../../assets/images/plus.svg"
+                alt=""
+                class="mb-1"
+              />
+              <p class="ant-upload-text text-14">Upload</p>
+            </nz-upload>
+          </div>
+        </div>
+      </section>
+      <!-- tab component start -->
+    </nz-card>
+    <!-- preview component start -->
+    <nz-card
+      *ngIf="tabSelected === 2"
+      style="width: 900px"
+      [nzBordered]="false"
+      [nzTitle]="previewtitle"
+      class="custom-card"
+    >
+      <ng-template #previewtitle>
+        <h3>Preview</h3>
+        <p>See a quick summary of sensor</p>
+      </ng-template>
+      <section class="preview-card">
+        <div class="header">
+          <h4>Sensor Details</h4>
+          <button
+            nz-button
+            nzTooltipTitle="Edit"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="updateTabSelected(1)"
+          >
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 24]">
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Sensor Code</h5>
+              <p>3488990</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Sensor Name</h5>
+              <p>Name123</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Sensor Serial No.</h5>
+              <p>AGHY-908766</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Model No.</h5>
+              <p>AGHY-908766</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Warranty Life</h5>
+              <p>2 Years</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Manufacture</h5>
+              <p>Mumbai, India</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Battery Life</h5>
+              <p>5 Years</p>
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Description</h5>
+              <p>Lorem ipsum is a dummy text since 1952</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </nz-card>
+    <!-- preview component end -->
+  </ng-container>
+  <ng-template #modalFooter>
+    <div>
+      <button nz-button (click)="back()" *ngIf="tabSelected > 1">Back</button>
+    </div>
+
+    <button
+      nz-button
+      nzType="primary"
+      (click)="continueNotification()"
+      *ngIf="tabSelected < 2 && !isEdit"
+    >
+      Save & Continue
+    </button>
+    <ng-template #noMouldTemplate>
+      <div class="custom-notification">
+        <nz-space [nzSize]="15" nzAlign="start">
+          <span
+            nz-icon
+            nzType="check-circle"
+            nzTheme="outline"
+            *nzSpaceItem
+          ></span>
+          <div *nzSpaceItem>
+            <h3>No Mould Associated</h3>
+            <p>Would you like to continue?</p>
+            <div class="btn-wrap">
+              <button nz-button nzType="default" nzSize="small">No</button
+              ><button
+                nz-button
+                nzType="primary"
+                nzSize="small"
+                class="ml-12"
+                (click)="saveContinue()"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </nz-space>
+      </div>
+    </ng-template>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="createNotification('success')"
+      *ngIf="tabSelected === 2"
+    >
+      Add Sensor
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="update()"
+      *ngIf="tabSelected < 3 && isEdit"
+    >
+      Update
+    </button>
+  </ng-template>
+</nz-modal>
+
+<!-- View Modal -->
+<nz-modal
+  [(nzVisible)]="viewOrganisation"
+  [nzTitle]="modalTitle1"
+  [nzCloseIcon]="modalClose1"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzFooter]="null"
+  nzCentered
+  nzWidth="100%"
+  nzWrapClassName="modal-full no-footer"
+  ><ng-container *nzModalContent>
+    <nz-card
+      style="width: 670px"
+      [nzBordered]="false"
+      [nzTitle]="previewtitle"
+      nzDescription="See a quick summary of organisation"
+      class="custom-card"
+    >
+      <ng-template #previewtitle>
+        <div
+          nz-row
+          nzJustify="space-between"
+          nzAlign="middle"
+          class="view-title"
+        >
+          <div nz-col>
+            <nz-space>
+              <img
+                src="../../../../../../../assets/images/QR-icon.svg"
+                alt=""
+              />
+              <div class="ml-12">
+                <h3>
+                  Sensor123 <span class="dot"></span>
+                  <span class="status green">Active</span>
+                </h3>
+                <p>Sensor Id:1171&nbsp;&nbsp;Sensor Code:A1171</p>
+              </div>
+            </nz-space>
+          </div>
+          <div nz-col>
+            <button
+              nz-button
+              nzTooltipTitle="Edit"
+              nzTooltipPlacement="bottom"
+              nz-tooltip
+              (click)="editModal(1)"
+            >
+              <span nz-icon nzType="edit" nzTheme="outline"></span>
+            </button>
+          </div>
+        </div>
+      </ng-template>
+      <section class="view-card">
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 15]">
+            <div nz-col nzSpan="24">
+              <h5>Description</h5>
+              <p>766 Olson Gardens, Port Clairport,NV 10872-8310</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Serial No.</h5>
+              <p>AGHY-908766</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Model No.</h5>
+              <p>AGHY-908766</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Warranty Life</h5>
+              <p>5 Years</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Manufacture</h5>
+              <p>Mumbai, India</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Battery Life</h5>
+              <p>5 Years</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Created By</h5>
+              <p>John Doe</p>
+              <hr />
+            </div>
+
+            <div nz-col nzSpan="24">
+              <h5>Created On</h5>
+              <p>12 Jan, 2024</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </nz-card></ng-container
+  >
+  <ng-template #modalTitle1> Sensor Information </ng-template>
+  <ng-template #modalClose1> Close </ng-template></nz-modal
+>
+
+<!-- Grid Customization Modal -->
+<nz-modal
+  [(nzVisible)]="isGridModal"
+  nzTitle="Grid Customization"
+  [nzCloseIcon]="modalClose2"
+  [nzFooter]="modalFooter3"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  nzCentered
+  nzWidth="450px"
+  ><ng-template #modalClose2> Close </ng-template
+  ><ng-container *nzModalContent>
+    <div class="checkbox-list">
+      <label nz-checkbox>Organisation Name</label
+      ><label nz-checkbox>Organisation Code</label
+      ><label nz-checkbox>Packfora URL</label
+      ><label nz-checkbox>Primary Email</label
+      ><label nz-checkbox>Primary Contact</label
+      ><label nz-checkbox>Created on</label><label nz-checkbox>Status</label>
+    </div></ng-container
+  >
+  <ng-template #modalFooter3>
+    <button nz-button (click)="handleCancel()">Clear</button>
+    <button nz-button nzType="primary" (click)="handleOk()">Save</button>
+  </ng-template>
+</nz-modal>

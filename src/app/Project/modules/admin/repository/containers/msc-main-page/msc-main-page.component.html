@@ -1,0 +1,566 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<div class="w-100">
+  <div class="title-bar">
+    <div nz-row nzJustify="space-between" nzAlign="middle">
+      <div nz-col>
+        <h3>Non Maintenance Schedule Configuration</h3>
+      </div>
+      <div nz-col>
+        <nz-space [nzSize]="8">
+          <div class="send-request" *nzSpaceItem>
+            <a nz-dropdown [nzDropdownMenu]="menu" nzType="link">
+              Mark as {{ confirmationText }}
+              <span nz-icon nzType="down"></span>
+            </a>
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu nzSelectable>
+                <li
+                  nz-menu-item
+                  (click)="showNotification('1')"
+                  (keydown.enter)="showNotification('1')"
+                  tabindex="0"
+                >
+                  Mark as Active
+                </li>
+                <li
+                  nz-menu-item
+                  (click)="showNotification('2')"
+                  (keydown.enter)="showNotification('2')"
+                  tabindex="0"
+                >
+                  Mark as Inactive
+                </li>
+              </ul>
+            </nz-dropdown-menu>
+          </div>
+          <ng-template #noMouldTemplate>
+            <div class="custom-notification">
+              <nz-space [nzSize]="15" nzAlign="start">
+                <span
+                  nz-icon
+                  nzType="exclamation-circle"
+                  nzTheme="outline"
+                  *nzSpaceItem
+                ></span>
+                <div *nzSpaceItem>
+                  <h3>
+                    Are you sure you want to Mark as {{ confirmationText }}?
+                  </h3>
+                  <p>Lorem ipsum is a dummy text</p>
+                  <div class="btn-wrap">
+                    <button
+                      nz-button
+                      nzType="default"
+                      nzSize="small"
+                      (click)="closeNotification()"
+                    >
+                      No</button
+                    ><button
+                      nz-button
+                      nzType="primary"
+                      nzSize="small"
+                      class="ml-12"
+                      (click)="closeNotification()"
+                    >
+                      Yes
+                    </button>
+                  </div>
+                </div>
+              </nz-space>
+            </div>
+          </ng-template>
+          <nz-input-group
+            *nzSpaceItem
+            [nzPrefix]="prefixTemplateUser"
+            class="search"
+          >
+            <input type="text" nz-input placeholder="Search by mould id" />
+            <ng-template #prefixTemplateUser
+              ><span nz-icon nzType="search" nzTheme="outline"></span
+            ></ng-template>
+          </nz-input-group>
+
+          <button
+            nz-button
+            nzType="default"
+            *nzSpaceItem
+            nzTooltipTitle="Export"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+          >
+            <span nz-icon nzType="download" nzTheme="outline"></span></button
+          ><button
+            nz-button
+            nzType="default"
+            *nzSpaceItem
+            nzTooltipTitle="Reset Filters"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+          >
+            <span nz-icon nzType="reload" nzTheme="outline"></span>
+          </button>
+          <button
+            nz-button
+            nzType="default"
+            *nzSpaceItem
+            (click)="openGridModal()"
+            nzTooltipTitle="Grid Customization"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+          >
+            <span nz-icon nzType="control" nzTheme="outline"></span></button
+          ><button
+            nz-button
+            nzType="primary"
+            *nzSpaceItem
+            (click)="showModal(1)"
+            class="d-none d-lg-block"
+          >
+            Create
+          </button>
+        </nz-space>
+        <div class="d-lg-none xs-footer">
+          <button nz-button nzType="primary" (click)="showModal(1)">
+            Create
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-msc-table (openViewEvent)="openViewModal()"></app-msc-table>
+</div>
+
+<!-- Create Modal -->
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="modalTitle"
+  [nzCloseIcon]="modalClose"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzFooter]="modalFooter"
+  nzCentered
+  nzWidth="100%"
+  nzWrapClassName="modal-full"
+>
+  <ng-template #modalTitle>
+    Create Non Maintenance Schedule Configuration
+  </ng-template>
+  <ng-template #modalClose> Close </ng-template>
+
+  <ng-container *nzModalContent>
+    <nz-card
+      *ngIf="tabSelected < 3"
+      style="width: 880px"
+      [nzBordered]="false"
+      [nzBodyStyle]="{ padding: '0px' }"
+      nzTitle="Basic Details"
+      class="custom-card"
+    >
+      <!-- tab component start -->
+      <section class="p-20">
+        <nz-collapse nzExpandIconPosition="right" class="form-accordion">
+          <nz-collapse-panel nzHeader="Converter" [nzActive]="true">
+            <div nz-row [nzGutter]="[15, 24]">
+              <div nz-col nzXs="12"><h4>Converter</h4></div>
+              <div nz-col nzXs="12" class="text-end">
+                <button
+                  nz-button
+                  nzType="primary"
+                  class="outline-primary"
+                  (click)="openTreeModal()"
+                >
+                  Select Converter
+                </button>
+              </div>
+            </div>
+            <div nz-row [nzGutter]="[16, 16]">
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                <nz-tag nzColor="blue" nzMode="closeable">Converter 1 </nz-tag
+                ><nz-tag nzColor="blue" nzMode="closeable">Converter 2</nz-tag>
+              </div>
+            </div>
+          </nz-collapse-panel>
+          <nz-collapse-panel nzHeader="Schedule Configuration">
+            <div nz-row [nzGutter]="[16, 16]">
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                <label>Schedule Configuration Code<sup>*</sup></label
+                ><input
+                  type="text"
+                  nz-input
+                  placeholder="Enter Value"
+                  disabled
+                  value="MLD009"
+                  nzSize="large"
+                />
+              </div>
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                <label>Schedule Configuration Name<sup>*</sup></label>
+                <input
+                  type="text"
+                  nz-input
+                  placeholder="Enter Value"
+                  value="Name 123"
+                  nzSize="large"
+                />
+              </div>
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                <label>Schedule Configuration Type<sup>*</sup></label>
+                <nz-select ngModel="1" nzSize="large" class="w-100">
+                  <nz-option nzValue="1" nzLabel="Data Capture"></nz-option>
+                  <nz-option nzValue="2" nzLabel="Mould Review"></nz-option>
+                </nz-select>
+              </div>
+            </div>
+            <div nz-row [nzGutter]="[16, 16]">
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                <label>Frequency Pattern<sup>*</sup></label>
+                <nz-select
+                  [(ngModel)]="pattern_val"
+                  nzSize="large"
+                  class="w-100"
+                >
+                  <nz-option nzValue="p1" nzLabel="Daily"></nz-option>
+                  <nz-option nzValue="p2" nzLabel="Weekly"></nz-option>
+                  <nz-option nzValue="p3" nzLabel="Monthly"></nz-option>
+                  <nz-option nzValue="p4" nzLabel="Quarterly"></nz-option>
+                  <nz-option nzValue="p5" nzLabel="Half-Yearly"></nz-option>
+                  <nz-option nzValue="p6" nzLabel="Yearly"></nz-option>
+                </nz-select>
+              </div>
+            </div>
+            <div nz-row [nzGutter]="[16, 16]" *ngIf="pattern_val === 'p1'">
+              <div nz-col class="gutter-row">
+                <label>Recurrence</label
+                ><nz-space nzAlign="center">
+                  <span *nzSpaceItem>Every</span>
+                  <nz-input-number
+                    *nzSpaceItem
+                    [nzStep]="1"
+                    nzPlaceHolder="Enter Value"
+                    nzSize="large"
+                  ></nz-input-number>
+                  <span *nzSpaceItem>Day(s)</span>
+                </nz-space>
+              </div>
+            </div>
+            <div nz-row [nzGutter]="[16, 16]" *ngIf="pattern_val === 'p2'">
+              <div nz-col class="gutter-row">
+                <label>Recurrence</label
+                ><nz-space nzAlign="center">
+                  <span *nzSpaceItem>Every</span>
+                  <nz-input-number
+                    *nzSpaceItem
+                    [nzStep]="1"
+                    nzPlaceHolder="Enter Value"
+                    nzSize="large"
+                  ></nz-input-number>
+                  <span *nzSpaceItem>Week(s) On</span>
+                  <nz-tree-select
+                    [(ngModel)]="value"
+                    [nzNodes]="nodes"
+                    nzShowSearch
+                    nzCheckable
+                    [nzShowExpand]="false"
+                    [nzMaxTagCount]="4"
+                    [nzShowIcon]="true"
+                    nzPlaceHolder="Select Day"
+                    nzSize="large"
+                    class="w-100"
+                    *nzSpaceItem
+                    nzDropdownClassName="multiselect"
+                    style="width: max-content; min-width: 150px"
+                  ></nz-tree-select>
+                </nz-space>
+              </div>
+            </div>
+            <div
+              nz-row
+              [nzGutter]="[16, 16]"
+              *ngIf="
+                pattern_val === 'p3' ||
+                pattern_val === 'p4' ||
+                pattern_val === 'p5'
+              "
+            >
+              <div nz-col class="gutter-row">
+                <label>Recurrence</label
+                ><nz-space nzAlign="center">
+                  <span *nzSpaceItem>Day</span>
+                  <nz-input-number
+                    *nzSpaceItem
+                    [nzStep]="1"
+                    nzPlaceHolder="Enter Value"
+                    nzSize="large"
+                  ></nz-input-number>
+                  <span *nzSpaceItem>Of Every</span>
+                  <nz-input-number
+                    *nzSpaceItem
+                    [nzStep]="1"
+                    nzPlaceHolder="Enter Value"
+                    nzSize="large"
+                  ></nz-input-number>
+                  <span *nzSpaceItem>Month(s)</span>
+                </nz-space>
+              </div>
+            </div>
+            <div nz-row [nzGutter]="[16, 16]" *ngIf="pattern_val === 'p6'">
+              <div nz-col class="gutter-row">
+                <label>Recurrence</label
+                ><nz-space nzAlign="center">
+                  <span *nzSpaceItem>Every</span>
+                  <nz-input-number
+                    *nzSpaceItem
+                    [nzStep]="1"
+                    nzPlaceHolder="Enter Value"
+                    nzSize="large"
+                  ></nz-input-number>
+                  <span *nzSpaceItem>Of Month</span>
+                  <nz-select ngModel="1" *nzSpaceItem nzSize="large">
+                    <nz-option nzValue="1" nzLabel="January"></nz-option>
+                    <nz-option nzValue="2" nzLabel="February"></nz-option>
+                    <nz-option nzValue="3" nzLabel="March"></nz-option>
+                    <nz-option nzValue="4" nzLabel="April"></nz-option>
+                    <nz-option
+                      nzValue="disabled"
+                      nzLabel="Disabled"
+                      nzDisabled
+                    ></nz-option>
+                  </nz-select>
+                </nz-space>
+              </div>
+            </div>
+          </nz-collapse-panel>
+        </nz-collapse>
+      </section>
+      <!-- tab component start -->
+    </nz-card>
+    <!-- preview component start -->
+    <nz-card
+      *ngIf="tabSelected === 3"
+      style="width: 900px"
+      [nzBordered]="false"
+      [nzTitle]="previewtitle"
+      class="custom-card"
+    >
+      <ng-template #previewtitle>
+        <h3>Preview</h3>
+        <p>See a quick summary of schedule configuration</p>
+      </ng-template>
+      <section class="preview-card">
+        <div class="header">
+          <h4>Converter Details</h4>
+          <button
+            nz-button
+            nzTooltipTitle="Edit"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="updateTabSelected(1)"
+          >
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 24]">
+            <div nz-col nzXs="24">
+              <nz-tag [nzColor]="'blue'">Converter 1</nz-tag>
+              <nz-tag [nzColor]="'blue'">Converter 2</nz-tag>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="preview-card">
+        <div class="header">
+          <h4>Schedule Configuration Details</h4>
+          <button
+            nz-button
+            nzTooltipTitle="Edit"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="updateTabSelected(2)"
+          >
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 24]">
+            <div
+              nz-col
+              nzXs="24"
+              nzSm="12"
+              nzMd="8"
+              *ngFor="let data of mouldAssociationsPreviewData"
+            >
+              <h5>{{ data.label }}</h5>
+              <p>{{ data.value }}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </nz-card>
+    <!-- preview component end -->
+  </ng-container>
+  <ng-template #modalFooter>
+    <div>
+      <button nz-button (click)="back()" *ngIf="tabSelected > 1">Back</button>
+    </div>
+
+    <button
+      nz-button
+      nzType="primary"
+      (click)="saveContinue()"
+      *ngIf="tabSelected < 3 && !isEdit"
+    >
+      Save & Continue
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="createNotification('success')"
+      *ngIf="tabSelected === 3"
+    >
+      Create Non Maintenance Schedule Configuration
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="update()"
+      *ngIf="tabSelected < 3 && isEdit"
+    >
+      Update
+    </button>
+  </ng-template>
+</nz-modal>
+
+<!-- View Modal -->
+<nz-modal
+  [(nzVisible)]="viewOrganisation"
+  [nzTitle]="modalTitle1"
+  [nzCloseIcon]="modalClose1"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzFooter]="null"
+  nzCentered
+  nzWidth="100%"
+  nzWrapClassName="modal-full no-footer"
+>
+  <ng-container *nzModalContent>
+    <nz-card
+      style="width: 670px"
+      [nzBordered]="false"
+      [nzTitle]="previewtitle"
+      nzDescription="See a quick summary of organisation"
+      class="custom-card"
+    >
+      <ng-template #previewtitle>
+        <div
+          nz-row
+          nzJustify="space-between"
+          nzAlign="middle"
+          class="view-title"
+        >
+          <div nz-col>
+            <div>
+              <h3>Schedule Name 123</h3>
+              <p>Schedule Configuration Code: SMP11258745</p>
+            </div>
+          </div>
+          <div nz-col>
+            <button
+              nz-button
+              nzTooltipTitle="Edit"
+              nzTooltipPlacement="bottom"
+              nz-tooltip
+              (click)="editModal(1)"
+            >
+              <span nz-icon nzType="edit" nzTheme="outline"></span>
+            </button>
+          </div>
+        </div>
+      </ng-template>
+      <section class="view-card">
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 15]">
+            <div nz-col nzSpan="24">
+              <h5>Converter</h5>
+              <nz-tag nzColor="blue">Converter 1</nz-tag>
+              <nz-tag nzColor="blue">Converter 2</nz-tag>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Schedule Configuration Type</h5>
+              <p>Data Review</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Frequency</h5>
+              <p>Monthly</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Recurrence</h5>
+              <p>Every 2 Day</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </nz-card></ng-container
+  >
+  <ng-template #modalTitle1> View Data Capture </ng-template>
+  <ng-template #modalClose1> Close </ng-template></nz-modal
+>
+
+<!-- Grid Customization Modal -->
+<nz-modal
+  [(nzVisible)]="isGridModal"
+  nzTitle="Grid Customization"
+  [nzCloseIcon]="modalClose2"
+  [nzFooter]="modalFooter3"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  nzCentered
+  nzWidth="450px"
+  ><ng-template #modalClose2> Close </ng-template
+  ><ng-container *nzModalContent>
+    <div class="checkbox-list">
+      <label nz-checkbox>Component Name</label
+      ><label nz-checkbox>Component Code</label
+      ><label nz-checkbox>Parent Component</label
+      ><label nz-checkbox>Child Component</label
+      ><label nz-checkbox>Modulable</label><label nz-checkbox>Specs Id</label
+      ><label nz-checkbox>Height</label>
+      <label nz-checkbox>Width</label>
+      <label nz-checkbox>Length</label>
+      <label nz-checkbox>Gross Height</label>
+      <label nz-checkbox>Created On</label>
+      <label nz-checkbox>Status</label>
+    </div></ng-container
+  >
+  <ng-template #modalFooter3>
+    <button nz-button (click)="handleCancel()">Clear</button>
+    <button nz-button nzType="primary" (click)="handleOk()">Save</button>
+  </ng-template>
+</nz-modal>
+
+<!-- Select tree modal -->
+<nz-modal
+  [(nzVisible)]="var_tree"
+  nzTitle="Search Converter "
+  (nzOnCancel)="closeTreeModal()"
+  (nzOnOk)="closeTreeModal()"
+  [nzFooter]="modalFooterSearch"
+  nzCentered
+  nzWidth="600px"
+  [nzCloseIcon]="modalClose1"
+>
+  <ng-container *nzModalContent>
+    <div class="border-none">
+      <!-- tree component start -->
+      <app-location-tree></app-location-tree>
+      <!-- tree component start -->
+    </div>
+  </ng-container>
+  <ng-template #modalFooterSearch>
+    <button nz-button nzType="primary" (click)="closeTreeModal()">Save</button>
+  </ng-template>
+  <ng-template #modalClose1> Close </ng-template>
+</nz-modal>

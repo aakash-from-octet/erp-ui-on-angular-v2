@@ -1,0 +1,112 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<nz-table
+  #expandTable
+  [nzData]="listOfMapData"
+  nzTableLayout="fixed"
+  nzShowPagination="false"
+  nzSize="small"
+  nzBordered="false"
+  [nzScroll]="{ y: 'calc(100vh - 210px)' }"
+  class="rolepermission-table"
+>
+  <thead>
+    <tr>
+      <th nzWidth="20%">Menu Item</th>
+      <th nzAlign="center" nzWidth="15%">Create</th>
+      <th nzAlign="center" nzWidth="15%">Edit</th>
+      <th nzAlign="center" nzWidth="15%">View</th>
+      <th nzAlign="center" nzWidth="15%">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let data of expandTable.data; let i = index">
+      <ng-container
+        *ngFor="let item of mapOfExpandedData[data.idModule]; let j = index"
+      >
+        <ng-template #expandIcon>
+          <span
+            nz-icon
+            *ngIf="!expandSet.has(data.hierarchy.toString())"
+            nzType="plus-circle"
+            nzTheme="outline"
+            (click)="onExpandChange(data.hierarchy.toString(), true)"
+            (keydown.enter)="onExpandChange(data.hierarchy.toString(), true)"
+            tabindex="0"
+          ></span>
+          <span
+            nz-icon
+            *ngIf="expandSet.has(data.hierarchy.toString())"
+            nzType="minus-circle"
+            nzTheme="outline"
+            (click)="onExpandChange(data.hierarchy.toString(), false)"
+            (keydown.enter)="onExpandChange(data.hierarchy.toString(), false)"
+            tabindex="0"
+          ></span>
+        </ng-template>
+        <tr
+          *ngIf="(item.parent && item.parent.expand) || !item.parent"
+          [ngClass]="{
+            'even-group': i % 2 === 0,
+            'odd-group': i % 2 !== 0,
+            'child-group': item.parent?.parent?.expand
+          }"
+        >
+          <td
+            [nzIndentSize]="item.level! * 20"
+            [nzShowExpand]="!!item.menus || !!item.subMenus"
+            [(nzExpand)]="item.expand"
+            (nzExpandChange)="
+              collapse(
+                mapOfExpandedData[data.idModule.toString()],
+                item,
+                $event
+              )
+            "
+          >
+            {{ item.moduleName }} {{ item.menuName }}
+          </td>
+          <td nzAlign="center">
+            <label
+              nz-checkbox
+              [nzId]="'CREATE-' + item.hierarchy"
+              [nzChecked]="item.isCheckedCreate"
+              (change)="handleCheckboxChange($event, item, 'CREATE')"
+              (keydown.enter)="handleCheckboxChange($event, item, 'CREATE')"
+              tabindex="0"
+            ></label>
+          </td>
+          <td nzAlign="center">
+            <label
+              nz-checkbox
+              [nzId]="'EDIT-' + item.hierarchy"
+              [nzChecked]="item.isCheckedEdit"
+              (change)="handleCheckboxChange($event, item, 'EDIT')"
+              (keydown.enter)="handleCheckboxChange($event, item, 'EDIT')"
+              tabindex="0"
+            ></label>
+          </td>
+          <td nzAlign="center">
+            <label
+              nz-checkbox
+              [nzId]="'VIEW-' + item.hierarchy"
+              [nzChecked]="item.isCheckedView"
+              (change)="handleCheckboxChange($event, item, 'VIEW')"
+              (keydown.enter)="handleCheckboxChange($event, item, 'VIEW')"
+              tabindex="0"
+            ></label>
+          </td>
+          <td nzAlign="center">
+            <label
+              nz-checkbox
+              [nzId]="'DELETE-' + item.hierarchy"
+              [nzChecked]="item.isCheckedDelete"
+              (change)="handleCheckboxChange($event, item, 'DELETE')"
+              (keydown.enter)="handleCheckboxChange($event, item, 'DELETE')"
+              tabindex="0"
+            ></label>
+          </td>
+        </tr>
+      </ng-container>
+    </ng-container>
+  </tbody>
+</nz-table>

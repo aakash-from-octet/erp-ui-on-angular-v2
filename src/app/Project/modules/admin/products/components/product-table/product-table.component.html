@@ -1,0 +1,184 @@
+<nz-table
+  #rowSelectionTable
+  nzSize="small"
+  nzOuterBordered
+  nzShowPagination="false"
+  [nzData]="listOfCurrentPageData"
+  [nzScroll]="{ x: '2800px', y: 'calc(100vh - 220px)' }"
+  [nzNoResult]="noDataTemplate"
+>
+  <thead>
+    <tr>
+      <th
+        [nzChecked]="checked"
+        [nzIndeterminate]="indeterminate"
+        (nzCheckedChange)="onAllChecked($event)"
+        [nzSelections]="listOfSelection"
+        nzLeft
+        nzWidth="50px"
+      ></th>
+      <th nzLeft nzWidth="200px">
+        Product Name <app-shared-filters></app-shared-filters>
+      </th>
+      <th>Product Id <app-shared-filters></app-shared-filters></th>
+      <th>Product Code <app-shared-filters></app-shared-filters></th>
+      <th>Product Brand</th>
+      <th>Product Assembly</th>
+      <th>Product Category</th>
+      <th>Product Components</th>
+      <th>Product Design Id</th>
+      <th>Design Type</th>
+      <th>Design Files</th>
+      <th>Dimensions Id</th>
+      <th>Height</th>
+      <th>Width</th>
+      <th>Length</th>
+      <th>Gross Weight</th>
+      <th>Created On</th>
+      <th>Status</th>
+      <th nzRight nzAlign="center" nzWidth="100px">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of listOfCurrentPageData">
+      <td
+        nzLeft
+        [nzChecked]="setOfCheckedId.has(data.id)"
+        (nzCheckedChange)="onItemChecked(data.id, $event)"
+      ></td>
+      <td nzLeft>
+        <span class="first-letter">{{ data.productname.charAt(0) }}</span
+        >{{ data.productname }}
+      </td>
+      <td>ASL:12332</td>
+      <td>PR:0001</td>
+      <td>Harpic</td>
+      <td>
+        <span
+          nz-icon
+          nzType="deployment-unit"
+          nzTheme="outline"
+          class="cp"
+          (click)="showModal()"
+          (keydown.enter)="showModal()"
+          tabindex="0"
+        ></span>
+      </td>
+      <td>Floor Cleaning</td>
+      <td>Comp:0001</td>
+      <td>#2454</td>
+      <td>lorem ipsum</td>
+      <td>lorem ipsum</td>
+      <td>44 mm</td>
+      <td>44 mm</td>
+      <td>44 mm</td>
+      <td>44 mm</td>
+      <td>100 gm</td>
+      <td>11 Nov, 2023</td>
+      <td>
+        <span
+          class="status"
+          [class.green]="data.status === 'Active'"
+          [class.red]="data.status === 'In Active'"
+        >
+          {{ data.status }}
+        </span>
+      </td>
+      <td nzRight nzAlign="center">
+        <nz-space>
+          <button *nzSpaceItem nz-button nzType="text" (click)="openView()">
+            <span nz-icon nzType="eye" nzTheme="outline"></span>
+          </button>
+          <div class="action-divider" *nzSpaceItem></div>
+          <button
+            *nzSpaceItem
+            nz-button
+            nzType="text"
+            nz-dropdown
+            [nzDropdownMenu]="menu"
+          >
+            <span nz-icon nzType="more" nzTheme="outline"></span>
+          </button>
+
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+              <li nz-menu-item>Edit</li>
+              <li nz-menu-item>Mark as in-active</li>
+              <li nz-menu-item>Add Component</li>
+            </ul>
+          </nz-dropdown-menu>
+        </nz-space>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<section class="footer-pagination">
+  <nz-pagination
+    [(nzPageIndex)]="currentPageIndex"
+    [(nzPageSize)]="pageSize"
+    [nzTotal]="totalItems"
+    (nzPageIndexChange)="loadTableData($event, pageSize)"
+    [nzSize]="'small'"
+    nzShowSizeChanger="true"
+    (nzPageSizeChange)="pageSizeChange($event)"
+  ></nz-pagination>
+</section>
+
+<ng-template #noDataTemplate>
+  <div class="no-data">
+    <img src="../../../assets/images/no-data.svg" alt="" />
+  </div>
+</ng-template>
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  nzTitle="Grid Customization"
+  [nzCloseIcon]="modalClose"
+  [nzFooter]="null"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  nzCentered
+  nzWidth="670px"
+  ><ng-template #modalClose> Close </ng-template
+  ><ng-container *nzModalContent>
+    <nz-table
+      #rowSelectionTable
+      nzSize="small"
+      nzOuterBordered
+      nzBordered=""
+      nzShowPagination="false"
+      [nzData]="listOfCurrentPageData"
+      [nzScroll]="{ x: '700px', y: '70vh' }"
+      [nzNoResult]="noDataTemplate"
+    >
+      <thead>
+        <tr>
+          <th nzAlign="center" nzLeft nzWidth="40px">#</th>
+          <th nzWidth="150px">
+            Component Name <app-shared-filters></app-shared-filters>
+          </th>
+          <th nzWidth="130px">
+            Component Id <app-shared-filters></app-shared-filters>
+          </th>
+          <th nzWidth="130px">
+            Component Code <app-shared-filters></app-shared-filters>
+          </th>
+          <th nzAlign="center" nzRight nzWidth="60px">Qty</th>
+          <th nzAlign="center" nzRight nzWidth="80px">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of listOfCurrentPageData">
+          <td nzLeft>{{ data.id + 1 }}</td>
+          <td>ASL:12332</td>
+          <td>PR:0001</td>
+          <td>ASL:12332</td>
+          <td nzAlign="center" nzRight>04</td>
+          <td nzAlign="center" nzRight>
+            <span nz-icon nzType="delete" nzTheme="outline"></span>
+          </td>
+        </tr>
+      </tbody> </nz-table
+  ></ng-container>
+</nz-modal>

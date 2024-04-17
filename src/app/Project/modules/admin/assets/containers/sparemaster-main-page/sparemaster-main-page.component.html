@@ -1,0 +1,630 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<div class="w-100">
+  <div class="title-bar">
+    <div nz-row nzJustify="space-between" nzAlign="middle">
+      <div nz-col>
+        <h3>Spare Master <span>(0 Spare Masters)</span></h3>
+      </div>
+      <div nz-col>
+        <nz-space [nzSize]="8">
+          <button
+            nz-button
+            nzType="primary"
+            *nzSpaceItem
+            (click)="showModal(1)"
+          >
+            Add Spare
+          </button>
+        </nz-space>
+        <div class="d-lg-none xs-footer">
+          <button nz-button nzType="primary" (click)="showModal(1)">
+            Add Spare
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nz-tabset [nzTabBarExtraContent]="extraTemplate">
+    <nz-tab nzTitle="Active"
+      ><app-sparemaster-table
+        (openViewEvent)="openViewModal()"
+      ></app-sparemaster-table
+    ></nz-tab>
+    <nz-tab nzTitle="Inactive"
+      ><app-sparemaster-table
+        (openViewEvent)="openViewModal()"
+      ></app-sparemaster-table
+    ></nz-tab>
+  </nz-tabset>
+  <ng-template #extraTemplate>
+    <nz-space [nzSize]="8">
+      <nz-input-group
+        *nzSpaceItem
+        [nzPrefix]="prefixTemplateUser"
+        class="search"
+      >
+        <input type="text" nz-input placeholder="Search by Spare Code" />
+        <ng-template #prefixTemplateUser
+          ><span nz-icon nzType="search" nzTheme="outline"></span
+        ></ng-template>
+      </nz-input-group>
+
+      <button
+        nz-button
+        nzType="default"
+        *nzSpaceItem
+        nzTooltipTitle="Export"
+        nzTooltipPlacement="bottom"
+        nz-tooltip
+      >
+        <span nz-icon nzType="download" nzTheme="outline"></span></button
+      ><button
+        nz-button
+        nzType="default"
+        *nzSpaceItem
+        nzTooltipTitle="Reset Filters"
+        nzTooltipPlacement="bottom"
+        nz-tooltip
+      >
+        <span nz-icon nzType="reload" nzTheme="outline"></span>
+      </button>
+      <button
+        nz-button
+        nzType="default"
+        *nzSpaceItem
+        (click)="openGridModal()"
+        nzTooltipTitle="Grid Customization"
+        nzTooltipPlacement="bottom"
+        nz-tooltip
+      >
+        <span nz-icon nzType="control" nzTheme="outline"></span>
+      </button>
+    </nz-space>
+  </ng-template>
+</div>
+
+<!-- Create Modal -->
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="modalTitle"
+  [nzCloseIcon]="modalClose"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzFooter]="modalFooter"
+  nzCentered
+  nzWidth="100%"
+  nzWrapClassName="modal-full"
+>
+  <ng-template #modalTitle> Add Spare </ng-template>
+  <ng-template #modalClose> Close </ng-template>
+  <ng-container *nzModalContent>
+    <nz-card
+      *ngIf="tabSelected < 3"
+      style="width: 880px"
+      [nzBordered]="false"
+      [nzBodyStyle]="{ padding: '0px' }"
+      nzTitle="Spare Details"
+      class="custom-card"
+    >
+      <!-- tab component start -->
+      <nz-tabset
+        [nzTabPosition]="isSmallScreen ? 'top' : 'left'"
+        [(nzSelectedIndex)]="tabSelected"
+        class="step-form"
+      >
+        <nz-tab nzTitle="Steps:" nzDisabled="true"></nz-tab>
+        <nz-tab nzTitle="Spare Details">
+          <section class="p-20">
+            <div nz-row [nzGutter]="[16, 16]">
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="6">
+                <label>Spares Code<sup>*</sup></label
+                ><input
+                  nz-input
+                  placeholder="Enter Spares Code"
+                  type="text"
+                  nzSize="large"
+                />
+              </div>
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="6">
+                <label>Spares Name<sup>*</sup></label
+                ><input
+                  nz-input
+                  placeholder="Enter Spares Name"
+                  type="text"
+                  nzSize="large"
+                />
+              </div>
+
+              <div nz-col class="gutter-row" [nzSpan]="24">
+                <label>Description<sup>*</sup></label
+                ><textarea
+                  nz-input
+                  placeholder="Enter Description"
+                  [nzAutosize]="{ minRows: 3 }"
+                ></textarea>
+              </div>
+              <div nz-col class="gutter-row d-flex" [nzSpan]="24">
+                <nz-switch nzSize="small" class="mr-15"></nz-switch
+                ><label>Mould Maker Supplied<sup>*</sup></label>
+              </div>
+              <div nz-col class="gutter-row d-flex" [nzSpan]="24">
+                <nz-switch nzSize="small" class="mr-15"></nz-switch
+                ><label>Mark Spare as Critical<sup>*</sup></label>
+              </div>
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+                <label>Quantity<sup>*</sup></label>
+                <nz-input-number
+                  placeholder="Enter Value"
+                  [ngModel]="1"
+                  [nzMin]="1"
+                  [nzMax]="10"
+                  [nzStep]="1"
+                  nzSize="large"
+                  class="w-100"
+                ></nz-input-number>
+              </div>
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+                <label>Cost<sup>*</sup></label>
+                <nz-input-group
+                  [nzAddOnAfter]="addOnAfterTemplate"
+                  nzSize="large"
+                >
+                  <input type="text" nz-input placeholder="Enter Value" />
+                </nz-input-group>
+                <ng-template #addOnAfterTemplate>
+                  <nz-select [ngModel]="'USD'" nzSize="large">
+                    <nz-option nzLabel="USD" nzValue="USD"></nz-option>
+                    <nz-option nzLabel="Rupee" nzValue="Rupee"></nz-option>
+                  </nz-select>
+                </ng-template>
+              </div>
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+                <label>UoM<sup>*</sup></label>
+                <nz-input-group
+                  [nzAddOnAfter]="addOnAfterTemplate1"
+                  nzSize="large"
+                >
+                  <input type="text" nz-input placeholder="Enter Value" />
+                </nz-input-group>
+                <ng-template #addOnAfterTemplate1>
+                  <nz-select [ngModel]="'Kg'" nzSize="large">
+                    <nz-option nzLabel="Kg" nzValue="Kg"></nz-option>
+                    <nz-option nzLabel="Gram" nzValue="Gram"></nz-option>
+                  </nz-select>
+                </ng-template>
+              </div>
+            </div></section
+        ></nz-tab>
+        <nz-tab nzTitle="Other Details"
+          ><section class="p-20">
+            <div nz-row [nzGutter]="[16, 16]">
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+                <label>Receipt Date<sup>*</sup></label
+                ><nz-date-picker nzSize="large" class="w-100"></nz-date-picker>
+              </div>
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+                <label>Manufacture<sup>*</sup></label
+                ><nz-date-picker nzSize="large" class="w-100"></nz-date-picker>
+              </div>
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+                <label>Min Stock Level<sup>*</sup></label>
+                <nz-input-number
+                  [nzMin]="1"
+                  [nzMax]="10"
+                  [nzStep]="1"
+                  nzSize="large"
+                  class="w-100"
+                  nzPlaceHolder="Enter Value"
+                ></nz-input-number>
+              </div>
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+                <label>Min Order Qty<sup>*</sup></label>
+                <nz-input-number
+                  [nzMin]="1"
+                  [nzMax]="10"
+                  [nzStep]="1"
+                  nzSize="large"
+                  class="w-100"
+                  nzPlaceHolder="Enter Value"
+                ></nz-input-number>
+              </div>
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+                <label>Reorder Point<sup>*</sup></label
+                ><input
+                  nz-input
+                  placeholder="Enter Reorder Point"
+                  type="text"
+                  nzSize="large"
+                />
+              </div>
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+                <label>Lead Time<sup>*</sup></label
+                ><input
+                  nz-input
+                  placeholder="Enter Lead Time"
+                  type="text"
+                  nzSize="large"
+                />
+              </div>
+              <div nz-col class="gutter-row" nzXs="24" nzSm="24" nzMd="16">
+                <label>Associate Mould<sup>*</sup></label
+                ><nz-select
+                  nzShowSearch
+                  nzAllowClear
+                  [nzSuffixIcon]="suffixIconSearch"
+                  nzPlaceHolder="Search by mould id, code, name.."
+                  [(ngModel)]="selectedValue"
+                  class="w-100 icon-prefix"
+                  nzSize="large"
+                >
+                  <nz-option nzLabel="Mould 1" nzValue="Mould1"></nz-option>
+                  <nz-option nzLabel="Mould 2" nzValue="Mould2"></nz-option>
+                  <nz-option nzLabel="Mould 3" nzValue="Mould3"></nz-option>
+                </nz-select>
+                <ng-template #suffixIconSearch>
+                  <span nz-icon nzType="search"></span>
+                </ng-template>
+              </div>
+            </div>
+            <div nz-row [nzGutter]="[16, 16]" class="mt-2">
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="6">
+                <label>QR Code</label>
+                <nz-upload
+                  nzType="drag"
+                  [nzMultiple]="true"
+                  nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                  (nzChange)="handleChange($event)"
+                >
+                  <img
+                    src="../../../../../../../assets/images/plus.svg"
+                    alt=""
+                    class="mb-1"
+                  />
+                  <p class="ant-upload-text text-14">Upload</p>
+                </nz-upload>
+              </div>
+            </div>
+          </section></nz-tab
+        >
+      </nz-tabset>
+      <!-- tab component start -->
+    </nz-card>
+    <!-- preview component start -->
+    <nz-card
+      *ngIf="tabSelected === 3"
+      style="width: 900px"
+      [nzBordered]="false"
+      [nzTitle]="previewtitle"
+      class="custom-card"
+    >
+      <ng-template #previewtitle>
+        <h3>Preview</h3>
+        <p>See a quick summary of Spare</p>
+      </ng-template>
+      <section class="preview-card">
+        <div class="header">
+          <h4>Spare Details</h4>
+          <button
+            nz-button
+            nzTooltipTitle="Edit"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="updateTabSelected(1)"
+          >
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 24]">
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Spare Code</h5>
+              <p>3488990</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Spare Name</h5>
+              <p>Name123</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Mould Maker Supplied</h5>
+              <p>Yes</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Mark Spare as Critical</h5>
+              <p>Yes</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Quantity</h5>
+              <p>24</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Cost</h5>
+              <p>$1209</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>UoM</h5>
+              <p>Kg</p>
+            </div>
+            <div nz-col nzSpan="16">
+              <h5>Description</h5>
+              <p>Lorem ipsum is a dummy text.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="preview-card">
+        <div class="header">
+          <h4>Other Details</h4>
+          <button
+            nz-button
+            nzTooltipTitle="Edit"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="updateTabSelected(2)"
+          >
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 24]">
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Origin</h5>
+              <p>Asia</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Receipt Date</h5>
+              <p>12 February 2024</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Manufacture</h5>
+              <p>Mumbai</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Min Stock Level</h5>
+              <p>3 Units</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Min Order Qty</h5>
+              <p>25</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Reorder Point</h5>
+              <p>14 Units</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Lead Time</h5>
+              <p>14</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </nz-card>
+    <!-- preview component end -->
+  </ng-container>
+  <ng-template #modalFooter>
+    <div>
+      <button nz-button (click)="back()" *ngIf="tabSelected > 1">Back</button>
+    </div>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="saveContinue()"
+      *ngIf="tabSelected < 2 && !isEdit"
+    >
+      Save & Continue
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="continueNotification()"
+      *ngIf="tabSelected === 2 && !isEdit"
+    >
+      Save & Continue
+    </button>
+    <ng-template #noMouldTemplate>
+      <div class="custom-notification">
+        <nz-space [nzSize]="15" nzAlign="start">
+          <span
+            nz-icon
+            nzType="check-circle"
+            nzTheme="outline"
+            *nzSpaceItem
+          ></span>
+          <div *nzSpaceItem>
+            <h3>No Mould Associated</h3>
+            <p>Would you like to continue?</p>
+            <div class="btn-wrap">
+              <button nz-button nzType="default" nzSize="small">No</button
+              ><button
+                nz-button
+                nzType="primary"
+                nzSize="small"
+                class="ml-12"
+                (click)="saveContinue()"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </nz-space>
+      </div>
+    </ng-template>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="createNotification('success')"
+      *ngIf="tabSelected === 3"
+    >
+      Add Spare
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="update()"
+      *ngIf="tabSelected < 3 && isEdit"
+    >
+      Update
+    </button>
+  </ng-template>
+</nz-modal>
+
+<!-- View Modal -->
+<nz-modal
+  [(nzVisible)]="viewOrganisation"
+  [nzTitle]="modalTitle1"
+  [nzCloseIcon]="modalClose1"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzFooter]="null"
+  nzCentered
+  nzWidth="100%"
+  nzWrapClassName="modal-full no-footer"
+  ><ng-container *nzModalContent>
+    <nz-card
+      style="width: 670px"
+      [nzBordered]="false"
+      [nzTitle]="previewtitle"
+      nzDescription="See a quick summary of organisation"
+      class="custom-card"
+    >
+      <ng-template #previewtitle>
+        <div
+          nz-row
+          nzJustify="space-between"
+          nzAlign="middle"
+          class="view-title"
+        >
+          <div nz-col>
+            <nz-space>
+              <img src="../../../../../../../assets/images/QR-icon.svg" alt ="" />
+              <div class="ml-12">
+                <h3>
+                  Spare123 <span class="dot"></span>
+                  <span class="text-blue text-13">Critical</span>
+                  <span class="dot"></span>
+                  <span class="status green">Active</span>
+                </h3>
+                <p>Spare Id:1171&nbsp;&nbsp;Spare Code:A1171</p>
+              </div>
+            </nz-space>
+          </div>
+          <div nz-col>
+            <button
+              nz-button
+              nzTooltipTitle="Edit"
+              nzTooltipPlacement="bottom"
+              nz-tooltip
+              (click)="editModal(1)"
+            >
+              <span nz-icon nzType="edit" nzTheme="outline"></span>
+            </button>
+          </div>
+        </div>
+      </ng-template>
+      <section class="view-card">
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 15]">
+            <div nz-col nzSpan="24">
+              <h5>Description</h5>
+              <p>766 Olson Gardens, Port Clairport,NV 10872-8310</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Mould Maker Supplied</h5>
+              <p>Yes</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Quantity</h5>
+              <p>24</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Cost</h5>
+              <p>123$</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>UoM</h5>
+              <p>Kgs</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Origin</h5>
+              <p>Mumbai, India</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Receipt Date</h5>
+              <p>12 Jan, 2024</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Manufacture</h5>
+              <p>Germany</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Min Stock Level</h5>
+              <p>45 Units</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Min Order Qty</h5>
+              <p>45 Units</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Reorder Point</h5>
+              <p>45 Units</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Lead Time</h5>
+              <p>45 Sec</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Created By</h5>
+              <p>John Doe</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Created On</h5>
+              <p>12 Jan, 2024</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </nz-card></ng-container
+  >
+  <ng-template #modalTitle1> Spare Information </ng-template>
+  <ng-template #modalClose1> Close </ng-template></nz-modal
+>
+
+<!-- Grid Customization Modal -->
+<nz-modal
+  [(nzVisible)]="isGridModal"
+  nzTitle="Grid Customization"
+  [nzCloseIcon]="modalClose2"
+  [nzFooter]="modalFooter3"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  nzCentered
+  nzWidth="450px"
+  ><ng-template #modalClose2> Close </ng-template
+  ><ng-container *nzModalContent>
+    <div class="checkbox-list">
+      <label nz-checkbox>Organisation Name</label
+      ><label nz-checkbox>Organisation Code</label
+      ><label nz-checkbox>Packfora URL</label
+      ><label nz-checkbox>Primary Email</label
+      ><label nz-checkbox>Primary Contact</label
+      ><label nz-checkbox>Created on</label><label nz-checkbox>Status</label>
+    </div></ng-container
+  >
+  <ng-template #modalFooter3>
+    <button nz-button (click)="handleCancel()">Clear</button>
+    <button nz-button nzType="primary" (click)="handleOk()">Save</button>
+  </ng-template>
+</nz-modal>

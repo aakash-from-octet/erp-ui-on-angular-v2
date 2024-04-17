@@ -1,0 +1,23 @@
+ORG-SETUP => organisation screen:
+    Edit org form:
+        (1) org details :
+            
+
+user management => users screen:
+
+    create form:
+
+        (1) user details :
+                profilePic:[''], need to store in s3 .
+                userCode:['',Validators.required], need to send api request check user code available or not. on offFocus. 
+                                                    also can be used as login cred.
+                employeeId: ['', Validators.required,],.
+                Name: ['', Validators.required], .
+                mobileCode: ['', Validators.required], api will be given .
+                mobile: ['', Validators.required], .
+                email: ['', Validators.required,email regex], .
+                reportsTo: [''], api (getusers)combination of username + userCode append user id as value .
+                userType: ['', Validators.required], static [internal, external].
+                userRole: ['', Validators.required], api (get roles)
+                department: ['', ],
+                designation: ['',],

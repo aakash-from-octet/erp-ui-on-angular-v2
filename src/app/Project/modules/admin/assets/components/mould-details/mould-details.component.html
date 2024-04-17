@@ -1,0 +1,230 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<nz-collapse nzExpandIconPosition="right" class="form-accordion">
+  <nz-collapse-panel nzHeader="Mould Dimensions" [nzActive]="true">
+    <div nz-row [nzGutter]="[16, 16]">
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Height</label>
+        <nz-input-group [nzAddOnAfter]="addOnAfterTemplate" nzSize="large">
+          <input type="text" nz-input placeholder="Enter Value" />
+        </nz-input-group>
+        <ng-template #addOnAfterTemplate>
+          <nz-select [ngModel]="'mm'" nzSize="large">
+            <nz-option nzLabel="mm" nzValue="mm"></nz-option>
+            <nz-option nzLabel="cm" nzValue="cm"></nz-option>
+          </nz-select>
+        </ng-template>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Breadth</label>
+        <nz-input-group [nzAddOnAfter]="addOnAfterTemplate" nzSize="large">
+          <input type="text" nz-input placeholder="Enter Value" />
+        </nz-input-group>
+        <ng-template #addOnAfterTemplate>
+          <nz-select [ngModel]="'mm'" nzSize="large">
+            <nz-option nzLabel="mm" nzValue="mm"></nz-option>
+            <nz-option nzLabel="cm" nzValue="cm"></nz-option>
+          </nz-select>
+        </ng-template>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Length</label>
+        <nz-input-group [nzAddOnAfter]="addOnAfterTemplate" nzSize="large">
+          <input type="text" nz-input placeholder="Enter Value" />
+        </nz-input-group>
+        <ng-template #addOnAfterTemplate>
+          <nz-select [ngModel]="'mm'" nzSize="large">
+            <nz-option nzLabel="mm" nzValue="mm"></nz-option>
+            <nz-option nzLabel="cm" nzValue="cm"></nz-option>
+          </nz-select>
+        </ng-template>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Weight</label>
+        <nz-input-group [nzAddOnAfter]="addOnAfterTemplate1" nzSize="large">
+          <input type="text" nz-input placeholder="Enter Value" />
+        </nz-input-group>
+        <ng-template #addOnAfterTemplate1>
+          <nz-select [ngModel]="'kg'" nzSize="large">
+            <nz-option nzLabel="kg" nzValue="kg"></nz-option>
+            <nz-option nzLabel="gram" nzValue="gram"></nz-option>
+          </nz-select>
+        </ng-template>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Mould Opening</label>
+        <nz-input-group [nzAddOnAfter]="addOnAfterTemplate" nzSize="large">
+          <input type="text" nz-input placeholder="Enter Value" />
+        </nz-input-group>
+        <ng-template #addOnAfterTemplate>
+          <nz-select [ngModel]="'mm'" nzSize="large">
+            <nz-option nzLabel="mm" nzValue="mm"></nz-option>
+            <nz-option nzLabel="cm" nzValue="cm"></nz-option>
+          </nz-select>
+        </ng-template>
+      </div>
+    </div>
+  </nz-collapse-panel>
+  <nz-collapse-panel nzHeader="Mould Materials">
+    <div nz-row [nzGutter]="[16, 16]">
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Mould Base Material<sup>*</sup></label>
+        <nz-tree-select
+          [(ngModel)]="value"
+          [nzNodes]="nodes"
+          nzShowSearch
+          nzCheckable
+          [nzShowExpand]="false"
+          [nzMaxTagCount]="1"
+          [nzShowIcon]="true"
+          nzPlaceHolder="Please select"
+          nzSize="large"
+          class="w-100"
+          nzDropdownClassName="multiselect"
+        ></nz-tree-select>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Mould Core Material<sup>*</sup></label>
+        <nz-tree-select
+          [(ngModel)]="value"
+          [nzNodes]="nodes"
+          nzShowSearch
+          nzCheckable
+          [nzShowExpand]="false"
+          [nzMaxTagCount]="1"
+          [nzShowIcon]="true"
+          nzPlaceHolder="Please select"
+          nzSize="large"
+          class="w-100"
+          nzDropdownClassName="multiselect"
+        ></nz-tree-select>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Mould Cavity Material<sup>*</sup></label>
+        <nz-tree-select
+          [(ngModel)]="value"
+          [nzNodes]="nodes"
+          nzShowSearch
+          nzCheckable
+          [nzShowExpand]="false"
+          [nzMaxTagCount]="1"
+          [nzShowIcon]="true"
+          nzPlaceHolder="Please select"
+          nzSize="large"
+          class="w-100"
+          nzDropdownClassName="multiselect"
+        ></nz-tree-select>
+      </div>
+    </div>
+  </nz-collapse-panel>
+  <nz-collapse-panel nzHeader="Mould Technology">
+    <div nz-row [nzGutter]="[16, 16]">
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Injection Technology</label
+        ><nz-select nzPlaceHolder="Select" class="w-100" nzSize="large">
+          <nz-option nzValue="Select 1" nzLabel="Select 1"></nz-option>
+          <nz-option nzValue="Select 2" nzLabel="Select 2"></nz-option>
+        </nz-select>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Inmould Closing</label
+        ><nz-select nzPlaceHolder="Select" class="w-100" nzSize="large">
+          <nz-option nzValue="Select 1" nzLabel="Select 1"></nz-option>
+          <nz-option nzValue="Select 2" nzLabel="Select 2"></nz-option>
+        </nz-select>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Construction Type</label
+        ><nz-select nzPlaceHolder="Select" class="w-100" nzSize="large">
+          <nz-option nzValue="Select 1" nzLabel="Select 1"></nz-option>
+          <nz-option nzValue="Select 2" nzLabel="Select 2"></nz-option>
+        </nz-select>
+      </div>
+    </div>
+  </nz-collapse-panel>
+  <nz-collapse-panel nzHeader="Sub Assemblies">
+    <div nz-row [nzGutter]="[16, 16]">
+      <div nz-col class="gutter-row" [nzSpan]="24">
+        <button nz-button nzType="primary" class="outline-primary">
+          Add Sub Assembly
+        </button>
+      </div>
+      <div nz-col class="gutter-row" [nzSpan]="24">
+        <nz-table
+          #basicTable
+          nzSize="small"
+          nzOuterBordered
+          nzShowPagination="false"
+          [nzScroll]="{ y: '70vh' }"
+          [nzData]="listOfCurrentPageData"
+        >
+          <thead>
+            <tr>
+              <th nzAlign="center" nzWidth="40px">#</th>
+
+              <th nzWidth="150px">Sub Assembly Type</th>
+              <th nzWidth="150px">Lorem Ipsum</th>
+              <th nzWidth="150px">Manufacture</th>
+              <th nzWidth="150px">Comments</th>
+              <th nzWidth="60px" nzAlign="center" nzRight>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of listOfCurrentPageData">
+              <td nzAlign="center">{{ data.id + 1 }}</td>
+
+              <td>
+                <nz-select ngModel="1" class="w-100">
+                  <nz-option nzValue="1" nzLabel="Runner Type 1"></nz-option>
+                  <nz-option nzValue="2" nzLabel="Runner Type 2"></nz-option>
+                </nz-select>
+              </td>
+              <td>
+                <nz-select ngModel="1" class="w-100">
+                  <nz-option nzValue="1" nzLabel="Cold 1"></nz-option>
+                  <nz-option nzValue="2" nzLabel="Cold 2"></nz-option>
+                </nz-select>
+              </td>
+              <td><input nz-input placeholder="Enter" type="text" /></td>
+              <td><input nz-input placeholder="Enter" type="text" /></td>
+              <td nzRight nzAlign="center">
+                <span nz-icon nzType="delete" nzTheme="outline"></span>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+    </div>
+  </nz-collapse-panel>
+  <nz-collapse-panel nzHeader="Mould Cavity">
+    <div nz-row [nzGutter]="[16, 16]">
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+        <label>Total Number of Cavities<sup>*</sup></label
+        ><input
+          nz-input
+          placeholder="Enter Years"
+          type="text"
+          nzSize="large"
+          value="345"
+        />
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+        <label>Cavity Start Number<sup>*</sup></label
+        ><input
+          nz-input
+          placeholder="Enter Number"
+          type="text"
+          nzSize="large"
+        />
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+        <label>Cavity End Number<sup>*</sup></label
+        ><input
+          nz-input
+          placeholder="Enter Number"
+          type="text"
+          nzSize="large"
+        />
+      </div>
+    </div>
+  </nz-collapse-panel>
+</nz-collapse>

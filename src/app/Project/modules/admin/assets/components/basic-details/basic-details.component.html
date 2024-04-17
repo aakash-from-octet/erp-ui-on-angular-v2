@@ -1,0 +1,198 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<div class="alert-red">
+  <b>Note:</b>
+  <span
+    >To create the mould into the system, Fill in all the mandatory fields in
+    Basic Details (Step 1) and Mould Associations (Step 2)</span
+  >
+</div>
+<nz-collapse nzExpandIconPosition="right" class="form-accordion">
+  <nz-collapse-panel nzHeader="Basic Details" [nzActive]="true">
+    <div nz-row [nzGutter]="[16, 16]">
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Mould Code<sup>*</sup></label
+        ><input nz-input placeholder="Enter Code" type="text" nzSize="large" />
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Mould Name<sup>*</sup></label
+        ><input nz-input placeholder="Enter Name" type="text" nzSize="large" />
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Mould Ownership<sup>*</sup></label
+        ><nz-select
+          [(ngModel)]="ownership"
+          nzPlaceHolder="Select"
+          class="w-100"
+          nzSize="large"
+        >
+          <nz-option nzValue="1" nzLabel="Brand"></nz-option>
+          <nz-option nzValue="2" nzLabel="Converter"></nz-option>
+          <nz-option nzValue="3" nzLabel="Joint"></nz-option>
+        </nz-select>
+      </div>
+      <div
+        nz-col
+        class="gutter-row"
+        nzXs="24"
+        nzSm="12"
+        nzMd="6"
+        *ngIf="ownership === '3'"
+      >
+        <label>Brand(%)<sup>*</sup></label
+        ><input nz-input placeholder="Enter Value" type="text" nzSize="large" />
+      </div>
+      <div
+        nz-col
+        class="gutter-row"
+        nzXs="24"
+        nzSm="12"
+        nzMd="6"
+        *ngIf="ownership === '3'"
+      >
+        <label>Converter(%)<sup>*</sup></label
+        ><input nz-input placeholder="Enter Value" type="text" nzSize="large" />
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Moulding Process<sup>*</sup></label
+        ><nz-select
+          ngModel=""
+          nzPlaceHolder="Select Process"
+          class="w-100"
+          nzSize="large"
+        >
+          <nz-option nzValue="1" nzLabel="1"></nz-option>
+          <nz-option nzValue="2" nzLabel="2"></nz-option>
+        </nz-select>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Mould Type<sup>*</sup></label
+        ><nz-select
+          ngModel=""
+          nzPlaceHolder="Select Type"
+          class="w-100"
+          nzSize="large"
+        >
+          <nz-option nzValue="1" nzLabel="1"></nz-option>
+          <nz-option nzValue="2" nzLabel="2"></nz-option>
+        </nz-select>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Total Number of Cavities<sup>*</sup></label
+        ><input
+          nz-input
+          placeholder="Enter Number"
+          type="text"
+          nzSize="large"
+        />
+      </div>
+      <div nz-col class="gutter-row d-flex" [nzSpan]="24">
+        <nz-switch nzSize="small" [(ngModel)]="iotEnabled"></nz-switch
+        ><label class="ml-12">IoT Enabled<sup>*</sup></label>
+      </div>
+      <div nz-col class="gutter-row d-flex" [nzSpan]="24" *ngIf="!iotEnabled">
+        <nz-switch nzSize="small" [(ngModel)]="shotEnabled"></nz-switch
+        ><label class="ml-12">Shot Counter Enabled<sup>*</sup></label>
+      </div>
+      <div
+        nz-col
+        [nzSpan]="12"
+        *ngIf="shotEnabled && !iotEnabled"
+        class="-mt-10"
+      >
+        <input nz-input placeholder="Add Make" type="text" nzSize="large" />
+      </div>
+    </div>
+  </nz-collapse-panel>
+  <nz-collapse-panel nzHeader="MQR Parameters">
+    <div nz-row [nzGutter]="[16, 16]">
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>MQR Date<sup>*</sup></label
+        ><nz-date-picker nzSize="large" class="w-100"></nz-date-picker>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Mould Cycle Time<sup>*</sup></label>
+        <nz-input-group [nzAddOnAfter]="addOnAfterTemplate" nzSize="large">
+          <input type="text" nz-input placeholder="Enter Value" />
+        </nz-input-group>
+        <ng-template #addOnAfterTemplate>
+          <nz-select [ngModel]="'Sec'" nzSize="large">
+            <nz-option nzLabel="Sec" nzValue="Sec"></nz-option>
+            <nz-option nzLabel="Minutes" nzValue="Minutes"></nz-option>
+          </nz-select>
+        </ng-template>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Machine Tonnage<sup>*</sup></label>
+        <nz-input-group [nzAddOnAfter]="addOnAfterTemplate1" nzSize="large">
+          <input type="text" nz-input placeholder="Enter Value" />
+        </nz-input-group>
+        <ng-template #addOnAfterTemplate1>
+          <nz-select [ngModel]="'Tonnage'" nzSize="large">
+            <nz-option nzLabel="Tonnage" nzValue="Tonnage"></nz-option>
+          </nz-select>
+        </ng-template>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Component Weight<sup>*</sup></label>
+        <nz-input-group [nzAddOnAfter]="addOnAfterTemplate2" nzSize="large">
+          <input type="text" nz-input placeholder="Enter Value" />
+        </nz-input-group>
+        <ng-template #addOnAfterTemplate2>
+          <nz-select [ngModel]="'Tonnage'" nzSize="large">
+            <nz-option nzLabel="Tonnage" nzValue="Tonnage"></nz-option>
+          </nz-select>
+        </ng-template>
+      </div>
+    </div>
+  </nz-collapse-panel>
+  <nz-collapse-panel nzHeader="MCR Parameters">
+    <div nz-row [nzGutter]="[16, 16]">
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Commissioning Date<sup>*</sup></label
+        ><nz-date-picker nzSize="large" class="w-100"></nz-date-picker>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Mould Cycle Time<sup>*</sup></label>
+        <nz-input-group [nzAddOnAfter]="addOnAfterTemplate" nzSize="large">
+          <input type="text" nz-input placeholder="Enter Value" />
+        </nz-input-group>
+        <ng-template #addOnAfterTemplate>
+          <nz-select [ngModel]="'Sec'" nzSize="large">
+            <nz-option nzLabel="Sec" nzValue="Sec"></nz-option>
+            <nz-option nzLabel="Minutes" nzValue="Minutes"></nz-option>
+          </nz-select>
+        </ng-template>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Machine Tonnage<sup>*</sup></label>
+        <nz-input-group [nzAddOnAfter]="addOnAfterTemplate1" nzSize="large">
+          <input type="text" nz-input placeholder="Enter Value" />
+        </nz-input-group>
+        <ng-template #addOnAfterTemplate1>
+          <nz-select [ngModel]="'Kg'" nzSize="large">
+            <nz-option nzLabel="Kg" nzValue="Kg"></nz-option>
+          </nz-select>
+        </ng-template>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Component Weight<sup>*</sup></label>
+        <nz-input-group [nzAddOnAfter]="addOnAfterTemplate2" nzSize="large">
+          <input type="text" nz-input placeholder="Enter Value" />
+        </nz-input-group>
+        <ng-template #addOnAfterTemplate2>
+          <nz-select [ngModel]="'Kg'" nzSize="large">
+            <nz-option nzLabel="Kg" nzValue="Kg"></nz-option>
+          </nz-select>
+        </ng-template>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Warranty (Min Years)<sup>*</sup></label
+        ><input nz-input placeholder="Enter Years" type="text" nzSize="large" />
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Warranty (Min Shot Count)<sup>*</sup></label
+        ><input nz-input placeholder="Enter Count" type="text" nzSize="large" />
+      </div>
+    </div>
+  </nz-collapse-panel>
+</nz-collapse>

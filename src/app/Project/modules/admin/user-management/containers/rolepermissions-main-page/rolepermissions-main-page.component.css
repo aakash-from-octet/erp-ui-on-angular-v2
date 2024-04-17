@@ -1,0 +1,92 @@
+.role-grid {
+    display: grid;
+    grid-template-columns: 250px auto;
+    border-radius: 0px 0px 2px 2px;
+    border: 1px solid #E7E9EB;
+}
+
+.role-grid .left-bar {
+    border-right: 1px solid #D7DCEA;
+    height: calc(100vh - 130px);
+    overflow: auto;
+}
+
+.search-wrap {
+    padding: 5px;
+}
+
+.left-header {
+    border-top: 1px solid #D7DCEA;
+    background: #EDF1F9;
+    padding: 8px 16px;
+}
+
+.roles-menu {
+    margin: 0;
+    padding: 0;
+}
+
+.roles-menu li {
+    list-style-type: none;
+
+    margin: 0;
+
+}
+
+.roles-menu li a {
+    border-bottom: 1px solid #E7E9EB;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #23394D;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+}
+
+.roles-menu .anticon {
+    position: absolute;
+    right: 10px;
+}
+
+.roles-menu li.active {
+    position: relative;
+}
+
+.roles-menu li.active:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background: #127BDB;
+    display: block;
+}
+
+.truck-wrap {
+    width: 32px;
+    height: 32px;
+    border-radius: 32px;
+    border: 1px solid #E3E6EE;
+    text-align: center;
+    padding-top: 3px;
+    background: #F5FAFF;
+}
+
+.roles-menu li a:hover,
+.roles-menu li.active a {
+    background: #F5FAFF;
+}
+
+.roles-menu li a:hover .truck-wrap,
+.roles-menu li.active a .truck-wrap {
+    background: #fff;
+}
+
+.role-grid .ant-table-row-indent+.ant-table-row-expand-icon {
+
+    position: absolute;
+    right: 0;
+}

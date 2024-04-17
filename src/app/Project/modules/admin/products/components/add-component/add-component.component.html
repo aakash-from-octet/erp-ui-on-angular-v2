@@ -1,0 +1,252 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<nz-modal
+  [(nzVisible)]="isVisible"
+  nzTitle="Add Components"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzFooter]="modalFooter"
+  nzCentered
+  nzWidth="975px"
+  [nzBodyStyle]="{ padding: '0px' }"
+>
+  <ng-container *nzModalContent>
+    <div class="custom-card border-none">
+      <!-- tab component start -->
+      <nz-tabset
+        nzTabPosition="left"
+        [(nzSelectedIndex)]="tabSelected"
+        class="step-form"
+        style="min-height: 480px"
+      >
+        <nz-tab nzTitle="Steps:" nzDisabled="true"></nz-tab>
+        <nz-tab nzTitle="Component Details">
+          <section class="p-20">
+            <div nz-row [nzGutter]="[16, 16]">
+              <div nz-col class="gutter-row" [nzSpan]="24">
+                <label>Component Image</label>
+                <nz-upload
+                  class="avatar-uploader"
+                  nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                  nzName="avatar"
+                  nzListType="picture-card"
+                  [nzShowUploadList]="false"
+                  (nzChange)="handleChange($event)"
+                >
+                  <ng-container *ngIf="!avatarUrl">
+                    <span
+                      class="upload-icon"
+                      nz-icon
+                      [nzType]="loading ? 'loading' : 'plus'"
+                    ></span>
+                    <div class="ant-upload-text">Upload</div>
+                  </ng-container>
+                  <img
+                    *ngIf="avatarUrl"
+                    [src]="avatarUrl"
+                    alt = ""
+                    style="width: 100%"
+                  />
+                </nz-upload>
+              </div>
+              <div nz-col class="gutter-row" [nzSpan]="12">
+                <label>Component Name<sup>*</sup></label
+                ><input
+                  nz-input
+                  placeholder="Enter Component Name"
+                  type="text"
+                  nzSize="large"
+                />
+              </div>
+              <div nz-col class="gutter-row" [nzSpan]="12">
+                <label>Component Code<sup>*</sup></label
+                ><input
+                  nz-input
+                  placeholder="Enter Component Code"
+                  type="text"
+                  nzSize="large"
+                />
+              </div>
+
+              <div nz-col class="gutter-row" [nzSpan]="24">
+                <label>Component Description<sup>*</sup></label
+                ><textarea
+                  nz-input
+                  placeholder="Enter Component Description"
+                  [nzAutosize]="{ minRows: 3 }"
+                ></textarea>
+              </div>
+              <div nz-col class="gutter-row" [nzSpan]="24">
+                <nz-switch nzSize="small" class="mr-15"></nz-switch> Does the
+                component have a child component?
+              </div>
+              <div nz-col class="gutter-row" [nzSpan]="24">
+                <nz-switch nzSize="small" class="mr-15"></nz-switch> Is the
+                component mouldable?
+              </div>
+            </div>
+          </section></nz-tab
+        >
+        <nz-tab nzTitle="Component Specs"
+          ><section class="p-20">
+            <div nz-row [nzGutter]="[16, 16]">
+              <div nz-col class="gutter-row" [nzSpan]="8">
+                <label>Component Spec id<sup>*</sup></label
+                ><input
+                  nz-input
+                  placeholder="Enter Spec id"
+                  type="text"
+                  nzSize="large"
+                />
+              </div>
+              <div nz-col class="gutter-row" [nzSpan]="8">
+                <label>Height<sup>*</sup></label
+                ><input
+                  nz-input
+                  placeholder="Enter Height"
+                  type="text"
+                  nzSize="large"
+                />
+              </div>
+              <div nz-col class="gutter-row" [nzSpan]="8">
+                <label>Width<sup>*</sup></label
+                ><input
+                  nz-input
+                  placeholder="Enter Width"
+                  type="text"
+                  nzSize="large"
+                />
+              </div>
+              <div nz-col class="gutter-row" [nzSpan]="8">
+                <label>Length<sup>*</sup></label
+                ><input
+                  nz-input
+                  placeholder="Enter Length"
+                  type="text"
+                  nzSize="large"
+                />
+              </div>
+              <div nz-col class="gutter-row" [nzSpan]="8">
+                <label>Gross Weight<sup>*</sup></label
+                ><input
+                  nz-input
+                  placeholder="Enter Gross Weight"
+                  type="text"
+                  nzSize="large"
+                />
+              </div>
+              <div nz-col class="gutter-row" [nzSpan]="24">
+                <label>Design Files<sup>*</sup></label
+                ><nz-upload
+                  nzType="drag"
+                  [nzMultiple]="true"
+                  nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                  (nzChange)="handleChange($event)"
+                >
+                  <p class="ant-upload-drag-icon mb-0">
+                    <span nz-icon nzType="file-add" nzTheme="twotone"></span>
+                  </p>
+                  <h3 class="ant-upload-text">
+                    <u>Click</u> or drag file to this area to upload
+                  </h3>
+                  <p class="ant-upload-hint">
+                    Support for a single or bulk upload.
+                  </p>
+                </nz-upload>
+              </div>
+            </div>
+          </section></nz-tab
+        >
+        <nz-tab nzTitle="Material Details"
+          ><section class="p-20">
+            <div nz-row [nzGutter]="[16, 16]">
+              <div nz-col class="gutter-row" [nzSpan]="8">
+                <label>Material Name</label
+                ><input
+                  nz-input
+                  placeholder="Enter Material Name"
+                  type="text"
+                  nzSize="large"
+                />
+              </div>
+              <div nz-col class="gutter-row" [nzSpan]="8">
+                <label>Resin Type</label
+                ><input
+                  nz-input
+                  placeholder="Enter Resin Type"
+                  type="text"
+                  nzSize="large"
+                />
+              </div>
+              <div nz-col class="gutter-row" [nzSpan]="8">
+                <label>Lead Resin Grade</label
+                ><input
+                  nz-input
+                  placeholder="Enter Lead Resin Grade"
+                  type="text"
+                  nzSize="large"
+                />
+              </div>
+              <div nz-col class="gutter-row" [nzSpan]="8">
+                <label>Back Up Resin Grade</label
+                ><input
+                  nz-input
+                  placeholder="Enter Back Up Resin Grade"
+                  type="text"
+                  nzSize="large"
+                />
+              </div>
+              <div nz-col class="gutter-row" [nzSpan]="8">
+                <label>Master Batch Colour</label
+                ><input
+                  nz-input
+                  placeholder="Enter Master Batch Colour"
+                  type="text"
+                  nzSize="large"
+                />
+              </div>
+              <div nz-col class="gutter-row" [nzSpan]="8">
+                <label>PCR (%)</label>
+                <nz-input-number
+                  placeholder="Enter Value"
+                  [ngModel]="1"
+                  [nzMin]="1"
+                  [nzMax]="10"
+                  [nzStep]="1"
+                  nzSize="large"
+                  class="w-100"
+                ></nz-input-number>
+              </div>
+              <div nz-col class="gutter-row" [nzSpan]="24">
+                <label>Additives</label>
+                <textarea
+                  nz-input
+                  placeholder="Enter Additives"
+                  [nzAutosize]="{ minRows: 3 }"
+                ></textarea>
+              </div>
+            </div></section
+        ></nz-tab>
+      </nz-tabset>
+      <!-- tab component start -->
+    </div>
+  </ng-container>
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="cancel()">Cancel</button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="saveContinue()"
+      *ngIf="tabSelected < 3"
+    >
+      Save & Continue
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="cancel()"
+      *ngIf="tabSelected === 3"
+    >
+      Add Component
+    </button>
+  </ng-template>
+</nz-modal>

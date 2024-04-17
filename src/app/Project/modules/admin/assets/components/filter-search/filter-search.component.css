@@ -1,0 +1,19 @@
+.filter-title {
+    color: #5A6170;
+    font-size: 13px;
+    font-weight: 400;
+    margin: 16px 0 8px 0;
+}
+
+.filter-list {
+    color: #23394D;
+    font-size: 14px;
+    font-weight: 400;
+    list-style-type: none;
+    height: 300px;
+    overflow: auto;
+}
+
+.filter-list li {
+    margin: 10px 0;
+}

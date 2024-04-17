@@ -1,0 +1,801 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<div class="alert-red">
+  <b>Note:</b>
+  <span
+    >To create the mould into the system, Fill in all the mandatory fields in
+    Basic Details (Step 1) and Mould Associations (Step 2)</span
+  >
+</div>
+<nz-collapse nzExpandIconPosition="right" class="form-accordion">
+  <nz-collapse-panel nzHeader="Key Association" [nzActive]="true">
+    <div nz-row [nzGutter]="[16, 16]">
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Component<sup>*</sup></label>
+        <nz-input-group
+          [nzPrefix]="prefixIconSearch"
+          nzSize="large"
+          class="search"
+          (click)="openSearchFilterModal('Component', handleSaveClicked)"
+        >
+          <input
+            type="text"
+            nz-input
+            placeholder="Search Component"
+            [value]="filteredItemsSelected"
+          />
+          <ng-template #prefixIconSearch>
+            <span nz-icon nzType="search"></span>
+          </ng-template>
+        </nz-input-group>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Product</label
+        ><input
+          nz-input
+          placeholder="Products"
+          type="text"
+          nzSize="large"
+          disabled=""
+        />
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Manufacturing Location<sup>*</sup></label>
+        <nz-input-group
+          [nzPrefix]="prefixIconSearch"
+          nzSize="large"
+          class="search"
+          (click)="openTreeModal()"
+        >
+          <input
+            type="text"
+            nz-input
+            placeholder="Search Location"
+            [value]="selectedLocation"
+          />
+          <ng-template #prefixIconSearch>
+            <span nz-icon nzType="search"></span>
+          </ng-template>
+        </nz-input-group>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Mould Manager<sup>*</sup></label
+        ><nz-select
+          nzShowSearch
+          nzAllowClear
+          [nzSuffixIcon]="suffixIconSearch"
+          nzPlaceHolder="Search Mould Manager"
+          [(ngModel)]="selectedValue"
+          class="w-100 icon-prefix"
+          nzSize="large"
+        >
+          <nz-option nzLabel="Manager 1" nzValue="manager1"></nz-option>
+          <nz-option nzLabel="Manager 2" nzValue="manager2"></nz-option>
+          <nz-option nzLabel="Manager 3" nzValue="manager3"></nz-option>
+        </nz-select>
+        <ng-template #suffixIconSearch>
+          <span nz-icon nzType="search"></span>
+        </ng-template>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Converter<sup>*</sup></label
+        ><nz-select
+          nzShowSearch
+          nzAllowClear
+          [nzSuffixIcon]="suffixIconSearch"
+          nzPlaceHolder="Search Converter"
+          [(ngModel)]="selectedValue"
+          class="w-100 icon-prefix"
+          nzSize="large"
+        >
+          <nz-option nzLabel="Converter 1" nzValue="Converter1"></nz-option>
+          <nz-option nzLabel="Converter 2" nzValue="Converter2"></nz-option>
+          <nz-option nzLabel="Converter 3" nzValue="Converter3"></nz-option>
+        </nz-select>
+        <ng-template #suffixIconSearch>
+          <span nz-icon nzType="search"></span>
+        </ng-template>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Converter Location<sup>*</sup></label
+        ><nz-select
+          nzShowSearch
+          nzAllowClear
+          [nzSuffixIcon]="suffixIconSearch"
+          nzPlaceHolder="Search Converter Location"
+          [(ngModel)]="selectedValue"
+          class="w-100 icon-prefix"
+          nzSize="large"
+        >
+          <nz-option
+            nzLabel="Converter Location 1"
+            nzValue="Converter Location1"
+          ></nz-option>
+          <nz-option
+            nzLabel="Converter Location 2"
+            nzValue="Converter Location2"
+          ></nz-option>
+          <nz-option
+            nzLabel="Converter Location 3"
+            nzValue="Converter Location3"
+          ></nz-option>
+        </nz-select>
+        <ng-template #suffixIconSearch>
+          <span nz-icon nzType="search"></span>
+        </ng-template>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Mould Maker<sup>*</sup></label
+        ><nz-select
+          nzShowSearch
+          nzAllowClear
+          [nzSuffixIcon]="suffixIconSearch"
+          nzPlaceHolder="Search Mould Maker"
+          [(ngModel)]="selectedValue"
+          class="w-100 icon-prefix"
+          nzSize="large"
+        >
+          <nz-option nzLabel="Mould Maker 1" nzValue="Mould Maker1"></nz-option>
+          <nz-option nzLabel="Mould Maker 2" nzValue="Mould Maker2"></nz-option>
+          <nz-option nzLabel="Mould Maker 3" nzValue="Mould Maker3"></nz-option>
+        </nz-select>
+        <ng-template #suffixIconSearch>
+          <span nz-icon nzType="search"></span>
+        </ng-template>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Mould Maker Mould Code<sup>*</sup></label
+        ><input nz-input placeholder="Enter Code" type="text" nzSize="large" />
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Mould Maker Location<sup>*</sup></label
+        ><nz-select
+          nzShowSearch
+          nzAllowClear
+          [nzSuffixIcon]="suffixIconSearch"
+          nzPlaceHolder="Search Mould Maker Location"
+          [(ngModel)]="selectedValue"
+          class="w-100 icon-prefix"
+          nzSize="large"
+        >
+          <nz-option
+            nzLabel="Mould Maker Location 1"
+            nzValue="Mould Maker Location1"
+          ></nz-option>
+          <nz-option
+            nzLabel="Mould Maker Location 2"
+            nzValue="Mould Maker Location2"
+          ></nz-option>
+          <nz-option
+            nzLabel="Mould Maker Location 3"
+            nzValue="Mould Maker Location3"
+          ></nz-option>
+        </nz-select>
+        <ng-template #suffixIconSearch>
+          <span nz-icon nzType="search"></span>
+        </ng-template>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Project Name</label
+        ><input nz-input placeholder="Enter Name" type="text" nzSize="large" />
+      </div>
+    </div>
+  </nz-collapse-panel>
+  <nz-collapse-panel nzHeader="Spares Association">
+    <div nz-row [nzGutter]="[16, 16]">
+      <div nz-col class="gutter-row" [nzSpan]="24">
+        <button
+          nz-button
+          nzType="primary"
+          class="outline-primary"
+          (click)="openSpares()"
+          class="d-none d-lg-block"
+        >
+          Add Spares
+        </button>
+      </div>
+      <div nz-col class="gutter-row" [nzSpan]="24">
+        <nz-table
+          #basicTable
+          nzSize="small"
+          nzOuterBordered
+          nzShowPagination="false"
+          [nzScroll]="{ y: '100px' }"
+          [nzData]="listOfCurrentPageData"
+        >
+          <thead>
+            <tr>
+              <th nzWidth="90%">
+                Spare Name & Code <app-filters></app-filters>
+              </th>
+              <th nzWidth="10%" nzAlign="center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of listOfCurrentPageData">
+              <td>Spare123 - SP001</td>
+              <td nzAlign="center">
+                <span nz-icon nzType="delete" nzTheme="outline"></span>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+    </div>
+  </nz-collapse-panel>
+  <nz-collapse-panel nzHeader="Sensors Association">
+    <div nz-row [nzGutter]="[16, 16]">
+      <div nz-col class="gutter-row" [nzSpan]="24">
+        <button
+          nz-button
+          nzType="primary"
+          class="outline-primary"
+          (click)="openSensors()"
+        >
+          Add Sensors
+        </button>
+      </div>
+      <div nz-col class="gutter-row" [nzSpan]="24">
+        <nz-table
+          #basicTable
+          nzSize="small"
+          nzOuterBordered
+          nzShowPagination="false"
+          [nzData]="listOfCurrentSensorData"
+        >
+          <thead>
+            <tr>
+              <th nzWidth="90%">
+                Sensor Name & Code <app-filters></app-filters>
+              </th>
+              <th nzWidth="10%" nzAlign="center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of listOfCurrentSensorData">
+              <td>Sensor123 - SP001</td>
+              <td nzAlign="center">
+                <span nz-icon nzType="delete" nzTheme="outline"></span>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+    </div>
+  </nz-collapse-panel>
+</nz-collapse>
+
+<!-- Select Spares modal -->
+<nz-modal
+  [(nzVisible)]="var_spares"
+  nzTitle="Select Spares"
+  (nzOnCancel)="closeModal()"
+  (nzOnOk)="closeModal()"
+  [nzFooter]="modalFooter"
+  nzCentered
+  nzWidth="975px"
+>
+  <ng-container *nzModalContent>
+    <div class="border-none">
+      <!-- tab component start -->
+      <div nz-row nzJustify="space-between" nzAlign="middle" class="mb-15">
+        <div nz-col>
+          <nz-input-group
+            [nzSuffix]="suffixTemplateInfo"
+            [nzPrefix]="prefixTemplateUser"
+            class="search"
+            style="width: 345px"
+          >
+            <input
+              type="text"
+              nz-input
+              placeholder="Search by spare name, spare id.."
+            />
+            <ng-template #prefixTemplateUser
+              ><span nz-icon nzType="search" nzTheme="outline"></span
+            ></ng-template>
+            <ng-template #suffixTemplateInfo>
+              <img
+                src="../../../../../../../assets/images/keyboard.svg"
+                alt=""
+              />
+            </ng-template>
+          </nz-input-group>
+        </div>
+        <div nz-col>
+          <a
+            nz-button
+            nzType="link"
+            class="p-0"
+            (click)="openAddNewSpare()"
+            (keydown.enter)="openAddNewSpare()"
+            tabindex="0"
+            >Add New Spare</a
+          >
+        </div>
+      </div>
+      <nz-table
+        #basicTable
+        nzSize="small"
+        nzOuterBordered
+        nzShowPagination="false"
+        [nzScroll]="{ y: '70vh' }"
+        [nzData]="listOfCurrentPageData"
+      >
+        <thead>
+          <tr>
+            <th nzLeft nzAlign="center" nzWidth="70px">Select</th>
+            <th nzWidth="150px">Spare Name <app-filters></app-filters></th>
+            <th nzWidth="150px">Spare Code</th>
+            <th nzWidth="150px">Description</th>
+            <th nzWidth="150px">Is critical</th>
+            <th nzWidth="150px">Measurement Unit</th>
+            <th nzWidth="150px">Manufacture</th>
+            <th nzWidth="150px">Origin</th>
+            <th nzAlign="center" nzWidth="80px">Quantity</th>
+            <th nzWidth="150px">Price</th>
+            <th nzWidth="150px">Currency</th>
+            <th nzWidth="150px">QR Code</th>
+            <th nzWidth="150px">Min Stock Level</th>
+            <th nzWidth="150px">Reorder Point</th>
+            <th nzWidth="150px">Min Order Qty</th>
+            <th nzWidth="150px">Lead Time</th>
+            <th nzWidth="150px">Receipt Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of listOfCurrentPageData">
+            <td
+              nzLeft
+              nzAlign="center"
+              [nzChecked]="setOfCheckedId.has(data.id)"
+            ></td>
+            <td>Spare 123</td>
+            <td>PR:0001</td>
+            <td>ASL:12332</td>
+            <td>Yes</td>
+            <td>mm</td>
+            <td>India</td>
+            <td>India</td>
+            <td>500</td>
+            <td>100k</td>
+            <td>USD</td>
+            <td><span nz-icon nzType="qrcode" nzTheme="outline"></span></td>
+            <td>400 Units</td>
+            <td>Lorem ipsum</td>
+            <td>1000 Units</td>
+            <td>Lorem ipsum</td>
+            <td>24 Jan, 2024</td>
+          </tr>
+        </tbody>
+      </nz-table>
+      <!-- tab component start -->
+    </div>
+  </ng-container>
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="closeModal()">Cancel</button>
+
+    <button nz-button nzType="primary" (click)="openAddNewSpare()">
+      Add Spares
+    </button>
+  </ng-template>
+</nz-modal>
+<!-- Add New Spare modal-->
+<nz-modal
+  [(nzVisible)]="var_addnewSpares"
+  nzTitle="Add New Spare"
+  (nzOnCancel)="closeModal()"
+  (nzOnOk)="closeModal()"
+  [nzFooter]="modalFooter5"
+  nzCentered
+  nzWidth="588px"
+  [nzBodyStyle]="{ height: '70vh', overflow: 'auto' }"
+>
+  <ng-container *nzModalContent
+    ><div class="custom-card border-none">
+      <div nz-row [nzGutter]="[16, 16]">
+        <div nz-col class="gutter-row" [nzSpan]="24"><b>Spare Details</b></div>
+        <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+          <label>Spares Code<sup>*</sup></label
+          ><input
+            nz-input
+            placeholder="Enter Spares Code"
+            type="text"
+            nzSize="large"
+          />
+        </div>
+        <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+          <label>Spares Name<sup>*</sup></label
+          ><input
+            nz-input
+            placeholder="Enter Spares Name"
+            type="text"
+            nzSize="large"
+          />
+        </div>
+        <div nz-col class="gutter-row" [nzSpan]="24">
+          <label>Description<sup>*</sup></label
+          ><textarea
+            rows="4"
+            nz-input
+            placeholder="Enter Description"
+          ></textarea>
+        </div>
+        <div nz-col class="gutter-row d-flex" [nzSpan]="24">
+          <nz-switch nzSize="small"></nz-switch
+          ><label class="ml-12">Mould Maker Supplied<sup>*</sup></label>
+        </div>
+        <div nz-col class="gutter-row d-flex" [nzSpan]="24">
+          <nz-switch nzSize="small"></nz-switch
+          ><label class="ml-12">Mark Spare as Critical<sup>*</sup></label>
+        </div>
+        <div nz-col class="gutter-row" nzXs="24" nzSm="8">
+          <label>Quantity<sup>*</sup></label>
+          <nz-input-number
+            [nzMin]="1"
+            [nzMax]="10"
+            [nzStep]="1"
+            nzSize="large"
+            class="w-100"
+            nzPlaceHolder="Enter Value"
+          ></nz-input-number>
+        </div>
+        <div nz-col class="gutter-row" nzXs="24" nzSm="8">
+          <label>Cost<sup>*</sup></label>
+          <nz-input-group [nzAddOnAfter]="addOnAfterTemplate1" nzSize="large">
+            <input type="text" nz-input placeholder="Enter Value" />
+          </nz-input-group>
+          <ng-template #addOnAfterTemplate1>
+            <nz-select [ngModel]="'USD'" nzSize="large">
+              <nz-option nzLabel="USD" nzValue="USD"></nz-option>
+              <nz-option nzLabel="Rupee" nzValue="Rupee"></nz-option>
+            </nz-select>
+          </ng-template>
+        </div>
+        <div nz-col class="gutter-row" nzXs="24" nzSm="8">
+          <label>UoM<sup>*</sup></label>
+          <nz-input-group [nzAddOnAfter]="addOnAfterTemplate2" nzSize="large">
+            <input type="text" nz-input placeholder="Enter Value" />
+          </nz-input-group>
+          <ng-template #addOnAfterTemplate2>
+            <nz-select [ngModel]="'Kg'" nzSize="large">
+              <nz-option nzLabel="Kg" nzValue="Kg"></nz-option>
+              <nz-option nzLabel="gram" nzValue="gram"></nz-option>
+            </nz-select>
+          </ng-template>
+        </div>
+        <div nz-col class="gutter-row" [nzSpan]="24">
+          <hr class="custom-hr m-0" />
+        </div>
+        <div nz-col class="gutter-row" [nzSpan]="24"><b>Other Details</b></div>
+        <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+          <label>Origin<sup>*</sup></label>
+          <nz-select [ngModel]="'Select Origin'" nzSize="large">
+            <nz-option
+              nzLabel="Select Origin"
+              nzValue="Select Origin"
+            ></nz-option>
+          </nz-select>
+        </div>
+        <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+          <label>Receipt Date<sup>*</sup></label
+          ><nz-date-picker nzSize="large" class="w-100"></nz-date-picker>
+        </div>
+        <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+          <label>Manufacture<sup>*</sup></label
+          ><nz-date-picker nzSize="large" class="w-100"></nz-date-picker>
+        </div>
+        <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+          <label>Min Stock Level<sup>*</sup></label>
+          <nz-input-number
+            [nzMin]="1"
+            [nzMax]="10"
+            [nzStep]="1"
+            nzSize="large"
+            class="w-100"
+            nzPlaceHolder="Enter Value"
+          ></nz-input-number>
+        </div>
+        <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+          <label>Min Order Qty<sup>*</sup></label>
+          <nz-input-number
+            [nzMin]="1"
+            [nzMax]="10"
+            [nzStep]="1"
+            nzSize="large"
+            class="w-100"
+            nzPlaceHolder="Enter Value"
+          ></nz-input-number>
+        </div>
+        <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+          <label>Reorder Point<sup>*</sup></label
+          ><input
+            nz-input
+            placeholder="Enter Reorder Point"
+            type="text"
+            nzSize="large"
+          />
+        </div>
+        <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+          <label>Lead Time<sup>*</sup></label
+          ><input
+            nz-input
+            placeholder="Enter Lead Time"
+            type="text"
+            nzSize="large"
+          />
+        </div>
+        <div nz-col class="gutter-row" [nzSpan]="8">
+          <label>QR Code</label>
+          <nz-upload
+            nzType="drag"
+            [nzMultiple]="true"
+            nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+            (nzChange)="handleChange($event)"
+          >
+            <img
+              src="../../../../../../../assets/images/plus.svg"
+              alt=""
+              class="mb-1"
+            />
+            <p class="ant-upload-text text-14">Choose File</p>
+          </nz-upload>
+        </div>
+      </div>
+    </div></ng-container
+  >
+  <ng-template #modalFooter5>
+    <button nz-button nzType="default" (click)="closeModal()">Cancel</button>
+    <button nz-button nzType="primary" (click)="closeModal()">Add Spare</button>
+  </ng-template>
+</nz-modal>
+<!-- Select Sensors modal -->
+<nz-modal
+  [(nzVisible)]="var_sensor"
+  nzTitle="Select Sensors"
+  (nzOnCancel)="closeModal()"
+  (nzOnOk)="closeModal()"
+  [nzFooter]="modalFooter1"
+  nzCentered
+  nzWidth="975px"
+>
+  <ng-container *nzModalContent>
+    <div class="border-none">
+      <!-- tab component start -->
+      <div nz-row nzJustify="space-between" nzAlign="middle" class="mb-15">
+        <div nz-col>
+          <nz-input-group
+            [nzSuffix]="suffixTemplateInfo"
+            [nzPrefix]="prefixTemplateUser"
+            class="search"
+            style="width: 345px"
+          >
+            <input
+              type="text"
+              nz-input
+              placeholder="Search by sensor name, sensor id.."
+            />
+            <ng-template #prefixTemplateUser
+              ><span nz-icon nzType="search" nzTheme="outline"></span
+            ></ng-template>
+            <ng-template #suffixTemplateInfo>
+              <img
+                src="../../../../../../../assets/images/keyboard.svg"
+                alt=""
+              />
+            </ng-template>
+          </nz-input-group>
+        </div>
+        <div nz-col>
+          <a
+            nz-button
+            nzType="link"
+            class="p-0"
+            (click)="openAddNewSensor()"
+            (keydown.enter)="openAddNewSensor()"
+            tabindex="0"
+            >Add New Sensor</a
+          >
+        </div>
+      </div>
+      <nz-table
+        #basicTable
+        nzSize="small"
+        nzOuterBordered
+        nzShowPagination="false"
+        [nzScroll]="{ y: '70vh' }"
+        [nzData]="listOfCurrentPageData"
+      >
+        <thead>
+          <tr>
+            <th nzLeft nzAlign="center" nzWidth="70px">Select</th>
+            <th nzWidth="150px">Sensor Name <app-filters></app-filters></th>
+            <th nzWidth="150px">Sensor Code</th>
+            <th nzWidth="150px">Sensor Master ID</th>
+            <th nzWidth="150px">Sensor ID</th>
+            <th nzWidth="150px">Sensor Serial No.</th>
+            <th nzWidth="150px">Make</th>
+            <th nzWidth="150px">Model No.</th>
+            <th nzWidth="150px">Manufacture</th>
+            <th nzWidth="150px">Warranty Life</th>
+            <th nzWidth="150px">QR Code</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of listOfCurrentPageData">
+            <td nzLeft nzAlign="center">
+              <nz-radio-group [(ngModel)]="radioValue">
+                <label nz-radio [nzValue]="data.id"></label>
+              </nz-radio-group>
+            </td>
+            <td>Sensor 1</td>
+            <td>PR:0001</td>
+            <td>ASL:12332</td>
+            <td>Yes</td>
+            <td>mm</td>
+            <td>India</td>
+            <td>SN-500VKJ</td>
+            <td>Lorem ipsum</td>
+            <td>5 Years</td>
+            <td><span nz-icon nzType="qrcode" nzTheme="outline"></span></td>
+          </tr>
+        </tbody>
+      </nz-table>
+      <!-- tab component start -->
+    </div>
+  </ng-container>
+  <ng-template #modalFooter1>
+    <button nz-button nzType="default" (click)="closeModal()">Cancel</button>
+
+    <button nz-button nzType="primary" (click)="openAddNewSensor()">
+      Add Sensors
+    </button>
+  </ng-template>
+</nz-modal>
+<!-- Add New Sensors modal-->
+<nz-modal
+  [(nzVisible)]="var_addnewSensors"
+  nzTitle="Add New Sensor"
+  (nzOnCancel)="closeModal()"
+  (nzOnOk)="closeModal()"
+  [nzFooter]="modalFooter4"
+  nzCentered
+  nzWidth="588px"
+  [nzBodyStyle]="{ height: '70vh', overflow: 'auto' }"
+>
+  <ng-container *nzModalContent
+    ><div class="custom-card border-none">
+      <div nz-row [nzGutter]="[16, 16]">
+        <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+          <label>Sensor Code<sup>*</sup></label
+          ><input
+            nz-input
+            placeholder="Enter Code"
+            type="text"
+            nzSize="large"
+          />
+        </div>
+        <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+          <label>Sensor Name<sup>*</sup></label
+          ><input
+            nz-input
+            placeholder="Enter Sensor Name"
+            type="text"
+            nzSize="large"
+          />
+        </div>
+        <div nz-col class="gutter-row" [nzSpan]="24">
+          <label>Description<sup>*</sup></label
+          ><textarea
+            rows="4"
+            nz-input
+            placeholder="Enter Description"
+          ></textarea>
+        </div>
+        <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+          <label>Sensor Serial No.<sup>*</sup></label
+          ><input
+            nz-input
+            placeholder="Enter Number"
+            type="text"
+            nzSize="large"
+          />
+        </div>
+        <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+          <label>Model No.<sup>*</sup></label
+          ><input
+            nz-input
+            placeholder="Enter Number"
+            type="text"
+            nzSize="large"
+          />
+        </div>
+        <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+          <label>Warranty Life<sup>*</sup></label>
+          <nz-input-group [nzAddOnAfter]="addOnAfterTemplate3" nzSize="large">
+            <input type="text" nz-input placeholder="Enter Value" />
+          </nz-input-group>
+          <ng-template #addOnAfterTemplate3>
+            <nz-select [ngModel]="'Years'" nzSize="large">
+              <nz-option nzLabel="Years" nzValue="Years"></nz-option>
+              <nz-option nzLabel="Month" nzValue="Month"></nz-option>
+            </nz-select>
+          </ng-template>
+        </div>
+        <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+          <label>Manufacture<sup>*</sup></label
+          ><input nz-input placeholder="Enter" type="text" nzSize="large" />
+        </div>
+        <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+          <label>Battery Life<sup>*</sup></label>
+          <nz-input-group [nzAddOnAfter]="addOnAfterTemplate4" nzSize="large">
+            <input type="text" nz-input placeholder="Enter Value" />
+          </nz-input-group>
+          <ng-template #addOnAfterTemplate4>
+            <nz-select [ngModel]="'Years'" nzSize="large">
+              <nz-option nzLabel="Years" nzValue="Years"></nz-option>
+              <nz-option nzLabel="Month" nzValue="Month"></nz-option>
+            </nz-select>
+          </ng-template>
+        </div>
+        <div nz-col class="gutter-row" [nzSpan]="24">
+          <label>Additional Comments<sup>*</sup></label>
+          <textarea
+            rows="4"
+            nz-input
+            placeholder="Enter Description"
+          ></textarea>
+        </div>
+
+        <div nz-col class="gutter-row" [nzSpan]="8">
+          <label>QR Code</label>
+          <nz-upload
+            nzType="drag"
+            [nzMultiple]="true"
+            nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+            (nzChange)="handleChange($event)"
+          >
+            <img
+              src="../../../../../../../assets/images/plus.svg"
+              alt=""
+              class="mb-1"
+            />
+            <p class="ant-upload-text text-14">Choose File</p>
+          </nz-upload>
+        </div>
+      </div>
+    </div></ng-container
+  >
+  <ng-template #modalFooter4>
+    <button nz-button nzType="default" (click)="closeModal()">Cancel</button>
+    <button nz-button nzType="primary" (click)="closeModal()">
+      Add Sensors
+    </button>
+  </ng-template>
+</nz-modal>
+<!-- Select tree modal -->
+<nz-modal
+  [(nzVisible)]="var_tree"
+  nzTitle="Search Location "
+  (nzOnCancel)="closeTreeModal()"
+  (nzOnOk)="closeTreeModal()"
+  [nzFooter]="modalFooterSearch"
+  nzCentered
+  nzWidth="600px"
+  [nzCloseIcon]="modalClose1"
+>
+  <ng-container *nzModalContent>
+    <div class="border-none">
+      <!-- tree component start -->
+      <app-checkbox-tree
+        [treeData]=""
+        [selectedNodes]=""
+        (selectedNodesChange)="onLocationSelectedNodesChange($event)"
+      ></app-checkbox-tree>
+      <!-- tree component start -->
+    </div>
+  </ng-container>
+  <ng-template #modalFooterSearch>
+    <button nz-button nzType="primary" (click)="closeTreeModal()">Save</button>
+  </ng-template>
+  <ng-template #modalClose1> Close </ng-template>
+</nz-modal>

@@ -1,0 +1,348 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<div class="w-100">
+  <div class="title-bar">
+    <div nz-row nzJustify="space-between" nzAlign="middle">
+      <div nz-col>
+        <h3>Task Repository</h3>
+      </div>
+      <div nz-col>
+        <nz-space [nzSize]="8">
+          <div class="send-request" *nzSpaceItem>
+            <a nz-dropdown [nzDropdownMenu]="menu" nzType="link">
+              Mark as Inactive
+              <span nz-icon nzType="down"></span>
+            </a>
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu nzSelectable>
+                <li nz-menu-item>Edit</li>
+                <li nz-menu-item>2nd menu item</li>
+                <li nz-menu-item>3rd menu item</li>
+              </ul>
+            </nz-dropdown-menu>
+          </div>
+          <nz-input-group
+            *nzSpaceItem
+            [nzPrefix]="prefixTemplateUser"
+            class="search"
+          >
+            <input type="text" nz-input placeholder="Search" />
+            <ng-template #prefixTemplateUser
+              ><span nz-icon nzType="search" nzTheme="outline"></span
+            ></ng-template>
+          </nz-input-group>
+
+          <button
+            nz-button
+            nzType="default"
+            *nzSpaceItem
+            nzTooltipTitle="Export"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+          >
+            <span nz-icon nzType="download" nzTheme="outline"></span></button
+          ><button
+            nz-button
+            nzType="default"
+            *nzSpaceItem
+            nzTooltipTitle="Reset Filters"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+          >
+            <span nz-icon nzType="reload" nzTheme="outline"></span>
+          </button>
+          <button
+            nz-button
+            nzType="default"
+            *nzSpaceItem
+            (click)="openGridModal()"
+            nzTooltipTitle="Grid Customization"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+          >
+            <span nz-icon nzType="control" nzTheme="outline"></span></button
+          ><button
+            nz-button
+            nzType="primary"
+            *nzSpaceItem
+            (click)="showModal(1)"
+            class="d-none d-lg-flex"
+          >
+            Create
+          </button>
+        </nz-space>
+        <div class="d-lg-none xs-footer">
+          <button nz-button nzType="primary" (click)="showModal(1)">
+            Create
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-task-repository-table
+    (openViewEvent)="openViewModal()"
+  ></app-task-repository-table>
+</div>
+
+<!-- Create Modal -->
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="modalTitle"
+  [nzCloseIcon]="modalClose"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzFooter]="modalFooter"
+  nzCentered
+  nzWidth="100%"
+  nzWrapClassName="modal-full"
+>
+  <ng-template #modalTitle> Add Tasks </ng-template>
+  <ng-template #modalClose> Close </ng-template>
+  <ng-container *nzModalContent>
+    <nz-card
+      *ngIf="tabSelected < 2"
+      style="width: 880px"
+      [nzBordered]="false"
+      [nzBodyStyle]="{ padding: '0px' }"
+      nzTitle="Basic Details"
+      class="custom-card"
+    >
+      <!-- tab component start -->
+
+      <section class="p-20">
+        <div nz-row [nzGutter]="[16, 16]">
+          <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+            <label>Task Code<sup>*</sup></label
+            ><input
+              nz-input
+              placeholder="Enter  Code"
+              type="text"
+              nzSize="large"
+            />
+          </div>
+          <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+            <label>Task Name <sup>*</sup></label
+            ><input
+              nz-input
+              placeholder="Enter  Name"
+              type="text"
+              nzSize="large"
+            />
+          </div>
+
+          <div nz-col class="gutter-row" nzXs="24" nzSm="24">
+            <label>Task Description<sup>*</sup></label>
+            <textarea
+              nz-input
+              placeholder="Enter Description"
+              [nzAutosize]="{ minRows: 3 }"
+            ></textarea>
+          </div>
+          <div nz-col class="gutter-row" nzXs="24" nzSm="10">
+            <label>Task Duration <sup>*</sup></label>
+            <nz-input-group [nzAddOnAfter]="addOnAfterTemplate4" nzSize="large">
+              <input
+                type="text"
+                nz-input
+                placeholder="Enter Value"
+                class="w-100"
+              />
+            </nz-input-group>
+            <ng-template #addOnAfterTemplate4>
+              <nz-select [ngModel]="'Hours'" nzSize="large">
+                <nz-option nzLabel="Hours" nzValue="Hours"></nz-option>
+                <nz-option nzLabel="Years" nzValue="Years"></nz-option>
+                <nz-option nzLabel="Month" nzValue="Month"></nz-option>
+              </nz-select>
+            </ng-template>
+          </div>
+        </div>
+      </section>
+
+      <!-- tab component start -->
+    </nz-card>
+    <!-- preview component start -->
+    <nz-card
+      *ngIf="tabSelected === 2"
+      style="width: 900px"
+      [nzBordered]="false"
+      [nzTitle]="previewtitle"
+      class="custom-card"
+    >
+      <ng-template #previewtitle>
+        <h3>Preview</h3>
+        <p>See a quick summary of task group</p>
+      </ng-template>
+      <section class="preview-card">
+        <div class="header">
+          <h4>Basic Details</h4>
+          <button
+            nz-button
+            nzTooltipTitle="Edit"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="updateTabSelected(1)"
+          >
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 24]">
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Task Code</h5>
+              <p>3488990</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Task Name</h5>
+              <p>Name123</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Task Duration</h5>
+              <p>5 mins</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="24" nzMd="24">
+              <h5>Task Group Description</h5>
+              <p>Lorem ipsum is a dummy text since 1952</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </nz-card>
+    <!-- preview component end -->
+  </ng-container>
+  <ng-template #modalFooter>
+    <div>
+      <button nz-button (click)="back()" *ngIf="tabSelected > 1">Back</button>
+    </div>
+
+    <button
+      nz-button
+      nzType="primary"
+      (click)="saveContinue()"
+      *ngIf="tabSelected < 2 && !isEdit"
+    >
+      Save & Continue
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="createNotification('success')"
+      *ngIf="tabSelected === 2"
+    >
+      Add Task
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="update()"
+      *ngIf="tabSelected < 4 && isEdit"
+    >
+      Update
+    </button>
+  </ng-template>
+</nz-modal>
+
+<!-- View Modal -->
+<nz-modal
+  [(nzVisible)]="viewOrganisation"
+  [nzTitle]="modalTitle1"
+  [nzCloseIcon]="modalClose1"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzFooter]="null"
+  nzCentered
+  nzWidth="100%"
+  nzWrapClassName="modal-full no-footer"
+>
+  <ng-container *nzModalContent>
+    <nz-card
+      style="width: 670px"
+      [nzBordered]="false"
+      [nzTitle]="previewtitle"
+      class="custom-card"
+    >
+      <ng-template #previewtitle>
+        <div
+          nz-row
+          nzJustify="space-between"
+          nzAlign="middle"
+          class="view-title"
+        >
+          <div nz-col>
+            <nz-space nzAlign="center">
+              <span class="first-letter" *nzSpaceItem>A</span>
+              <div *nzSpaceItem>
+                <h3>Task 123</h3>
+                <span class="status green">Active</span>
+              </div>
+            </nz-space>
+          </div>
+          <div nz-col>
+            <button
+              nz-button
+              nzTooltipTitle="Edit"
+              nzTooltipPlacement="bottom"
+              nz-tooltip
+              (click)="editModal(1)"
+            >
+              <span nz-icon nzType="edit" nzTheme="outline"></span>
+            </button>
+          </div>
+        </div>
+      </ng-template>
+      <section class="view-card">
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 15]">
+            <div nz-col nzSpan="24">
+              <h5>Task Code</h5>
+              <p>145628</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Task Name</h5>
+              <p>Lorem iosum</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Task Description</h5>
+              <p>Lorem ipsum is a dummy text</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Task Duration</h5>
+              <p>2 Days</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </nz-card></ng-container
+  >
+  <ng-template #modalTitle1> Task Information </ng-template>
+  <ng-template #modalClose1> Close </ng-template></nz-modal
+>
+
+<!-- Grid Customization Modal -->
+<nz-modal
+  [(nzVisible)]="isGridModal"
+  nzTitle="Grid Customization"
+  [nzCloseIcon]="modalClose2"
+  [nzFooter]="modalFooter3"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  nzCentered
+  nzWidth="450px"
+  ><ng-template #modalClose2> Close </ng-template
+  ><ng-container *nzModalContent>
+    <div class="checkbox-list">
+      <label nz-checkbox>Organisation Name</label
+      ><label nz-checkbox>Organisation Code</label
+      ><label nz-checkbox>Packfora URL</label
+      ><label nz-checkbox>Primary Email</label
+      ><label nz-checkbox>Primary Contact</label
+      ><label nz-checkbox>Created on</label><label nz-checkbox>Status</label>
+    </div></ng-container
+  >
+  <ng-template #modalFooter3>
+    <button nz-button (click)="handleCancel()">Clear</button>
+    <button nz-button nzType="primary" (click)="handleOk()">Save</button>
+  </ng-template>
+</nz-modal>

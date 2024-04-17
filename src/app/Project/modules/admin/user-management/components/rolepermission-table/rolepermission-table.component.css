@@ -1,0 +1,24 @@
+.even-group td {
+    background: #fff;
+}
+
+.odd-group td {
+    background: #F7F9FD;
+
+}
+
+.even-group:last-of-type td {
+    border-bottom: 1px solid #E7E9EB;
+}
+
+.odd-group:last-of-type td {
+    border-bottom: 1px solid #E7E9EB;
+}
+
+.even-group+.child-group td {
+    background: #F7F9FD;
+}
+
+.odd-group+.child-group td {
+    background: #fff;
+}

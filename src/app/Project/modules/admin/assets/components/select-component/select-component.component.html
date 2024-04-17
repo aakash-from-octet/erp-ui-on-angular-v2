@@ -1,0 +1,119 @@
+<nz-modal
+  [(nzVisible)]="isVisible"
+  nzTitle="Select Components"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzFooter]="modalFooter"
+  nzCentered
+  nzWidth="975px"
+>
+  <ng-container *nzModalContent>
+    <div class="border-none">
+      <!-- tab component start -->
+      <div nz-row nzJustify="space-between" nzAlign="middle" class="mb-15">
+        <div nz-col>
+          <nz-input-group
+            [nzSuffix]="suffixTemplateInfo"
+            [nzPrefix]="prefixTemplateUser"
+            class="search"
+            style="width: 345px"
+          >
+            <input type="text" nz-input placeholder="Search" />
+            <ng-template #prefixTemplateUser
+              ><span nz-icon nzType="search" nzTheme="outline"></span
+            ></ng-template>
+            <ng-template #suffixTemplateInfo>
+              <img
+                src="../../../../../../../assets/images/keyboard.svg"
+                alt=""
+              />
+            </ng-template>
+          </nz-input-group>
+        </div>
+        <div nz-col>
+          <a
+            nz-button
+            nzType="link"
+            class="p-0"
+            (click)="openAddNewComponent()"
+            (keydown.enter)="openAddNewComponent()"
+            tabindex="0"
+            >Add New Component</a
+          >
+        </div>
+      </div>
+      <nz-table
+        #basicTable
+        nzSize="small"
+        nzOuterBordered
+        nzShowPagination="false"
+        [nzScroll]="{ y: '70vh' }"
+        [nzData]="listOfCurrentPageData"
+      >
+        <thead>
+          <tr>
+            <th nzLeft nzAlign="center" nzWidth="70px">Select</th>
+            <th nzWidth="150px">Component Name</th>
+            <th>Component Id</th>
+            <th>Component Code</th>
+            <th>Component Description</th>
+            <th nzAlign="center" nzWidth="80px">Qty</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of listOfCurrentPageData">
+            <td
+              nzLeft
+              nzAlign="center"
+              [nzChecked]="setOfCheckedId.has(data.id)"
+            ></td>
+            <td>Dispenser</td>
+            <td>PR:0001</td>
+            <td>ASL:12332</td>
+            <td>Harpic</td>
+            <td nzAlign="center">
+              <div
+                class="btn-add"
+                (click)="btnAdd()"
+                (keydown.enter)="btnAdd()"
+                tabindex="0"
+                *ngIf="!isAdding"
+              >
+                Add
+              </div>
+              <div class="btn-adding" *ngIf="isAdding">
+                <span
+                  class="sign"
+                  (click)="btnMinus()"
+                  (keydown.enter)="btnMinus()"
+                  tabindex="0"
+                  >-</span
+                >
+                <span class="number">{{ compValue }}</span>
+                <span
+                  class="sign"
+                  (click)="btnPlus()"
+                  (keydown.enter)="btnPlus()"
+                  tabindex="0"
+                  >+</span
+                >
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+      <!-- tab component start -->
+    </div>
+  </ng-container>
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="cancel()">Cancel</button>
+
+    <button nz-button nzType="primary" (click)="cancel()">
+      Add Components
+    </button>
+  </ng-template>
+</nz-modal>
+<app-add-component
+  [isVisible]="openComponent"
+  (cancelClicked)="closeAddNewModal()"
+></app-add-component>

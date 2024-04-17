@@ -1,0 +1,130 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<div nz-row [nzGutter]="[16, 16]">
+  <div nz-col class="gutter-row d-flex">
+    <nz-switch nzSize="small"></nz-switch
+    ><label class="ml-12">Lead Mould<sup>*</sup></label>
+  </div>
+  <div nz-col class="gutter-row d-flex">
+    <nz-switch nzSize="small"></nz-switch
+    ><label class="ml-12">Repeat Mould<sup>*</sup></label>
+  </div>
+</div>
+<nz-collapse nzExpandIconPosition="right" class="form-accordion">
+  <nz-collapse-panel nzHeader="MDR Parameters">
+    <div nz-row [nzGutter]="[16, 16]">
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>MDR Date<sup>*</sup></label
+        ><nz-date-picker nzSize="large" class="w-100"></nz-date-picker>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Mould Cycle Time<sup>*</sup></label>
+        <nz-input-group [nzAddOnAfter]="addOnAfterTemplate" nzSize="large">
+          <input type="text" nz-input placeholder="Enter Value" />
+        </nz-input-group>
+        <ng-template #addOnAfterTemplate>
+          <nz-select [ngModel]="'Sec'" nzSize="large">
+            <nz-option nzLabel="Sec" nzValue="Sec"></nz-option>
+            <nz-option nzLabel="Minutes" nzValue="Minutes"></nz-option>
+          </nz-select>
+        </ng-template>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Machine Tonnage<sup>*</sup></label>
+        <nz-input-group [nzAddOnAfter]="addOnAfterTemplate1" nzSize="large">
+          <input type="text" nz-input placeholder="Enter Value" />
+        </nz-input-group>
+        <ng-template #addOnAfterTemplate1>
+          <nz-select [ngModel]="'Kg'" nzSize="large">
+            <nz-option nzLabel="Kg" nzValue="Kg"></nz-option>
+          </nz-select>
+        </ng-template>
+      </div>
+      <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+        <label>Component Weight<sup>*</sup></label>
+        <nz-input-group [nzAddOnAfter]="addOnAfterTemplate2" nzSize="large">
+          <input type="text" nz-input placeholder="Enter Value" />
+        </nz-input-group>
+        <ng-template #addOnAfterTemplate2>
+          <nz-select [ngModel]="'Kg'" nzSize="large">
+            <nz-option nzLabel="Kg" nzValue="Kg"></nz-option>
+          </nz-select>
+        </ng-template>
+      </div>
+    </div>
+  </nz-collapse-panel>
+</nz-collapse>
+<div nz-row [nzGutter]="[16, 16]">
+  <div nz-col class="gutter-row d-flex">
+    <nz-switch nzSize="small"></nz-switch
+    ><label class="ml-12">Recyclable Logo Capable<sup>*</sup></label>
+  </div>
+</div>
+<div nz-row [nzGutter]="[16, 16]">
+  <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+    <label>Comment<sup>*</sup></label
+    ><input nz-input placeholder="Enter Comment" type="text" nzSize="large" />
+  </div>
+</div>
+<hr class="custom-hr" />
+
+<div nz-row [nzGutter]="[16, 16]">
+  <div nz-col class="gutter-row d-flex">
+    <nz-switch nzSize="small"></nz-switch
+    ><label class="ml-12">Brand Logo Capable<sup>*</sup></label>
+  </div>
+</div>
+<div nz-row [nzGutter]="[16, 16]">
+  <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+    <label>Comment<sup>*</sup></label
+    ><input nz-input placeholder="Enter Comment" type="text" nzSize="large" />
+  </div>
+</div>
+<hr class="custom-hr" />
+
+<div nz-row [nzGutter]="[16, 16]">
+  <div nz-col class="gutter-row d-flex">
+    <nz-switch nzSize="small"></nz-switch
+    ><label class="ml-12">Converter Logo Capable<sup>*</sup></label>
+  </div>
+</div>
+<div nz-row [nzGutter]="[16, 16]">
+  <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+    <label>Comment<sup>*</sup></label
+    ><input nz-input placeholder="Enter Comment" type="text" nzSize="large" />
+  </div>
+</div>
+<hr class="custom-hr" />
+<div nz-row [nzGutter]="[16, 16]">
+  <div nz-col nzXs="24" nzSm="5" class="gutter-row">
+    <label>Mould Image</label>
+    <nz-upload
+      nzType="drag"
+      [nzMultiple]="true"
+      nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+      (nzChange)="handleChange($event)"
+    >
+      <img
+        src="../../../../../../../assets/images/plus.svg"
+        alt=""
+        class="mb-1"
+      />
+      <p class="ant-upload-text text-14">Choose File</p>
+    </nz-upload>
+  </div>
+  <div nz-col nzXs="24" nzSm="5" class="gutter-row">
+    <label>QR Code</label>
+    <nz-upload
+      nzType="drag"
+      [nzMultiple]="true"
+      nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+      (nzChange)="handleChange($event)"
+    >
+      <img
+        src="../../../../../../../assets/images/plus.svg"
+        alt=""
+        class="mb-1"
+      />
+      <p class="ant-upload-text text-14">Choose File</p>
+    </nz-upload>
+  </div>
+</div>

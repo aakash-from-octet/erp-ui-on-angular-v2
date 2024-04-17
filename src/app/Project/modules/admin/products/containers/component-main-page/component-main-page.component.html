@@ -1,0 +1,920 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<div class="w-100">
+  <div class="title-bar">
+    <div nz-row nzJustify="space-between" nzAlign="middle">
+      <div nz-col>
+        <h3>Component <span>(0 Components)</span></h3>
+      </div>
+      <div nz-col>
+        <nz-space [nzSize]="8">
+          <div class="send-request" *nzSpaceItem>
+            <a
+              nz-dropdown
+              [nzDropdownMenu]="menu"
+              nzType="link"
+              nzTrigger="click"
+            >
+              Mark as Inactive
+              <span nz-icon nzType="down"></span>
+            </a>
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu nzSelectable>
+                <li nz-menu-item>Edit</li>
+                <li nz-menu-item>2nd menu item</li>
+                <li nz-menu-item>3rd menu item</li>
+              </ul>
+            </nz-dropdown-menu>
+          </div>
+          <nz-input-group
+            *nzSpaceItem
+            [nzPrefix]="prefixTemplateUser"
+            class="search"
+          >
+            <input
+              type="text"
+              nz-input
+              placeholder="Search"
+              [(ngModel)]="searchText"
+              (ngModelChange)="filterData()"
+            />
+            <ng-template #prefixTemplateUser
+              ><span nz-icon nzType="search" nzTheme="outline"></span
+            ></ng-template>
+          </nz-input-group>
+
+          <button
+            nz-button
+            nzType="default"
+            *nzSpaceItem
+            nzTooltipTitle="Export"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+          >
+            <span nz-icon nzType="download" nzTheme="outline"></span></button
+          ><button
+            nz-button
+            nzType="default"
+            *nzSpaceItem
+            nzTooltipTitle="Reset Filters"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+          >
+            <span nz-icon nzType="reload" nzTheme="outline"></span>
+          </button>
+          <button
+            nz-button
+            nzType="default"
+            *nzSpaceItem
+            (click)="openGridModal()"
+            nzTooltipTitle="Grid Customization"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+          >
+            <span nz-icon nzType="control" nzTheme="outline"></span></button
+          ><button
+            nz-button
+            nzType="primary"
+            *nzSpaceItem
+            (click)="showModal(1)"
+            class="d-none d-lg-block"
+          >
+            Create Component
+          </button>
+        </nz-space>
+        <div class="d-lg-none xs-footer">
+          <button nz-button nzType="primary" (click)="showModal(1)">
+            Create Component
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <app-component-table (openViewEvent)="openViewModal()"></app-component-table> -->
+  <nz-table
+    #rowSelectionTable
+    nzSize="small"
+    nzOuterBordered
+    nzShowPagination="false"
+    [nzData]="listOfCurrentPageData"
+    [nzScroll]="{ x: '2000px', y: 'calc(100vh - 250px)' }"
+    [nzNoResult]="noDataTemplate"
+  >
+    <thead>
+      <tr>
+        <th
+          [nzChecked]="checked"
+          [nzIndeterminate]="indeterminate"
+          (nzCheckedChange)="onAllChecked($event)"
+          nzLeft
+          nzWidth="50px"
+        ></th>
+        <th nzLeft nzWidth="200px">
+          Component Name
+          <app-common-filter
+            [filterByString]="'Component Name'"
+            [valueArray]="getValueArray('name')"
+            (searchEvent)="search($event, 'name')"
+            (sortEvent)="sort($event, 'name')"
+            (filterEvent)="filter($event, 'name')"
+          >
+          </app-common-filter>
+        </th>
+        <th>Component Code <app-common-filter></app-common-filter></th>
+        <th>Product Components<app-common-filter></app-common-filter></th>
+        <th>Child Components<app-common-filter></app-common-filter></th>
+        <th>Modulable<app-common-filter></app-common-filter></th>
+        <th>Specs Id<app-common-filter></app-common-filter></th>
+        <th>Height<app-common-filter></app-common-filter></th>
+        <th>Width<app-common-filter></app-common-filter></th>
+        <th>Length<app-common-filter></app-common-filter></th>
+        <th>Gross Weight<app-common-filter></app-common-filter></th>
+        <!-- <th>Created On</th> -->
+        <th>Status<app-common-filter></app-common-filter></th>
+        <th nzRight nzAlign="center" nzWidth="100px">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of listOfCurrentPageData">
+        <td
+          nzLeft
+          [nzChecked]="setOfCheckedId.has(data.id)"
+          (nzCheckedChange)="onItemChecked(data.id, $event)"
+        ></td>
+        <td nzLeft>
+          <span class="first-letter">{{ data?.name?.charAt(0) }}</span
+          >{{ data?.name }}
+        </td>
+        <td>{{ data?.code }}</td>
+        <td>PR:0001</td>
+        <td>Harpic</td>
+        <td>Harpic</td>
+        <td>Floor Cleaning</td>
+        <td>Comp: 0001</td>
+        <td>#2454</td>
+        <td>Lorem ipsum</td>
+        <td>Lorem ipsum</td>
+        <!-- <td>44 mm</td> -->
+        <td>
+          <span class="status green">{{ data?.isActive }}</span>
+        </td>
+        <td nzRight>
+          <nz-space>
+            <button *nzSpaceItem nz-button nzType="text" (click)="openView()">
+              <span nz-icon nzType="eye" nzTheme="outline"></span>
+            </button>
+            <div class="action-divider" *nzSpaceItem></div>
+            <button
+              *nzSpaceItem
+              nz-button
+              nzType="text"
+              nz-dropdown
+              [nzDropdownMenu]="menu"
+            >
+              <span nz-icon nzType="more" nzTheme="outline"></span>
+            </button>
+
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu nzSelectable>
+                <li nz-menu-item>Edit</li>
+                <li nz-menu-item>Mark as in-active</li>
+                <li nz-menu-item>Add Component</li>
+              </ul>
+            </nz-dropdown-menu>
+          </nz-space>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+
+  <section class="footer-pagination">
+    <nz-pagination
+      [(nzPageIndex)]="currentPageIndex"
+      [(nzPageSize)]="pageSize"
+      [nzTotal]="totalItems"
+      (nzPageIndexChange)="loadTableData($event, pageSize)"
+      [nzSize]="'small'"
+      nzShowSizeChanger="true"
+      (nzPageSizeChange)="pageSizeChange($event)"
+    ></nz-pagination>
+  </section>
+
+  <ng-template #noDataTemplate>
+    <div class="no-data">
+      <img src="../../../assets/images/no-data.svg" alt="" />
+    </div>
+  </ng-template>
+</div>
+
+<!-- Create Modal -->
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="modalTitle"
+  [nzCloseIcon]="modalClose"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzFooter]="modalFooter"
+  nzCentered
+  nzWidth="100%"
+  nzWrapClassName="modal-full"
+>
+  <ng-template #modalTitle> Create Component </ng-template>
+  <ng-template #modalClose> Close </ng-template>
+  <ng-container *nzModalContent>
+    <nz-card
+      *ngIf="tabSelected < 5"
+      style="width: 973px"
+      [nzBordered]="false"
+      [nzBodyStyle]="{ padding: '0px' }"
+      nzTitle="Basic Details"
+      class="custom-card"
+    >
+      <!-- tab component start -->
+      <nz-tabset
+        [nzTabPosition]="isSmallScreen ? 'top' : 'left'"
+        [(nzSelectedIndex)]="tabSelected"
+        class="step-form"
+      >
+        <nz-tab nzTitle="Steps:" nzDisabled="true"></nz-tab>
+        <nz-tab nzTitle="Basic Details">
+          <section class="p-20">
+            <div nz-row [nzGutter]="[16, 16]">
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+                <label>Component Code<sup>*</sup></label
+                ><input
+                  nz-input
+                  placeholder="Enter Component Code"
+                  type="text"
+                  nzSize="large"
+                />
+              </div>
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+                <label>Component Name<sup>*</sup></label
+                ><input
+                  nz-input
+                  placeholder="Enter Component Name"
+                  type="text"
+                  nzSize="large"
+                />
+              </div>
+
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+                <label>Parent Component<sup>*</sup></label
+                ><nz-select
+                  ngModel=""
+                  nzPlaceHolder="Select Parent Component"
+                  class="w-100"
+                  nzSize="large"
+                >
+                  <nz-option nzValue="1" nzLabel="1"></nz-option>
+                  <nz-option nzValue="2" nzLabel="2"></nz-option>
+                </nz-select>
+              </div>
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+                <label>Component Design Owner<sup>*</sup></label
+                ><nz-select
+                  ngModel=""
+                  nzPlaceHolder="Select Design Owner"
+                  class="w-100"
+                  nzSize="large"
+                >
+                  <nz-option nzValue="1" nzLabel="1"></nz-option>
+                  <nz-option nzValue="2" nzLabel="2"></nz-option>
+                </nz-select>
+              </div>
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+                <label>Product Association<sup>*</sup></label
+                ><nz-select
+                  ngModel=""
+                  nzPlaceHolder="Select Product"
+                  class="w-100"
+                  nzSize="large"
+                >
+                  <nz-option nzValue="1" nzLabel="1"></nz-option>
+                  <nz-option nzValue="2" nzLabel="2"></nz-option>
+                </nz-select>
+              </div>
+              <div nz-col class="gutter-row" [nzSpan]="24">
+                <label>Component Description<sup>*</sup></label
+                ><textarea
+                  nz-input
+                  placeholder="Enter Component Description"
+                  [nzAutosize]="{ minRows: 3 }"
+                ></textarea>
+              </div>
+              <div nz-col class="gutter-row" [nzSpan]="24">
+                <nz-switch nzSize="small" class="mr-15"></nz-switch>Does the
+                component have a child component?
+              </div>
+              <div nz-col class="gutter-row" [nzSpan]="24">
+                <nz-switch nzSize="small" class="mr-15"></nz-switch> Is the
+                component mouldable?
+              </div>
+              <div nz-col class="gutter-row" [nzSpan]="24">
+                <nz-switch nzSize="small" class="mr-15"></nz-switch> Component
+                design review?
+              </div>
+            </div>
+          </section></nz-tab
+        >
+        <nz-tab nzTitle="Component Details"
+          ><section class="p-20">
+            <nz-collapse nzExpandIconPosition="right" class="form-accordion">
+              <nz-collapse-panel
+                nzHeader="Component Dimensions"
+                [nzActive]="true"
+              >
+                <div nz-row [nzGutter]="[16, 16]">
+                  <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                    <label>Height</label>
+                    <nz-input-group
+                      [nzAddOnAfter]="addOnAfterTemplateheight"
+                      nzSize="large"
+                    >
+                      <input type="text" nz-input placeholder="Enter Value" />
+                    </nz-input-group>
+                    <ng-template #addOnAfterTemplateheight>
+                      <nz-select [ngModel]="'mm'" nzSize="large">
+                        <nz-option nzLabel="mm" nzValue="mm"></nz-option>
+                        <nz-option nzLabel="cm" nzValue="cm"></nz-option>
+                      </nz-select>
+                    </ng-template>
+                  </div>
+                  <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                    <label>Width</label>
+                    <nz-input-group
+                      [nzAddOnAfter]="addOnAfterTemplateheight"
+                      nzSize="large"
+                    >
+                      <input type="text" nz-input placeholder="Enter Value" />
+                    </nz-input-group>
+                    <ng-template #addOnAfterTemplateheight>
+                      <nz-select [ngModel]="'mm'" nzSize="large">
+                        <nz-option nzLabel="mm" nzValue="mm"></nz-option>
+                        <nz-option nzLabel="cm" nzValue="cm"></nz-option>
+                      </nz-select>
+                    </ng-template>
+                  </div>
+                  <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                    <label>Length</label>
+                    <nz-input-group
+                      [nzAddOnAfter]="addOnAfterTemplateheight"
+                      nzSize="large"
+                    >
+                      <input type="text" nz-input placeholder="Enter Value" />
+                    </nz-input-group>
+                    <ng-template #addOnAfterTemplateheight>
+                      <nz-select [ngModel]="'mm'" nzSize="large">
+                        <nz-option nzLabel="mm" nzValue="mm"></nz-option>
+                        <nz-option nzLabel="cm" nzValue="cm"></nz-option>
+                      </nz-select>
+                    </ng-template>
+                  </div>
+                  <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                    <label>Gross Weight</label>
+                    <nz-input-group
+                      [nzAddOnAfter]="addOnAfterTemplateweight"
+                      nzSize="large"
+                    >
+                      <input type="text" nz-input placeholder="Enter Value" />
+                    </nz-input-group>
+                    <ng-template #addOnAfterTemplateweight>
+                      <nz-select [ngModel]="'Kg'" nzSize="large">
+                        <nz-option nzLabel="Kg" nzValue="Kg"></nz-option>
+                        <nz-option nzLabel="gram" nzValue="gram"></nz-option>
+                      </nz-select>
+                    </ng-template>
+                  </div>
+                </div>
+              </nz-collapse-panel>
+              <nz-collapse-panel nzHeader="Component Materials">
+                <div nz-row [nzGutter]="[16, 16]">
+                  <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+                    <label>Polymer Type<sup>*</sup></label
+                    ><nz-tree-select
+                      [(ngModel)]="value"
+                      [nzNodes]="nodes"
+                      nzShowSearch
+                      nzCheckable
+                      [nzShowExpand]="false"
+                      [nzMaxTagCount]="1"
+                      [nzShowIcon]="true"
+                      nzPlaceHolder="Select Polymer Type"
+                      nzSize="large"
+                      class="w-100"
+                      nzDropdownClassName="multiselect"
+                      nzHideUnMatched="true"
+                    ></nz-tree-select>
+                  </div>
+                  <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+                    <label>Material Name</label
+                    ><input
+                      nz-input
+                      placeholder="Enter Material Name"
+                      type="text"
+                      nzSize="large"
+                    />
+                  </div>
+                  <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+                    <label>Resin Type</label
+                    ><input
+                      nz-input
+                      placeholder="Enter Resin Type"
+                      type="text"
+                      nzSize="large"
+                    />
+                  </div>
+                  <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+                    <label>Lead Resin Grade</label
+                    ><input
+                      nz-input
+                      placeholder="Enter Lead Resin Grade"
+                      type="text"
+                      nzSize="large"
+                    />
+                  </div>
+                  <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+                    <label>Back Up Resin Grade</label
+                    ><input
+                      nz-input
+                      placeholder="Enter Back Up Resin Grade"
+                      type="text"
+                      nzSize="large"
+                    />
+                  </div>
+                  <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+                    <label>Master Batch Colour</label
+                    ><input
+                      nz-input
+                      placeholder="Enter Master Batch Colour"
+                      type="text"
+                      nzSize="large"
+                    />
+                  </div>
+                  <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+                    <label>PCR (%)</label>
+                    <nz-input-number
+                      [nzMin]="1"
+                      [nzMax]="10"
+                      [nzStep]="1"
+                      nzSize="large"
+                      class="w-100"
+                      nzPlaceHolder="Enter Value"
+                    ></nz-input-number>
+                  </div>
+                  <div nz-col class="gutter-row" [nzSpan]="24">
+                    <label>Additives</label
+                    ><textarea
+                      rows="3"
+                      nz-input
+                      placeholder="Enter Additives"
+                    ></textarea>
+                  </div>
+                </div>
+              </nz-collapse-panel>
+            </nz-collapse></section
+        ></nz-tab>
+        <nz-tab nzTitle="Documents">
+          <section class="p-20">
+            <div nz-row [nzGutter]="[16, 16]">
+              <div nz-col class="gutter-row" [nzSpan]="24">
+                <label>Component Image</label>
+                <nz-upload
+                  class="avatar-uploader"
+                  nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                  nzName="avatar"
+                  nzListType="picture-card"
+                  [nzShowUploadList]="false"
+                  (nzChange)="handleChange($event)"
+                >
+                  <ng-container *ngIf="!avatarUrl">
+                    <span
+                      class="upload-icon"
+                      nz-icon
+                      [nzType]="loading ? 'loading' : 'plus'"
+                    ></span>
+                    <div class="ant-upload-text">Upload</div>
+                  </ng-container>
+                  <img
+                    *ngIf="avatarUrl"
+                    [src]="avatarUrl"
+                    alt=""
+                    style="width: 100%"
+                  />
+                </nz-upload>
+              </div>
+            </div>
+            <app-documents></app-documents></section
+        ></nz-tab>
+        <nz-tab nzTitle="Other Details"
+          ><section class="p-20">
+            <div nz-row [nzGutter]="[16, 16]">
+              <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                <label>Global Currency<sup>*</sup></label
+                ><input
+                  nz-input
+                  placeholder="Enter Currency"
+                  type="text"
+                  nzSize="large"
+                />
+              </div>
+            </div></section
+        ></nz-tab>
+      </nz-tabset>
+      <!-- tab component start -->
+    </nz-card>
+    <!-- preview component start -->
+    <nz-card
+      *ngIf="tabSelected === 5"
+      style="width: 900px"
+      [nzBordered]="false"
+      [nzTitle]="previewtitle"
+      class="custom-card"
+    >
+      <ng-template #previewtitle>
+        <h3>Preview</h3>
+        <p>See a quick summary of component</p>
+      </ng-template>
+      <section class="preview-card">
+        <div class="header">
+          <h4>Basic Details</h4>
+          <button
+            nz-button
+            nzTooltipTitle="Edit"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="updateTabSelected(1)"
+          >
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 24]">
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Component Code</h5>
+              <p>3488990</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Component Name</h5>
+              <p>Component Name</p>
+            </div>
+
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Parent Component</h5>
+              <p>Lorem ipsum</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Component Design Owner</h5>
+              <p>Lorem ipsum</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Product Association</h5>
+              <p>Lorem ipsum</p>
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Component Description</h5>
+              <p>Lorem ipsum is a dummy text.</p>
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Does the component have a child component?</h5>
+              <p>Yes</p>
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Is the component mouldable?</h5>
+              <p>No</p>
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Component design review?</h5>
+              <p>No</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="preview-card">
+        <div class="header">
+          <h4>Component Details</h4>
+          <button
+            nz-button
+            nzTooltipTitle="Edit"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="updateTabSelected(2)"
+          >
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 24]">
+            <div
+              nz-col
+              nzXs="24"
+              nzSm="12"
+              nzMd="8"
+              *ngFor="let data of componentDetails"
+            >
+              <h5>{{ data.label }}</h5>
+              <p>{{ data.value }}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </nz-card>
+    <!-- preview component end -->
+  </ng-container>
+  <ng-template #modalFooter>
+    <div>
+      <button nz-button (click)="back()" *ngIf="tabSelected > 1">Back</button>
+    </div>
+
+    <button
+      nz-button
+      nzType="primary"
+      (click)="saveContinue()"
+      *ngIf="tabSelected < 5 && !isEdit"
+    >
+      Save & Continue
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="createNotification('success')"
+      *ngIf="tabSelected === 5"
+    >
+      Create Component
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="update()"
+      *ngIf="tabSelected < 6 && isEdit"
+    >
+      Update
+    </button>
+  </ng-template>
+</nz-modal>
+
+<!-- View Modal -->
+<nz-modal
+  [(nzVisible)]="viewOrganisation"
+  [nzTitle]="modalTitle1"
+  [nzCloseIcon]="modalClose1"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzFooter]="null"
+  nzCentered
+  nzWidth="100%"
+  nzWrapClassName="modal-full no-footer"
+  ><ng-container *nzModalContent>
+    <nz-card
+      style="width: 670px"
+      [nzBordered]="false"
+      [nzTitle]="previewtitle"
+      nzDescription="See a quick summary of component"
+      class="custom-card"
+    >
+      <ng-template #previewtitle>
+        <div
+          nz-row
+          nzJustify="space-between"
+          nzAlign="middle"
+          class="view-title"
+        >
+          <div nz-col>
+            <nz-space>
+              <span class="first-letter">A</span>
+              <div class="ml-12">
+                <h3>
+                  Sensor123 <span class="dot"></span>
+                  <span class="status green">Active</span>
+                </h3>
+                <p>Sensor Id:1171&nbsp;&nbsp;Sensor Code:A1171</p>
+              </div>
+            </nz-space>
+          </div>
+          <div nz-col>
+            <button
+              nz-button
+              nzTooltipTitle="Edit"
+              nzTooltipPlacement="bottom"
+              nz-tooltip
+              (click)="editModal(1)"
+            >
+              <span nz-icon nzType="edit" nzTheme="outline"></span>
+            </button>
+          </div>
+        </div>
+      </ng-template>
+
+      <section class="view-card">
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 15]">
+            <div nz-col nzSpan="24">
+              <h5>Component Id</h5>
+              <p>+91 98291 39382</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Component code</h5>
+              <p>ASL:1121</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Document</h5>
+              <p
+                (click)="openDocumentListModal()"
+                (keydown.enter)="openDocumentListModal()"
+                tabindex="0"
+              >
+                <span class="text-link">Lorem ipsum</span>
+              </p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Height</h5>
+              <p>44 mm</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Width</h5>
+              <p>32 mm</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Length</h5>
+              <p>32 mm</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Gross Weight</h5>
+              <p>120 gms</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Description</h5>
+              <p>Lorem ipsum is a dummy text.</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Created Date</h5>
+              <p>11 June, 2024</p>
+              <hr />
+            </div>
+
+            <div nz-col nzSpan="24">
+              <h5>Created By</h5>
+              <p>John Doe</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </nz-card></ng-container
+  >
+  <ng-template #modalTitle1> Component Information </ng-template>
+  <ng-template #modalClose1> Close </ng-template>
+</nz-modal>
+<!-- Grid Customization Modal -->
+<nz-modal
+  [(nzVisible)]="isGridModal"
+  nzTitle="Grid Customization"
+  [nzCloseIcon]="modalClose2"
+  [nzFooter]="modalFooter3"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  nzCentered
+  nzWidth="450px"
+  ><ng-template #modalClose2> Close </ng-template
+  ><ng-container *nzModalContent>
+    <div class="checkbox-list">
+      <label nz-checkbox>Component Name</label
+      ><label nz-checkbox>Component Code</label
+      ><label nz-checkbox>Parent Component</label
+      ><label nz-checkbox>Child Component</label
+      ><label nz-checkbox>Modulable</label><label nz-checkbox>Specs Id</label
+      ><label nz-checkbox>Height</label>
+    </div></ng-container
+  >
+  <ng-template #modalFooter3>
+    <button nz-button (click)="handleCancel()">Clear</button>
+    <button nz-button nzType="primary" (click)="handleOk()">Save</button>
+  </ng-template>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="documentList"
+  nzTitle="Documents"
+  (nzOnCancel)="closeDocumentModal()"
+  (nzOnOk)="closeDocumentModal()"
+  [nzFooter]="null"
+  nzCentered
+  nzWidth="765px"
+  [nzBodyStyle]="{ padding: '20px' }"
+>
+  <ng-container *nzModalContent>
+    <div nz-row nzJustify="space-between" nzAlign="middle" class="mb-15">
+      <div nz-col>Document Details</div>
+      <div nz-col>
+        <a
+          nz-button
+          nzType="link"
+          class="p-0"
+          (click)="openDocumentModal()"
+          (keydown.enter)="openDocumentModal()"
+          tabindex="0"
+          >Add New Document</a
+        >
+      </div>
+    </div>
+
+    <div nz-row [nzGutter]="[16, 16]">
+      <div nz-col class="gutter-row" [nzSpan]="24">
+        <nz-table
+          #basicTable
+          nzSize="small"
+          nzOuterBordered
+          nzShowPagination="false"
+          [nzScroll]="{ y: '70vh' }"
+          [nzData]="listOfCurrentDocData"
+        >
+          <thead>
+            <tr>
+              <th nzAlign="center" nzWidth="40px">#</th>
+              <th nzWidth="150px">Document Type</th>
+              <th nzWidth="130px">Document</th>
+              <th nzAlign="center" nzWidth="80px">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of listOfCurrentDocData">
+              <td nzAlign="center">{{ data.id + 1 }}</td>
+              <td>Specs Documents</td>
+              <td>
+                <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
+                MouldTest.PDF
+              </td>
+              <td nzAlign="center">
+                <span nz-icon nzType="delete" nzTheme="outline"></span>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+    </div>
+  </ng-container>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="document"
+  nzTitle="Add New Document"
+  (nzOnCancel)="closeDocumentModal()"
+  (nzOnOk)="closeDocumentModal()"
+  [nzFooter]="modalFooterDoc"
+  nzCentered
+  nzWidth="375px"
+  [nzBodyStyle]="{ padding: '20px' }"
+>
+  <ng-container *nzModalContent>
+    <div nz-row [nzGutter]="[16, 16]" class="custom-card border-none">
+      <div nz-col class="gutter-row" [nzSpan]="24">
+        <label>Document Type<sup>*</sup></label>
+        <nz-select
+          ngModel=""
+          nzPlaceHolder="Select Type"
+          class="w-100"
+          nzSize="large"
+        >
+          <nz-option nzValue="1" nzLabel="Specs Documents"></nz-option>
+          <nz-option nzValue="2" nzLabel="Design Documnets"></nz-option>
+          <nz-option nzValue="3" nzLabel="Mould Manual Documnets"></nz-option>
+          <nz-option nzValue="4" nzLabel="Maintainence Documnets"></nz-option>
+          <nz-option nzValue="5" nzLabel="2D Drawings"></nz-option>
+          <nz-option nzValue="6" nzLabel="3D Drawing"></nz-option>
+          <nz-option nzValue="7" nzLabel="Audit Document"></nz-option>
+          <nz-option nzValue="8" nzLabel="Any other"></nz-option>
+        </nz-select>
+      </div>
+      <div nz-col class="gutter-row" [nzSpan]="24">
+        <label>Upload Document</label>
+        <nz-upload
+          nzType="drag"
+          [nzMultiple]="true"
+          nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+          (nzChange)="handleChange($event)"
+        >
+          <img
+            src="../../../../../../../assets/images/plus.svg"
+            alt=""
+            class="mb-1"
+          />
+          <p class="ant-upload-text text-14">Upload</p>
+        </nz-upload>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #modalFooterDoc>
+    <button nz-button nzType="default" (click)="closeDocumentModal()">
+      Cancel
+    </button>
+    <button nz-button nzType="primary" (click)="closeDocumentModal()">
+      Add Document
+    </button>
+  </ng-template>
+</nz-modal>

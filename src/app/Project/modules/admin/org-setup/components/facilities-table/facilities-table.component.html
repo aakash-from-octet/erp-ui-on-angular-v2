@@ -1,0 +1,1217 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<div class="w-100">
+  <div class="title-bar">
+    <div nz-row nzJustify="space-between" nzAlign="middle">
+      <div nz-col>
+        <h3>
+          Facility <span>({{ totalItems }} Facilities)</span>
+        </h3>
+      </div>
+      <div nz-col>
+        <nz-space [nzSize]="8">
+          <div class="send-request" *nzSpaceItem>
+            <a nz-dropdown [nzDropdownMenu]="menu" nzType="link">
+              Bulk Action
+            </a>
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu nzSelectable>
+                <li
+                  nz-menu-item
+                  (click)="bulkActive()"
+                  (keydown.enter)="bulkActive()"
+                  tabindex="0"
+                >
+                  Mark as Active
+                </li>
+                <li
+                  nz-menu-item
+                  (click)="bulkInactive()"
+                  (keydown.enter)="bulkInactive()"
+                  tabindex="0"
+                >
+                  Mark as Inactive
+                </li>
+              </ul>
+            </nz-dropdown-menu>
+          </div>
+          <nz-input-group
+            *nzSpaceItem
+            [nzPrefix]="prefixTemplateUser"
+            class="search"
+          >
+            <input
+              type="text"
+              nz-input
+              placeholder="Search"
+              [(ngModel)]="searchText"
+              (ngModelChange)="filterData()"
+            />
+            <ng-template #prefixTemplateUser
+              ><span nz-icon nzType="search" nzTheme="outline"></span
+            ></ng-template>
+          </nz-input-group>
+
+          <button
+            nz-button
+            nzType="default"
+            *nzSpaceItem
+            nzTooltipTitle="Export"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+          >
+            <span nz-icon nzType="download" nzTheme="outline"></span></button
+          ><button
+            nz-button
+            nzType="default"
+            *nzSpaceItem
+            nzTooltipTitle="Reset Filters"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="resetFilter()"
+          >
+            <span nz-icon nzType="reload" nzTheme="outline"></span>
+          </button>
+          <button
+            nz-button
+            nzType="default"
+            *nzSpaceItem
+            (click)="openGridModal()"
+            nzTooltipTitle="Grid Customization"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+          >
+            <span nz-icon nzType="control" nzTheme="outline"></span>
+          </button>
+          <button
+            nz-button
+            nzType="primary"
+            *nzSpaceItem
+            (click)="showModal(1)"
+            class="d-none d-lg-block"
+          >
+            Create Facility
+          </button>
+        </nz-space>
+        <div class="d-lg-none xs-footer">
+          <button nz-button nzType="primary" (click)="showModal(1)">
+            Create Facility
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<nz-table
+  #rowSelectionTable
+  nzSize="small"
+  nzOuterBordered
+  nzShowPagination="false"
+  [nzData]="listOfCurrentPageData"
+  [nzScroll]="{ y: 'calc(100vh - 250px)' }"
+  [nzNoResult]="noDataTemplate"
+>
+  <thead>
+    <tr>
+      <th
+        [nzChecked]="checked"
+        [nzIndeterminate]="indeterminate"
+        (nzCheckedChange)="onAllChecked($event)"
+        nzLeft
+        nzWidth="50px"
+      ></th>
+      <th nzLeft nzWidth="180px" *ngIf="States['Facility Name'] === true">
+        Facility Name
+        <app-common-filter
+          [filterByString]="'Facility Name'"
+          [valueArray]="getValueArray('facilityName')"
+          [filterEnabled]="false"
+          (searchEvent)="search($event, 'facilityName')"
+          (sortEvent)="sort($event, 'facilityName')"
+          (filterEvent)="filter($event, 'facilityName')"
+        ></app-common-filter>
+      </th>
+      <th nzWidth="180px" *ngIf="States['Facility Code'] === true">
+        Facility Code
+        <app-common-filter
+          [filterByString]="'Facility Code'"
+          [valueArray]="getValueArray('facilityCode')"
+          [filterEnabled]="false"
+          (searchEvent)="search($event, 'facilityCode')"
+          (sortEvent)="sort($event, 'facilityCode')"
+          (filterEvent)="filter($event, 'facilityCode')"
+        ></app-common-filter>
+      </th>
+      <th nzWidth="120px" *ngIf="States['Facility Type'] === true">
+        Facility Type
+        <app-common-filter
+          [filterByString]="'Facility Type'"
+          [valueArray]="getValueArray('facilityTypes.name')"
+          [filterEnabled]="true"
+          (searchEvent)="search($event, 'facilityTypes.name')"
+          (sortEvent)="sort($event, 'facilityTypes.name')"
+          (filterEvent)="filter($event, 'facilityTypes.name')"
+        ></app-common-filter>
+      </th>
+      <th nzWidth="130px" *ngIf="States['Facility Nature'] === true">
+        Facility Nature
+        <app-common-filter
+          [filterByString]="'Facility Nature'"
+          [valueArray]="getValueArray('facilityNature')"
+          [filterEnabled]="true"
+          (searchEvent)="search($event, 'facilityNature')"
+          (sortEvent)="sort($event, 'facilityNature')"
+          (filterEvent)="filter($event, 'facilityNature')"
+        ></app-common-filter>
+      </th>
+      <th nzWidth="130px" *ngIf="States['Location Name'] === true">
+        Location Name
+        <app-common-filter
+          [filterByString]="'Location Name'"
+          [valueArray]="getValueArray('location.locationName')"
+          [filterEnabled]="true"
+          (searchEvent)="search($event, 'location.locationName')"
+          (sortEvent)="sort($event, 'location.locationName')"
+          (filterEvent)="filter($event, 'location.locationName')"
+        ></app-common-filter>
+      </th>
+      <th nzWidth="130px" *ngIf="States['Vendor Name'] === true">
+        Vendor Name
+        <app-common-filter
+          [filterByString]="'Vendor Name'"
+          [valueArray]="getValueArray('vendor.name')"
+          [filterEnabled]="false"
+          (searchEvent)="search($event, 'vendor.name')"
+          (sortEvent)="sort($event, 'vendor.name')"
+          (filterEvent)="filter($event, 'vendor.name')"
+        ></app-common-filter>
+      </th>
+      <th nzWidth="130px" *ngIf="States['Cost Center'] === true">
+        Cost Center
+        <app-common-filter
+          [filterByString]="'Cost Center'"
+          [valueArray]="getValueArray('costCentre')"
+          [filterEnabled]="true"
+          (searchEvent)="search($event, 'costCentre')"
+          (sortEvent)="sort($event, 'costCentre')"
+          (filterEvent)="filter($event, 'costCentre')"
+        ></app-common-filter>
+      </th>
+      <th nzWidth="140px" *ngIf="States['Parent Facility'] === true">
+        Parent Facility
+        <app-common-filter
+          [filterByString]="'Parent Facility'"
+          [valueArray]="getValueArray('parentFacility.facilityName')"
+          [filterEnabled]="true"
+          (searchEvent)="search($event, 'parentFacility.facilityName')"
+          (sortEvent)="sort($event, 'parentFacility.facilityName')"
+          (filterEvent)="filter($event, 'parentFacility.facilityName')"
+        ></app-common-filter>
+      </th>
+      <th nzWidth="100px" *ngIf="States['Status'] === true">
+        Status
+        <app-common-filter
+          [filterByString]="'Status'"
+          [valueArray]="getValueArray('isActive')"
+          [filterEnabled]="true"
+          (searchEvent)="search($event, 'isActive')"
+          (sortEvent)="sort($event, 'isActive')"
+          (filterEvent)="filter($event, 'isActive')"
+        ></app-common-filter>
+      </th>
+      <th nzWidth="100px" nzRight nzAlign="center">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of listOfCurrentPageData">
+      <td
+        nzLeft
+        [nzChecked]="setOfCheckedId.has(data?.id)"
+        (nzCheckedChange)="onItemChecked(data?.id, $event)"
+      ></td>
+      <td nzLeft *ngIf="States['Facility Name'] === true">
+        <span class="first-letter">{{ data?.facilityName.charAt(0) }}</span
+        >{{ data?.facilityName }}
+      </td>
+      <td *ngIf="States['Facility Code'] === true">{{ data?.facilityCode }}</td>
+      <td *ngIf="States['Facility Type'] === true">
+        {{ data?.facilityTypes?.name }}
+      </td>
+      <td *ngIf="States['Facility Nature'] === true">
+        {{ data?.facilityNature }}
+      </td>
+      <td *ngIf="States['Location Name'] === true">
+        {{ data?.location?.locationName }}
+      </td>
+      <td nzEllipsis *ngIf="States['Vendor Name'] === true">
+        {{ data?.vendor?.name }}
+      </td>
+      <td *ngIf="States['Cost Center'] === true">{{ data?.costCentre }}</td>
+      <td *ngIf="States['Parent Facility'] === true">
+        {{ data?.parentFacilityId }}
+      </td>
+      <td *ngIf="data?.isActive === true && States['Status'] === true">
+        <span class="status green">Active</span>
+      </td>
+      <td
+        *ngIf="
+          data?.isActive === false ||
+          (data?.isActive === null && States['Status'] === true)
+        "
+      >
+        <span class="status red">Inactive</span>
+      </td>
+      <td nzRight>
+        <nz-space>
+          <button
+            *nzSpaceItem
+            nz-button
+            nzType="text"
+            (click)="openViewModal(data)"
+          >
+            <span nz-icon nzType="eye" nzTheme="outline"></span>
+          </button>
+          <div class="action-divider" *nzSpaceItem></div>
+          <button
+            *nzSpaceItem
+            nz-button
+            nzType="text"
+            nz-dropdown
+            [nzDropdownMenu]="menu"
+          >
+            <span nz-icon nzType="more" nzTheme="outline"></span>
+          </button>
+
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <!-- <ul nz-menu nzSelectable>
+              <li nz-menu-item (click)="editModal(1)">Edit</li>
+            </ul> -->
+            <ul nz-menu nzSelectable>
+              <li
+                nz-menu-item
+                (click)="editFacility(data)"
+                (keydown.enter)="editFacility(data)"
+                tabindex="0"
+              >
+                Edit
+              </li>
+              <li
+                nz-menu-item
+                *ngIf="data?.isActive === true"
+                (click)="onStatusChange(data)"
+                (keydown.enter)="onStatusChange(data)"
+                tabindex="0"
+              >
+                Mark as in-active
+              </li>
+              <li
+                nz-menu-item
+                *ngIf="data?.isActive === false"
+                (click)="onStatusChange(data)"
+                (keydown.enter)="onStatusChange(data)"
+                tabindex="0"
+              >
+                Mark as active
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </nz-space>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+<ng-template #noDataTemplate>
+  <div class="no-data" *ngIf="!facilityList || facilityList.length === 0">
+    <img src="../../../assets/images/no-data.svg" alt="" />
+  </div>
+</ng-template>
+<section class="footer-pagination">
+  <nz-pagination
+    [(nzPageIndex)]="currentPageIndex"
+    [(nzPageSize)]="pageSize"
+    [nzTotal]="totalItems"
+    (nzPageIndexChange)="loadTableData($event, pageSize)"
+    [nzSize]="'small'"
+    nzShowSizeChanger="true"
+    (nzPageSizeChange)="pageSizeChange($event)"
+  ></nz-pagination>
+</section>
+<!-- Create Modal -->
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="modalTitle"
+  [nzCloseIcon]="modalClose"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzFooter]="modalFooter"
+  nzCentered
+  nzWidth="100%"
+  nzWrapClassName="modal-full"
+>
+  <ng-template #modalTitle
+    ><span *ngIf="!isEdit">Create Facility </span>
+    <span *ngIf="isEdit">Edit Facility </span>
+  </ng-template>
+  <ng-template #modalClose
+    ><span (click)="cancelEdit()" (keydown.enter)="cancelEdit()" tabindex="0">
+      Close
+    </span>
+  </ng-template>
+  <ng-container *nzModalContent>
+    <nz-card
+      *ngIf="tabSelected < 3"
+      style="width: 880px"
+      [nzBordered]="false"
+      [nzBodyStyle]="{ padding: '0px' }"
+      nzTitle="Facility Details"
+      class="custom-card"
+    >
+      <!-- tab component start -->
+      <form [formGroup]="facilityForm">
+        <nz-tabset
+          [nzTabPosition]="isSmallScreen ? 'top' : 'left'"
+          [(nzSelectedIndex)]="tabSelected"
+          class="step-form"
+        >
+          <nz-tab nzTitle="Steps:" nzDisabled="true"></nz-tab>
+          <nz-tab nzTitle="Facility Details">
+            <section class="p-20">
+              <div nz-row [nzGutter]="[16, 16]">
+                <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                  <label>Facility Name<sup>*</sup></label
+                  ><input
+                    nz-input
+                    placeholder="Enter Facility Name"
+                    type="text"
+                    nzSize="large"
+                    formControlName="facilityName"
+                    [class.ant-input-status-error]="
+                      f['facilityName'].errors &&
+                      (f['facilityName'].dirty || f['facilityName'].touched)
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      f['facilityName'].errors &&
+                      (f['facilityName'].dirty || f['facilityName'].touched)
+                    "
+                  >
+                    <div
+                      *ngIf="f['facilityName'].errors['required']"
+                      class="error"
+                    >
+                      Facility name is required.
+                    </div>
+                  </div>
+                </div>
+
+                <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                  <label>Facility Type<sup>*</sup></label>
+                  <nz-select
+                    formControlName="facilityType"
+                    [nzPlaceHolder]="'Select an option'"
+                    [nzAllowClear]="true"
+                    style="width: 100%"
+                    nzSize="large"
+                    nzShowSearch
+                    [class.ant-input-status-error]="
+                      f['facilityType'].errors &&
+                      (f['facilityType'].dirty || f['facilityType'].touched)
+                    "
+                  >
+                    <nz-option
+                      *ngFor="let option of selectFacilityType"
+                      [nzLabel]="option.name"
+                      [nzValue]="option.id"
+                    ></nz-option>
+                  </nz-select>
+                  <div
+                    *ngIf="
+                      f['facilityType'].errors &&
+                      (f['facilityType'].dirty || f['facilityType'].touched)
+                    "
+                  >
+                    <div
+                      *ngIf="f['facilityType'].errors['required']"
+                      class="error"
+                    >
+                      Facility type is required.
+                    </div>
+                  </div>
+                </div>
+
+                <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                  <label>Facility Code<sup>*</sup></label
+                  ><input
+                    nz-input
+                    placeholder="Enter Facility Code"
+                    type="text"
+                    nzSize="large"
+                    [readonly]="isEdit"
+                    formControlName="facilityCode"
+                    (focusout)="onFocusOutEvent($event)"
+                    (input)="onInput($event)"
+                    [class.ant-input-status-error]="
+                      f['facilityCode'].errors &&
+                      (f['facilityCode'].dirty || f['facilityCode'].touched)
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      f['facilityCode'].errors &&
+                      (f['facilityCode'].dirty || f['facilityCode'].touched)
+                    "
+                  >
+                    <div
+                      *ngIf="f['facilityCode'].errors['required']"
+                      class="error"
+                    >
+                      Facility code is required.
+                    </div>
+                  </div>
+                  <div *ngIf="errorMessage" class="error">
+                    Facility code is already exist
+                  </div>
+                </div>
+
+                <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                  <label>Facility Nature<sup>*</sup></label
+                  ><nz-select
+                    formControlName="facilityNature"
+                    [nzPlaceHolder]="'Select an option'"
+                    nzShowSearch
+                    [nzAllowClear]="true"
+                    style="width: 100%"
+                    nzSize="large"
+                    [(ngModel)]="facilitySelectedValue"
+                    [class.ant-input-status-error]="
+                      f['facilityNature'].errors &&
+                      (f['facilityNature'].dirty || f['facilityNature'].touched)
+                    "
+                  >
+                    <nz-option
+                      *ngFor="let option of facilityNatureValues"
+                      [nzLabel]="option.label"
+                      [nzValue]="option.value"
+                    ></nz-option>
+                  </nz-select>
+                  <div
+                    *ngIf="
+                      f['facilityNature'].errors &&
+                      (f['facilityNature'].dirty || f['facilityNature'].touched)
+                    "
+                  >
+                    <div
+                      *ngIf="f['facilityNature'].errors['required']"
+                      class="error"
+                    >
+                      Facility Nature is required.
+                    </div>
+                  </div>
+                </div>
+
+                <div nz-col class="gutter-row" nzXs="24" nzSm="12">
+                  <label>Location<sup>*</sup></label
+                  ><nz-select
+                    formControlName="location"
+                    [nzPlaceHolder]="'Select an option'"
+                    nzShowSearch
+                    [nzAllowClear]="true"
+                    style="width: 100%"
+                    nzSize="large"
+                    [class.ant-input-status-error]="
+                      f['location'].errors &&
+                      (f['location'].dirty || f['location'].touched)
+                    "
+                  >
+                    <nz-option
+                      *ngFor="let option of locationList"
+                      [nzLabel]="option?.locationName"
+                      [nzValue]="option?.id"
+                    ></nz-option>
+                  </nz-select>
+                  <div
+                    *ngIf="
+                      f['location'].errors &&
+                      (f['location'].dirty || f['location'].touched)
+                    "
+                  >
+                    <div *ngIf="f['location'].errors['required']" class="error">
+                      Location is required.
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  nz-col
+                  class="gutter-row"
+                  nzXs="24"
+                  nzSm="12"
+                  *ngIf="facilitySelectedValue === 'ORG'"
+                >
+                  <label *ngIf="fnOrg === 'ORG'">Cost Center</label>
+                  <input
+                    nz-input
+                    placeholder="Enter Cost Center"
+                    type="text"
+                    nzSize="large"
+                    [readonly]="isEdit"
+                    formControlName="costCentre"
+                  />
+                </div>
+
+                <!-- <div
+                  nz-col
+                  class="gutter-row"
+                  nzXs="24"
+                  nzSm="12"
+                  *ngIf="facilitySelectedValue == 'VENDOR'"
+                >
+                  <label>Organization Facility<sup>*</sup></label>
+                  <nz-select
+                    formControlName="orgFacility"
+                    [nzPlaceHolder]="'Select an option'"
+                    [nzAllowClear]="true"
+                    style="width: 100%"
+                    nzSize="large"
+                  >
+                    <nz-option
+                      *ngFor="let option of orgFacilityList"
+                      [nzLabel]="option.facilityName"
+                      [nzValue]="option.id"
+                    ></nz-option>
+                  </nz-select>
+                </div> -->
+
+                <div
+                  nz-col
+                  class="gutter-row"
+                  nzXs="24"
+                  nzSm="12"
+                  *ngIf="facilitySelectedValue === 'VENDOR'"
+                >
+                  <label>Vendor<sup>*</sup></label
+                  ><nz-select
+                    formControlName="vendor"
+                    [nzPlaceHolder]="'Select an option'"
+                    [nzAllowClear]="true"
+                    style="width: 100%"
+                    nzSize="large"
+                    [(ngModel)]="selectVendor"
+                    (ngModelChange)="onVendorSelectionChange($event)"
+                  >
+                    <nz-option
+                      *ngFor="let option of vendorList"
+                      [nzLabel]="option?.name"
+                      [nzValue]="option?.id"
+                    ></nz-option>
+                  </nz-select>
+                </div>
+                <div
+                  nz-col
+                  class="gutter-row"
+                  nzXs="24"
+                  nzSm="12"
+                  *ngIf="selectVendor !== null"
+                >
+                  <label>Parent Facility<sup>*</sup></label
+                  ><nz-select
+                    formControlName="parentFacility"
+                    [nzPlaceHolder]="'Select an option'"
+                    [nzAllowClear]="true"
+                    style="width: 100%"
+                    nzSize="large"
+                    [(ngModel)]="selectFacility"
+                  >
+                    <nz-option
+                      *ngFor="let option of vendorIdFacilityList"
+                      [nzLabel]="option?.facilityName"
+                      [nzValue]="option?.id"
+                    ></nz-option>
+                  </nz-select>
+                </div>
+              </div>
+            </section>
+          </nz-tab>
+          <nz-tab nzTitle="Contact Details">
+            <section class="p-20">
+              <div nz-row [nzGutter]="[16, 16]">
+                <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+                  <label>Conatct Name<sup>*</sup></label>
+                  <input
+                    nz-input
+                    placeholder="Enter Contact Name"
+                    type="text"
+                    formControlName="contactName"
+                    nzSize="large"
+                    [class.ant-input-status-error]="
+                      f['contactName'].errors &&
+                      (f['contactName'].dirty || f['contactName'].touched)
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      f['contactName'].errors &&
+                      (f['contactName'].dirty || f['contactName'].touched)
+                    "
+                  >
+                    <div
+                      *ngIf="f['contactName'].errors['required']"
+                      class="error"
+                    >
+                      Contact code is required.
+                    </div>
+                  </div>
+                </div>
+
+                <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="8">
+                  <label>Conatct Mobile<sup>*</sup></label>
+                  <input
+                    nz-input
+                    placeholder="Enter Contact Mobile"
+                    type="text"
+                    formControlName="contactMobile"
+                    nzSize="large"
+                    [class.ant-input-status-error]="
+                      f['contactMobile'].errors &&
+                      (f['contactMobile'].dirty || f['contactMobile'].touched)
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      f['contactMobile'].errors &&
+                      (f['contactMobile'].dirty || f['contactMobile'].touched)
+                    "
+                  >
+                    <div
+                      *ngIf="f['contactMobile'].errors['required']"
+                      class="error"
+                    >
+                      Contact mobile is required.
+                    </div>
+                    <div
+                      *ngIf="f['contactMobile'].errors['pattern']"
+                      class="error"
+                    >
+                      Please enter a valid contact mobile number in the format
+                      '+91 1234567890'.
+                    </div>
+                  </div>
+                </div>
+
+                <div nz-col class="gutter-row" nzXs="24" nzSm="24" nzMd="8">
+                  <label>Email Id<sup>*</sup></label>
+                  <input
+                    nz-input
+                    placeholder="Enter Email"
+                    type="text"
+                    formControlName="emailid"
+                    nzSize="large"
+                    [class.ant-input-status-error]="
+                      f['emailid'].errors &&
+                      (f['emailid'].dirty || f['emailid'].touched)
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      f['emailid'].errors &&
+                      (f['emailid'].dirty || f['emailid'].touched)
+                    "
+                  >
+                    <div *ngIf="f['emailid'].errors['required']" class="error">
+                      Email is required.
+                    </div>
+                    <div *ngIf="f['emailid'].errors['pattern']" class="error">
+                      Invalid email format.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div nz-row [nzGutter]="[16, 16]">
+                <div nz-col class="gutter-row" [nzSpan]="24">
+                  <label>Address<sup>*</sup></label>
+                  <input
+                    class="mb-10"
+                    nz-input
+                    placeholder="Address Line 1"
+                    type="text"
+                    formControlName="address1"
+                    nzSize="large"
+                    [class.ant-input-status-error]="
+                      f['address1'].errors &&
+                      (f['address1'].dirty || f['address1'].touched)
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      f['address1'].errors &&
+                      (f['address1'].dirty || f['address1'].touched)
+                    "
+                  >
+                    <div *ngIf="f['address1'].errors['required']" class="error">
+                      Address is required.
+                    </div>
+                  </div>
+                  <input
+                    nz-input
+                    placeholder="Address Line 2"
+                    type="text"
+                    formControlName="address2"
+                    nzSize="large"
+                  />
+                </div>
+              </div>
+              <div nz-row [nzGutter]="[16, 16]">
+                <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="6">
+                  <label>Country<sup>*</sup></label>
+                  <input
+                    nz-input
+                    placeholder="Enter Country"
+                    type="text"
+                    formControlName="country"
+                    nzSize="large"
+                    [class.ant-input-status-error]="
+                      f['country'].errors &&
+                      (f['country'].dirty || f['country'].touched)
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      f['country'].errors &&
+                      (f['country'].dirty || f['country'].touched)
+                    "
+                  >
+                    <div *ngIf="f['country'].errors['required']" class="error">
+                      Country is required.
+                    </div>
+                  </div>
+                </div>
+                <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="6">
+                  <label>State<sup>*</sup></label>
+                  <input
+                    nz-input
+                    placeholder="Enter State"
+                    type="text"
+                    formControlName="state"
+                    nzSize="large"
+                    [class.ant-input-status-error]="
+                      f['state'].errors &&
+                      (f['state'].dirty || f['state'].touched)
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      f['state'].errors &&
+                      (f['state'].dirty || f['state'].touched)
+                    "
+                  >
+                    <div *ngIf="f['state'].errors['required']" class="error">
+                      State is required.
+                    </div>
+                  </div>
+                </div>
+                <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="6">
+                  <label>City<sup>*</sup></label>
+                  <input
+                    nz-input
+                    placeholder="Enter City"
+                    type="text"
+                    formControlName="city"
+                    nzSize="large"
+                    [class.ant-input-status-error]="
+                      f['city'].errors && (f['city'].dirty || f['city'].touched)
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      f['city'].errors && (f['city'].dirty || f['city'].touched)
+                    "
+                  >
+                    <div *ngIf="f['city'].errors['required']" class="error">
+                      City is required.
+                    </div>
+                  </div>
+                </div>
+                <div nz-col class="gutter-row" nzXs="24" nzSm="12" nzMd="6">
+                  <label>Zipcode<sup>*</sup></label>
+                  <input
+                    nz-input
+                    placeholder="Enter Zipcode"
+                    type="text"
+                    formControlName="pincode"
+                    nzSize="large"
+                    [class.ant-input-status-error]="
+                      f['pincode'].errors &&
+                      (f['pincode'].dirty || f['pincode'].touched)
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      f['pincode'].errors &&
+                      (f['pincode'].dirty || f['pincode'].touched)
+                    "
+                  >
+                    <div *ngIf="f['pincode'].errors['required']" class="error">
+                      Zipcode is required.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </nz-tab>
+        </nz-tabset>
+        <!-- tab component start -->
+      </form>
+    </nz-card>
+
+    <!-- preview component start -->
+    <nz-card
+      *ngIf="tabSelected === 3"
+      style="width: 900px"
+      [nzBordered]="false"
+      [nzTitle]="previewtitle"
+      nzDescription="See a quick summary of Facility"
+      class="custom-card"
+    >
+      <ng-template #previewtitle>
+        <h3>Preview</h3>
+        <p>See a quick summary of Facility</p>
+      </ng-template>
+      <section class="preview-card">
+        <div class="header">
+          <h4>Facility Details</h4>
+          <button
+            nz-button
+            nzTooltipTitle="Edit"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="updateTabSelected(1)"
+          >
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 24]">
+            <!-- <div nz-col nzSpan="24">
+            <h5>Logo</h5>
+            <div class="preview-logo">
+              <img
+                src="../../../../../../../assets/images/org-logo.png"
+                alt=""
+              />
+            </div>
+          </div> -->
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Facility Name</h5>
+              <p>{{ previewValue?.facilityName }}</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Facility Type</h5>
+              <p>
+                {{
+                  getLabel(
+                    previewValue?.facilityType,
+                    selectFacilityType,
+                    "id",
+                    "name"
+                  )
+                }}
+              </p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Facility Code</h5>
+              <p>{{ previewValue?.facilityCode }}</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Facility Nature</h5>
+              <p>
+                {{
+                  getLabel(
+                    previewValue?.facilityNature,
+                    facilityNatureValues,
+                    "value",
+                    "label"
+                  )
+                }}
+              </p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Location</h5>
+              <p>
+                {{
+                  getLabel(
+                    previewValue?.location,
+                    locationList,
+                    "id",
+                    "locationName"
+                  )
+                }}
+              </p>
+            </div>
+            <div
+              nz-col
+              nzXs="24"
+              nzSm="12"
+              nzMd="8"
+              *ngIf="facilitySelectedValue === 'ORG'"
+            >
+              <h5>Cost Center</h5>
+              {{ previewValue?.costCentre }}
+            </div>
+            <!-- <div nz-col nzXs="24" nzSm="12" nzMd="8" *ngIf="facilitySelectedValue == 'VENDOR'">
+                <h5>Cost Center</h5>
+                {{ previewValue?.vendor }}
+              </div> -->
+            <!-- <div
+              nz-col
+              nzXs="24"
+              nzSm="12"
+              nzMd="8"
+              *ngIf="facilitySelectedValue == 'VENDOR'"
+            >
+              <h5>Organization Facility</h5>
+              {{
+                getLabel(
+                  previewValue?.orgFacility,
+                  orgFacilityList,
+                  "id",
+                  "facilityName"
+                )
+              }}
+            </div> -->
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Parent Facility</h5>
+              {{
+                getLabel(previewValue?.parentFacility, vendorList, "id", "name")
+              }}
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="preview-card">
+        <div class="header">
+          <h4>Contact Details</h4>
+          <button
+            nz-button
+            nzTooltipTitle="Edit"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="updateTabSelected(2)"
+          >
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 24]">
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Conatct Name</h5>
+              <p>{{ previewValue.contactName }}</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Conatct Mobile</h5>
+              <p>{{ previewValue.contactMobile }}</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Email</h5>
+              <p>{{ previewValue.emailid }}</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Address</h5>
+              <p>
+                {{ previewValue.address1 }}
+                {{ previewValue.address2 }}
+              </p>
+            </div>
+          </div>
+          <div nz-row [nzGutter]="[15, 24]">
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>city</h5>
+              <p>{{ previewValue.city }}</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Pincode</h5>
+              <p>{{ previewValue.pincode }}</p>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>State</h5>
+              <p>{{ previewValue.state }}</p>
+            </div>
+          </div>
+          <div nz-row [nzGutter]="[15, 24]">
+            <div nz-col nzXs="24" nzSm="12" nzMd="8">
+              <h5>Country</h5>
+              <p>{{ previewValue.country }}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </nz-card>
+    <!-- preview component end -->
+  </ng-container>
+  <ng-template #modalFooter>
+    <div>
+      <button nz-button (click)="back()" *ngIf="tabSelected > 1">Back</button>
+    </div>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="saveContinue()"
+      *ngIf="tabSelected < 3"
+    >
+      Save & Continue
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      *ngIf="tabSelected === 3 && !isEdit"
+      (click)="createFacility()"
+    >
+      Create Facility
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="updateFacility()"
+      *ngIf="tabSelected === 3 && isEdit"
+    >
+      Update
+    </button>
+  </ng-template>
+</nz-modal>
+<!-- create modal end -->
+
+<!-- view modal start  -->
+<nz-modal
+  [(nzVisible)]="viewFacility"
+  [nzTitle]="modalTitle1"
+  [nzCloseIcon]="modalClose1"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzFooter]="null"
+  nzCentered
+  nzWidth="100%"
+  nzWrapClassName="modal-full no-footer"
+  ><ng-container *nzModalContent>
+    <nz-card
+      style="width: 670px"
+      [nzBordered]="false"
+      [nzTitle]="previewtitle"
+      nzDescription="See a quick summary of facility"
+      class="custom-card"
+    >
+      <ng-template #previewtitle>
+        <div
+          nz-row
+          nzJustify="space-between"
+          nzAlign="middle"
+          class="view-title"
+        >
+          <div nz-col>
+            <nz-space>
+              <span> {{ tableDataValue?.facilityName }}</span>
+              <div>
+                <h3>
+                  {{ tableDataValue.name }} <span class="dot"></span
+                  ><span
+                    class="status green"
+                    *ngIf="tableDataValue?.isActive === true"
+                    >Active</span
+                  >
+                  <span
+                    class="status red"
+                    *ngIf="tableDataValue?.isActive === false"
+                    >In-Active</span
+                  >
+                </h3>
+              </div>
+            </nz-space>
+            <div nz-row>
+              <p>
+                Facility Id :
+                {{ tableDataValue?.id }}
+              </p>
+              &nbsp; &nbsp;
+              <p>
+                Facility Code :
+                {{ tableDataValue?.facilityCode }}
+              </p>
+            </div>
+          </div>
+          <div nz-col>
+            <button
+              nz-button
+              nzTooltipTitle="Edit"
+              nzTooltipPlacement="bottom"
+              nz-tooltip
+              (click)="editFacility(tableDataValue)"
+            >
+              <span nz-icon nzType="edit" nzTheme="outline"></span>
+            </button>
+          </div>
+        </div>
+      </ng-template>
+      <section class="view-card">
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 15]">
+            <div nz-col nzSpan="24">
+              <h5>Contact Info</h5>
+              <!-- <a href="#" target="_blank">Packfora URL</a> -->
+              <p>+91 {{ tableDataValue["contactInfo"]?.mobile }}</p>
+              <hr />
+            </div>
+
+            <div nz-col nzSpan="24">
+              <h5>Location Id</h5>
+              <p>{{ tableDataValue["location"]?.id }}</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Mobile</h5>
+              <p>{{ tableDataValue["contactInfo"]?.mobile }}</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Facility Nature</h5>
+              <p>{{ tableDataValue.facilityNature }}</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Facility Type</h5>
+              <p>{{ tableDataValue["facilityTypes"].name }}</p>
+              <hr />
+            </div>
+            <div nz-col nzSpan="24">
+              <h5>Address</h5>
+              <p>
+                {{ tableDataValue["addressInfo"]?.addressLine1 }}
+                {{ tableDataValue["addressInfo"]?.city }}
+                {{ tableDataValue["addressInfo"]?.zipCode }}
+                {{ tableDataValue["addressInfo"]?.state }}
+                {{ tableDataValue["addressInfo"]?.country }}
+              </p>
+              <hr />
+            </div>
+          </div>
+        </div>
+      </section> </nz-card
+  ></ng-container>
+  <ng-template #modalTitle1> Facility Information </ng-template>
+  <ng-template #modalClose1> Close </ng-template>
+</nz-modal>
+<!-- view model end -->
+
+<!-- Grid Customization starts -->
+<nz-modal
+  [(nzVisible)]="isModalVisible"
+  [nzCloseIcon]="modalClose2"
+  (nzOnCancel)="Cancel()"
+  (nzOnOk)="handleOk()"
+  nzTitle="Facilities"
+  ><ng-template #modalClose2> Close </ng-template>
+  <ng-container *nzModalContent>
+    <app-grid-customization
+      [checkboxStates]="States"
+      [columns]="columns"
+    ></app-grid-customization>
+  </ng-container>
+</nz-modal>
+<!-- Grid Customization End -->

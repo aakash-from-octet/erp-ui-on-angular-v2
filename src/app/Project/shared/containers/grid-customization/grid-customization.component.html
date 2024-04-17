@@ -1,0 +1,12 @@
+<div class="checkbox-list">
+  <div *ngFor="let column of columns">
+    <label
+      ><input
+        type="checkbox"
+        [checked]="checkboxStates[column]"
+        (change)="onCheckboxChange(column)"
+      />
+      {{ column }}</label
+    >
+  </div>
+</div>

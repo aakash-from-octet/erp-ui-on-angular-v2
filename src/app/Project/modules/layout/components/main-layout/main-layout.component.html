@@ -1,0 +1,32 @@
+<main class="admin-wrapper">
+  <section class="d-none d-lg-block">
+    <app-side-bar></app-side-bar>
+  </section>
+  <section>
+    <app-navbar></app-navbar>
+    <div class="sidebar-wrap">
+      <div class="sidebar-container d-none d-lg-block">
+        <app-main-menu></app-main-menu>
+      </div>
+      <div class="category-container">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- <div>
+    <div>
+        <app-navbar></app-navbar>
+    </div>
+    <div>
+    <app-main-menu></app-main-menu>
+    <app-side-bar></app-side-bar>
+    <div>
+        <router-outlet></router-outlet>
+    </div>
+    </div>
+    <div>
+        <app-footer></app-footer>
+    </div>
+</div> -->

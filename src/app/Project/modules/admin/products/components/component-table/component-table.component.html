@@ -1,0 +1,103 @@
+<nz-table
+  #rowSelectionTable
+  nzSize="small"
+  nzOuterBordered
+  nzShowPagination="false"
+  [nzData]="listOfCurrentPageData"
+  [nzScroll]="{ x: '2000px', y: 'calc(100vh - 250px)' }"
+  [nzNoResult]="noDataTemplate"
+>
+  <thead>
+    <tr>
+      <th
+        [nzChecked]="checked"
+        [nzIndeterminate]="indeterminate"
+        (nzCheckedChange)="onAllChecked($event)"
+        nzLeft
+        nzWidth="50px"
+      ></th>
+      <th nzLeft nzWidth="200px">Component Name <app-shared-filters></app-shared-filters></th>
+
+      <th>Component Code <app-shared-filters></app-shared-filters></th>
+
+      <th>Product Components</th>
+      <th>Child Components</th>
+      <th>Modulable</th>
+      <th>Specs Id</th>
+      <th>Height</th>
+      <th>Width</th>
+      <th>Length</th>
+      <th>Gross Weight</th>
+      <th>Created On</th>
+      <th>Status</th>
+      <th nzRight nzAlign="center" nzWidth="100px">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of listOfCurrentPageData">
+      <td
+        nzLeft
+        [nzChecked]="setOfCheckedId.has(data.id)"
+        (nzCheckedChange)="onItemChecked(data.id, $event)"
+      ></td>
+      <td nzLeft>
+        <span class="first-letter">{{ data.productname.charAt(0) }}</span
+        >{{ data.productname }}
+      </td>
+      <td>PR:0001</td>
+      <td>PR:0001</td>
+      <td>Harpic</td>
+      <td>Harpic</td>
+      <td>Floor Cleaning</td>
+      <td>Comp: 0001</td>
+      <td>#2454</td>
+      <td>Lorem ipsum</td>
+      <td>Lorem ipsum</td>
+      <td>44 mm</td>
+      <td><span class="status green">Active</span></td>
+      <td nzRight>
+        <nz-space>
+          <button *nzSpaceItem nz-button nzType="text" (click)="openView()">
+            <span nz-icon nzType="eye" nzTheme="outline"></span>
+          </button>
+          <div class="action-divider" *nzSpaceItem></div>
+          <button
+            *nzSpaceItem
+            nz-button
+            nzType="text"
+            nz-dropdown
+            [nzDropdownMenu]="menu"
+          >
+            <span nz-icon nzType="more" nzTheme="outline"></span>
+          </button>
+
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+              <li nz-menu-item>Edit</li>
+              <li nz-menu-item>Mark as in-active</li>
+              <li nz-menu-item>Add Component</li>
+            </ul>
+          </nz-dropdown-menu>
+        </nz-space>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<section class="footer-pagination">
+  <nz-pagination
+    [(nzPageIndex)]="currentPageIndex"
+    [(nzPageSize)]="pageSize"
+    [nzTotal]="totalItems"
+    (nzPageIndexChange)="loadTableData($event, pageSize)"
+    [nzSize]="'small'"
+    nzShowSizeChanger="true"
+    (nzPageSizeChange)="pageSizeChange($event)"
+  ></nz-pagination>
+</section>
+
+<ng-template #noDataTemplate>
+  <div class="no-data">
+    <img src="../../../assets/images/no-data.svg" alt="" />
+  </div>
+</ng-template>

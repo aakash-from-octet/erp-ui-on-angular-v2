@@ -1,0 +1,622 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<div class="w-100">
+  <div class="title-bar">
+    <div nz-row nzJustify="space-between" nzAlign="middle">
+      <div nz-col>
+        <h3>Mould Master <span>(0 Mould Masters)</span></h3>
+      </div>
+      <div nz-col>
+        <nz-space [nzSize]="8">
+          <div class="send-request" *nzSpaceItem>
+            <a nz-dropdown [nzDropdownMenu]="menu" nzType="link">
+              Mark as {{ confirmationText }}
+              <span nz-icon nzType="down"></span>
+            </a>
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu nzSelectable>
+                <li
+                  nz-menu-item
+                  (click)="showNotification('1')"
+                  (keydown.enter)="showNotification('1')"
+                  tabindex="0"
+                >
+                  Mark as Active
+                </li>
+                <li
+                  nz-menu-item
+                  (click)="showNotification('2')"
+                  (keydown.enter)="showNotification('2')"
+                  tabindex="0"
+                >
+                  Mark as Inactive
+                </li>
+              </ul>
+            </nz-dropdown-menu>
+          </div>
+          <ng-template #noMouldTemplate>
+            <div class="custom-notification">
+              <nz-space [nzSize]="15" nzAlign="start">
+                <span
+                  nz-icon
+                  nzType="exclamation-circle"
+                  nzTheme="outline"
+                  *nzSpaceItem
+                ></span>
+                <div *nzSpaceItem>
+                  <h3>
+                    Are you sure you want to Mark as {{ confirmationText }}?
+                  </h3>
+                  <p>Lorem ipsum is a dummy text</p>
+                  <div class="btn-wrap">
+                    <button
+                      nz-button
+                      nzType="default"
+                      nzSize="small"
+                      (click)="closeNotification()"
+                    >
+                      No</button
+                    ><button
+                      nz-button
+                      nzType="primary"
+                      nzSize="small"
+                      class="ml-12"
+                      (click)="closeNotification()"
+                    >
+                      Yes
+                    </button>
+                  </div>
+                </div>
+              </nz-space>
+            </div>
+          </ng-template>
+          <nz-input-group
+            *nzSpaceItem
+            [nzPrefix]="prefixTemplateUser"
+            class="search"
+          >
+            <input type="text" nz-input placeholder="Search by mould id" />
+            <ng-template #prefixTemplateUser
+              ><span nz-icon nzType="search" nzTheme="outline"></span
+            ></ng-template>
+          </nz-input-group>
+
+          <button
+            nz-button
+            nzType="default"
+            *nzSpaceItem
+            nzTooltipTitle="Export"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+          >
+            <span nz-icon nzType="download" nzTheme="outline"></span></button
+          ><button
+            nz-button
+            nzType="default"
+            *nzSpaceItem
+            nzTooltipTitle="Reset Filters"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+          >
+            <span nz-icon nzType="reload" nzTheme="outline"></span>
+          </button>
+          <button
+            nz-button
+            nzType="default"
+            *nzSpaceItem
+            (click)="openGridModal()"
+            nzTooltipTitle="Grid Customization"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+          >
+            <span nz-icon nzType="control" nzTheme="outline"></span></button
+          ><button
+            nz-button
+            nzType="primary"
+            *nzSpaceItem
+            (click)="showModal(1)"
+            class="d-none d-lg-block"
+          >
+            Create Mould
+          </button>
+        </nz-space>
+        <div class="d-lg-none xs-footer">
+          <button nz-button nzType="primary" (click)="showModal(1)">
+            Create Mould
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-mould-table (openViewEvent)="openViewModal()"></app-mould-table>
+</div>
+
+<!-- Create Modal -->
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="modalTitle"
+  [nzCloseIcon]="modalClose"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzFooter]="modalFooter"
+  nzCentered
+  nzWidth="100%"
+  nzWrapClassName="modal-full"
+>
+  <ng-template #modalTitle> Create Mould </ng-template>
+  <ng-template #modalClose> Close </ng-template>
+
+  <ng-container *nzModalContent>
+    <nz-card
+      *ngIf="tabSelected < 7"
+      style="width: 880px"
+      [nzBordered]="false"
+      [nzBodyStyle]="{ padding: '0px' }"
+      nzTitle="Basic Details"
+      class="custom-card"
+    >
+      <!-- tab component start -->
+      <nz-tabset
+        [nzTabPosition]="isSmallScreen ? 'top' : 'left'"
+        [(nzSelectedIndex)]="tabSelected"
+        class="step-form"
+      >
+        <nz-tab nzTitle="Steps:" nzDisabled="true"></nz-tab>
+        <nz-tab nzTitle="Basic Details">
+          <section class="p-20">
+            <app-basic-details></app-basic-details></section
+        ></nz-tab>
+        <nz-tab nzTitle="Mould Associations"
+          ><section class="p-20">
+            <app-mould-associations></app-mould-associations></section
+        ></nz-tab>
+        <nz-tab nzTitle="Mould Details"
+          ><section class="p-20">
+            <app-mould-details></app-mould-details></section
+        ></nz-tab>
+        <nz-tab nzTitle="Cost"
+          ><section class="p-20"><app-cost></app-cost></section>
+        </nz-tab>
+        <nz-tab nzTitle="Other Information"
+          ><section class="p-20">
+            <app-other-information></app-other-information></section
+        ></nz-tab>
+        <nz-tab nzTitle="Documents"
+          ><section class="p-20">
+            <app-documents></app-documents></section
+        ></nz-tab>
+      </nz-tabset>
+      <!-- tab component start -->
+    </nz-card>
+    <!-- preview component start -->
+    <nz-card
+      *ngIf="tabSelected === 7"
+      style="width: 900px"
+      [nzBordered]="false"
+      [nzTitle]="previewtitle"
+      class="custom-card"
+    >
+      <ng-template #previewtitle>
+        <h3>Preview</h3>
+        <p>See a quick summary of product</p>
+      </ng-template>
+      <section class="preview-card">
+        <div class="header">
+          <h4>Basic Details</h4>
+          <button
+            nz-button
+            nzTooltipTitle="Edit"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="updateTabSelected(1)"
+          >
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 24]">
+            <div
+              nz-col
+              nzXs="24"
+              nzSm="12"
+              nzMd="8"
+              *ngFor="let data of basicDetailsPreviewData"
+            >
+              <h5>{{ data.label }}</h5>
+              <p>{{ data.value }}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="preview-card">
+        <div class="header">
+          <h4>Mould Associations</h4>
+          <button
+            nz-button
+            nzTooltipTitle="Edit"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="updateTabSelected(2)"
+          >
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 24]">
+            <div
+              nz-col
+              nzXs="24"
+              nzSm="12"
+              nzMd="8"
+              *ngFor="let data of mouldAssociationsPreviewData"
+            >
+              <h5>{{ data.label }}</h5>
+              <p>{{ data.value }}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="preview-card">
+        <div class="header">
+          <h4>Mould Details</h4>
+          <button
+            nz-button
+            nzTooltipTitle="Edit"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="updateTabSelected(3)"
+          >
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 24]">
+            <div
+              nz-col
+              nzXs="24"
+              nzSm="12"
+              nzMd="8"
+              *ngFor="let data of mouldDetailsPreviewData"
+            >
+              <h5>{{ data.label }}</h5>
+              <p>{{ data.value }}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="preview-card">
+        <div class="header">
+          <h4>Cost Details</h4>
+          <button
+            nz-button
+            nzTooltipTitle="Edit"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="updateTabSelected(4)"
+          >
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 24]">
+            <div
+              nz-col
+              nzXs="24"
+              nzSm="12"
+              nzMd="8"
+              *ngFor="let data of costPreviewData"
+            >
+              <h5>{{ data.label }}</h5>
+              <p>{{ data.value }}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="preview-card">
+        <div class="header">
+          <h4>Other Details</h4>
+          <button
+            nz-button
+            nzTooltipTitle="Edit"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+            (click)="updateTabSelected(5)"
+          >
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+        </div>
+        <div class="body">
+          <div nz-row [nzGutter]="[15, 24]">
+            <div
+              nz-col
+              nzXs="24"
+              nzSm="12"
+              nzMd="8"
+              *ngFor="let data of otherPreviewData"
+            >
+              <h5>{{ data.label }}</h5>
+              <p>{{ data.value }}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </nz-card>
+    <!-- preview component end -->
+  </ng-container>
+  <ng-template #modalFooter>
+    <div>
+      <button nz-button (click)="back()" *ngIf="tabSelected > 1">Back</button>
+    </div>
+
+    <button
+      nz-button
+      nzType="primary"
+      (click)="saveContinue()"
+      *ngIf="tabSelected < 7 && !isEdit"
+    >
+      Save & Continue
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="createNotification('success')"
+      *ngIf="tabSelected === 7"
+    >
+      Create Mould
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="update()"
+      *ngIf="tabSelected < 7 && isEdit"
+    >
+      Update
+    </button>
+  </ng-template>
+</nz-modal>
+
+<!-- View Modal -->
+<nz-modal
+  [(nzVisible)]="viewOrganisation"
+  [nzTitle]="modalTitle1"
+  [nzCloseIcon]="modalClose1"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzFooter]="null"
+  nzCentered
+  nzWidth="100%"
+  nzWrapClassName="modal-full no-footer"
+  ><ng-container *nzModalContent>
+    <nz-card
+      style="width: calc(100vw - 340px); max-width: 1020px"
+      [nzBordered]="false"
+      [nzTitle]=""
+      nzDescription="See a quick summary of product"
+      class="custom-card"
+      [nzBodyStyle]="{ padding: 0 }"
+    >
+      <div class="product-preview-grid">
+        <div>
+          <section class="view-card">
+            <div
+              nz-row
+              nzJustify="space-between"
+              nzAlign="middle"
+              class="view-title bg-lightblue px-24 py-15"
+            >
+              <div nz-col>
+                <nz-space>
+                  <span class="first-letter">D</span>
+                  <div>
+                    <h3>Dispenser</h3>
+                    <p>
+                      <span class="status blue mr-10">Mould Maker</span>
+                      <span class="status green">Active</span>
+                    </p>
+                  </div>
+                </nz-space>
+              </div>
+              <div nz-col>
+                <button
+                  nz-button
+                  nzTooltipTitle="Edit"
+                  nzTooltipPlacement="bottom"
+                  nz-tooltip
+                  (click)="editModal(1)"
+                >
+                  <span nz-icon nzType="edit" nzTheme="outline"></span>
+                </button>
+              </div>
+            </div>
+            <div class="body">
+              <div class="px-24 py-15">
+                <div nz-row [nzGutter]="[15, 15]">
+                  <div nz-col nzXs="24" nzSm="12">
+                    <h5>Product Id</h5>
+                    <p>1124</p>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="12">
+                    <h5>Product code</h5>
+                    <p>A1124</p>
+                  </div>
+                </div>
+              </div>
+
+              <div nz-col nzSpan="24"><hr /></div>
+              <div class="px-24 py-15">
+                <div nz-row [nzGutter]="[15, 15]">
+                  <div nz-col nzSpan="24">
+                    <h5>Product Variants</h5>
+                    <p>500ml, 750 ml, 1000ml</p>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="12">
+                    <h5>Brand Name</h5>
+                    <p>Unilever</p>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="12">
+                    <h5>Brand Code</h5>
+                    <p>ASL:1234</p>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="12">
+                    <h5>Category Name</h5>
+                    <p>Renee</p>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="12">
+                    <h5>Category Code</h5>
+                    <p>#1234</p>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="12">
+                    <h5>Category Type</h5>
+                    <p>Skincare</p>
+                  </div>
+                </div>
+              </div>
+              <div nz-col nzSpan="24"><hr /></div>
+              <div class="px-24 py-15">
+                <div nz-row [nzGutter]="[15, 15]">
+                  <div nz-col nzXs="24" nzSm="12">
+                    <h5>Design Id</h5>
+                    <p>#1234</p>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="12">
+                    <h5>Design Type</h5>
+                    <p>Lorem ipsum</p>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="12">
+                    <h5>Design Files</h5>
+                    <a href="" target="_blank">Lorem ipsum</a>
+                  </div>
+                </div>
+              </div>
+              <div nz-col nzSpan="24"><hr /></div>
+              <div class="px-24 py-15">
+                <div nz-row [nzGutter]="[15, 15]">
+                  <div nz-col nzXs="24" nzSm="12">
+                    <h5>Height</h5>
+                    <p>44 mm</p>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="12">
+                    <h5>Width</h5>
+                    <p>32 mm</p>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="12">
+                    <h5>Length</h5>
+                    <p>32 mm</p>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="12">
+                    <h5>Gross Weight</h5>
+                    <p>120 gms</p>
+                  </div>
+                  <div nz-col nzXs="24" nzSm="12">
+                    <h5>Created Date</h5>
+                    <p>11 June, 2023</p>
+                  </div>
+                </div>
+              </div>
+              <div nz-col nzSpan="24"><hr /></div>
+              <div class="px-24 py-15">
+                <div nz-row [nzGutter]="[15, 15]">
+                  <div nz-col nzXs="24" nzSm="12">
+                    <h5>Description</h5>
+                    <p>lorem ipsum is a dummy text</p>
+                  </div>
+                </div>
+              </div>
+
+              <div nz-col nzSpan="24"><hr class="m-0" /></div>
+              <div class="px-24 py-15">
+                <div nz-row [nzGutter]="[15, 15]">
+                  <div nz-col nzXs="24" nzSm="12">
+                    <h5>Created By</h5>
+                    <p>John Doe</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div class="preview-2-right">
+          <div nz-row nzJustify="space-between" nzAlign="middle" class="mb-10">
+            <div nz-col>
+              <h3 class="text-14 fw-600">Product Assembly</h3>
+            </div>
+            <div nz-col>
+              <a nz-button nzType="link" class="p-0">Add New Component</a>
+            </div>
+          </div>
+
+          <nz-table
+            #rowSelectionTable
+            nzSize="small"
+            nzOuterBordered
+            nzBordered=""
+            nzShowPagination="false"
+            [nzData]="listOfCurrentPageData"
+            [nzScroll]="{ x: '700px', y: '70vh' }"
+          >
+            <thead>
+              <tr>
+                <th nzAlign="center" nzLeft nzWidth="40px">#</th>
+                <th nzWidth="150px">
+                  Component Name <app-filters></app-filters>
+                </th>
+                <th nzWidth="130px">
+                  Component Id <app-filters></app-filters>
+                </th>
+                <th nzWidth="130px">
+                  Component Code <app-filters></app-filters>
+                </th>
+                <th nzAlign="center" nzRight nzWidth="60px">Qty</th>
+                <th nzAlign="center" nzRight nzWidth="80px">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of listOfCurrentPageData">
+                <td nzLeft>{{ data.id + 1 }}</td>
+                <td>ASL:12332</td>
+                <td>PR:0001</td>
+                <td>ASL:12332</td>
+                <td nzAlign="center" nzRight>04</td>
+                <td nzAlign="center" nzRight>
+                  <span nz-icon nzType="delete" nzTheme="outline"></span>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
+      </div> </nz-card
+  ></ng-container>
+  <ng-template #modalTitle1> Organisation Information </ng-template>
+  <ng-template #modalClose1> Close </ng-template></nz-modal
+>
+
+<!-- Grid Customization Modal -->
+<nz-modal
+  [(nzVisible)]="isGridModal"
+  nzTitle="Grid Customization"
+  [nzCloseIcon]="modalClose2"
+  [nzFooter]="modalFooter3"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  nzCentered
+  nzWidth="450px"
+  ><ng-template #modalClose2> Close </ng-template
+  ><ng-container *nzModalContent>
+    <div class="checkbox-list">
+      <label nz-checkbox>Component Name</label
+      ><label nz-checkbox>Component Code</label
+      ><label nz-checkbox>Parent Component</label
+      ><label nz-checkbox>Child Component</label
+      ><label nz-checkbox>Modulable</label><label nz-checkbox>Specs Id</label
+      ><label nz-checkbox>Height</label>
+      <label nz-checkbox>Width</label>
+      <label nz-checkbox>Length</label>
+      <label nz-checkbox>Gross Height</label>
+      <label nz-checkbox>Created On</label>
+      <label nz-checkbox>Status</label>
+    </div></ng-container
+  >
+  <ng-template #modalFooter3>
+    <button nz-button (click)="handleCancel()">Clear</button>
+    <button nz-button nzType="primary" (click)="handleOk()">Save</button>
+  </ng-template>
+</nz-modal>

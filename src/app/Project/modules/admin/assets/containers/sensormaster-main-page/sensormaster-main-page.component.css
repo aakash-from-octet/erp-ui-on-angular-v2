@@ -1,0 +1,10 @@
+.product-preview-grid {
+   display: grid;
+   grid-template-columns: 350px 1fr;
+
+}
+
+.preview-2-right {
+   border-left: 1px solid #E7E9EB;
+   padding: 20px;
+}

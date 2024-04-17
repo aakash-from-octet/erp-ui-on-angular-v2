@@ -1,0 +1,146 @@
+<nz-table
+  #rowSelectionTable
+  nzSize="small"
+  nzOuterBordered
+  nzShowPagination="false"
+  [nzData]="listOfCurrentPageData"
+  [nzScroll]="{ x: '1400px', y: 'calc(100vh - 220px)' }"
+  [nzNoResult]="noDataTemplate"
+>
+  <thead>
+    <tr>
+      <th
+        [nzChecked]="checked"
+        [nzIndeterminate]="indeterminate"
+        (nzCheckedChange)="onAllChecked($event)"
+        [nzSelections]="listOfSelection"
+        nzLeft
+        nzWidth="50px"
+      ></th>
+      <th nzLeft>Location <app-shared-filters></app-shared-filters></th>
+      <th nzWidth="250px">Converter Name</th>
+      <th nzWidth="250px">
+        Schedule Configuration Code <app-shared-filters></app-shared-filters>
+      </th>
+      <th nzWidth="250px">
+        Schedule Configuration Name <app-shared-filters></app-shared-filters>
+      </th>
+
+      <th nzWidth="250px">Schedule Configuration Type</th>
+      <th>Frequency</th>
+
+      <th nzRight nzAlign="center" nzWidth="100px">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of listOfCurrentPageData">
+      <td
+        nzLeft
+        [nzChecked]="setOfCheckedId.has(data.id)"
+        (nzCheckedChange)="onItemChecked(data.id, $event)"
+      ></td>
+      <td nzLeft>Mumbai, India</td>
+      <td>Converetr Name 123</td>
+      <td>SMC- 90987</td>
+      <td>Name 123</td>
+      <td>Data Capture</td>
+      <td>Weekly</td>
+      <td nzRight nzAlign="center">
+        <nz-space>
+          <button *nzSpaceItem nz-button nzType="text" (click)="openView()">
+            <span nz-icon nzType="eye" nzTheme="outline"></span>
+          </button>
+          <div class="action-divider" *nzSpaceItem></div>
+          <button
+            *nzSpaceItem
+            nz-button
+            nzType="text"
+            nz-dropdown
+            [nzDropdownMenu]="menu"
+          >
+            <span nz-icon nzType="more" nzTheme="outline"></span>
+          </button>
+
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+              <li nz-menu-item>Edit</li>
+              <li nz-menu-item>Mark as in-active</li>
+              <li nz-menu-item>Add Component</li>
+            </ul>
+          </nz-dropdown-menu>
+        </nz-space>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<section class="footer-pagination">
+  <nz-pagination
+    [(nzPageIndex)]="currentPageIndex"
+    [(nzPageSize)]="pageSize"
+    [nzTotal]="totalItems"
+    (nzPageIndexChange)="loadTableData($event, pageSize)"
+    [nzSize]="'small'"
+    nzShowSizeChanger="true"
+    (nzPageSizeChange)="pageSizeChange($event)"
+  ></nz-pagination>
+</section>
+
+<ng-template #noDataTemplate>
+  <div class="no-data">
+    <img src="../../../assets/images/no-data.svg" alt="" />
+  </div>
+</ng-template>
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  nzTitle="Grid Customization"
+  [nzCloseIcon]="modalClose"
+  [nzFooter]="null"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  nzCentered
+  nzWidth="670px"
+  ><ng-template #modalClose> Close </ng-template
+  ><ng-container *nzModalContent>
+    <nz-table
+      #rowSelectionTable
+      nzSize="small"
+      nzOuterBordered
+      nzBordered=""
+      nzShowPagination="false"
+      [nzData]="listOfCurrentPageData"
+      [nzScroll]="{ x: '700px', y: '70vh' }"
+      [nzNoResult]="noDataTemplate"
+    >
+      <thead>
+        <tr>
+          <th nzAlign="center" nzLeft nzWidth="40px">#</th>
+          <th nzWidth="150px">
+            Task Group Code <app-shared-filters></app-shared-filters>
+          </th>
+          <th nzWidth="130px">
+            Task Group Name <app-shared-filters></app-shared-filters>
+          </th>
+          <th nzWidth="130px">
+            Task Group Type <app-shared-filters></app-shared-filters>
+          </th>
+          <th nzAlign="center" nzRight nzWidth="60px">Moulding Process</th>
+          <th nzAlign="center" nzRight nzWidth="80px">Location</th>
+          <th nzAlign="center" nzRight nzWidth="80px">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of listOfCurrentPageData">
+          <td nzLeft>{{ data.id + 1 }}</td>
+          <td>ASL:12332</td>
+          <td>PR:0001</td>
+          <td>ASL:12332</td>
+          <td nzAlign="center" nzRight>04</td>
+          <td nzAlign="center" nzRight>
+            <span nz-icon nzType="delete" nzTheme="outline"></span>
+          </td>
+        </tr>
+      </tbody> </nz-table
+  ></ng-container>
+</nz-modal>
